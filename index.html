@@ -1,225 +1,319 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
-import { getFirestore, collection, addDoc, onSnapshot, query, limit } from 'firebase/firestore';
-import { Terminal, ShieldAlert, Cpu, Globe, Zap, Database, Share2, Wifi, Loader2, Lock, Unlock } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FF PROXY - VIRTUAL IDENTITY SPOOFER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500;700&family=Orbitron:wght@900&display=swap');
 
-// Cấu hình Firebase an toàn
-const firebaseConfig = JSON.parse(__firebase_config);
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-const auth = getAuth(app);
-const db = getFirestore(app);
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'ff-proxy-v2';
-
-export default function App() {
-  const [user, setUser] = useState(null);
-  const [playerID, setPlayerID] = useState('');
-  const [isInjecting, setIsInjecting] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [logs, setLogs] = useState(["[SYSTEM] Khởi tạo giao thức Proxy v5.0..."]);
-  const [activeProxies, setActiveProxies] = useState(1402);
-  const [status, setStatus] = useState('READY');
-
-  // 1. Khởi tạo Auth an toàn theo Rule 3
-  useEffect(() => {
-    const initAuth = async () => {
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
+        :root {
+            --neon-green: #00ff41;
+            --neon-red: #ff4655;
+            --bg-dark: #020202;
         }
-      } catch (e) {
-        console.error("Auth Error:", e);
-      }
-    };
-    initAuth();
-    const unsubscribe = onAuthStateChanged(auth, setUser);
-    return () => unsubscribe();
-  }, []);
 
-  // 2. Lắng nghe dữ liệu thực tế từ Cloud
-  useEffect(() => {
-    if (!user) return;
-    const q = collection(db, 'artifacts', appId, 'public', 'data', 'proxy_sessions');
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setActiveProxies(1402 + snapshot.size);
-    }, (error) => {
-      console.error("Firestore Listen Error:", error);
-    });
-    return () => unsubscribe();
-  }, [user]);
-
-  const addLog = useCallback((text) => {
-    setLogs(prev => [...prev.slice(-6), `[${new Date().toLocaleTimeString()}] ${text}`]);
-  }, []);
-
-  const handleStart = async () => {
-    if (!playerID || playerID.length < 5) return;
-    if (!user) {
-        addLog("LỖI: Chưa thiết lập kết nối Cloud!");
-        return;
-    }
-
-    setIsInjecting(true);
-    setStatus('INJECTING');
-    addLog(`Đang thiết lập Proxy Spoofing cho UID: ${playerID}...`);
-
-    try {
-      // Gửi dữ liệu lên Firestore (Tác dụng thật để lưu yêu cầu vào hệ thống)
-      await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'proxy_sessions'), {
-        uid: playerID,
-        target_profile: 'TOP_1_RICHEST_VN',
-        timestamp: Date.now(),
-        status: 'active',
-        client_id: user.uid
-      });
-
-      // Quy trình mô phỏng Inject cực kỳ chi tiết
-      let p = 0;
-      const interval = setInterval(() => {
-        p += Math.random() * 5;
-        if (p >= 100) {
-          p = 100;
-          clearInterval(interval);
-          finishInjection();
+        body {
+            background-color: var(--bg-dark);
+            color: var(--neon-green);
+            font-family: 'Fira Code', monospace;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
-        setProgress(p);
 
-        if (p > 20 && p < 25) addLog("Đang bypass Garena-VN Security Layer...");
-        if (p > 45 && p < 50) addLog("Đang giả lập Packet Header (Emotes Sync)...");
-        if (p > 75 && p < 80) addLog("Đang đồng bộ hóa kho đồ ảo (Buffer)...");
-      }, 200);
+        .orbitron { font-family: 'Orbitron', sans-serif; }
 
-    } catch (err) {
-      addLog("LỖI: Không thể gửi lệnh tới Server!");
-      setIsInjecting(false);
-      setStatus('ERROR');
-    }
-  };
+        .proxy-container {
+            background: rgba(0, 10, 0, 0.95);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.1);
+            position: relative;
+        }
 
-  const finishInjection = () => {
-    addLog("PHÂN TÁCH GÓI TIN THÀNH CÔNG!");
-    addLog("ĐÃ KÍCH HOẠT PROXY TOP 1 SERVER.");
-    setStatus('SUCCESS');
-    setIsInjecting(false);
-  };
+        .proxy-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green);
+            animation: scan-line 3s infinite linear;
+        }
 
-  return (
-    <div className={`min-h-screen bg-[#020202] text-[#00ff41] font-mono p-4 flex flex-col items-center transition-all duration-500 ${isInjecting ? 'brightness-125' : ''}`}>
-      {/* Background Grid */}
-      <div className="fixed inset-0 pointer-events-none opacity-20" style={{ backgroundImage: 'radial-gradient(#00ff41 0.5px, transparent 0.5px)', backgroundSize: '20px 20px' }}></div>
+        @keyframes scan-line {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
 
-      {/* Top HUD */}
-      <div className="w-full max-w-lg border-b border-[#00ff41]/40 pb-4 mb-8 flex justify-between items-end relative z-10">
+        .btn-inject {
+            background: var(--neon-green);
+            color: black;
+            font-weight: 900;
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+            transition: all 0.3s;
+        }
+
+        .btn-inject:hover:not(:disabled) {
+            box-shadow: 0 0 30px var(--neon-green);
+            transform: scale(1.02);
+        }
+
+        .btn-inject:disabled {
+            background: #1a1a1a;
+            color: #444;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #111;
+            width: 100%;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        #progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+            transition: width 0.3s;
+        }
+
+        .log-entry {
+            border-left: 2px solid var(--neon-green);
+            padding-left: 10px;
+            margin-bottom: 4px;
+            font-size: 10px;
+            animation: fade-in 0.3s ease-out;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .status-active { color: #fff; text-shadow: 0 0 10px var(--neon-green); }
+        
+        /* Hiệu ứng rung màn hình khi xong */
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake {
+            10, 90% { transform: translate3d(-1px, 0, 0); }
+            20, 80% { transform: translate3d(2px, 0, 0); }
+            30, 50, 70% { transform: translate3d(-4px, 0, 0); }
+            40, 60% { transform: translate3d(4px, 0, 0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center p-4 py-10">
+
+    <!-- Header HUD -->
+    <header class="w-full max-w-lg mb-8 flex justify-between items-end border-b border-green-900/50 pb-4">
         <div>
-          <h1 className="text-2xl font-black italic tracking-tighter flex items-center gap-2 drop-shadow-[0_0_10px_#00ff41]">
-            <Cpu className={isInjecting ? 'animate-spin' : ''} /> PROXY-X <span className="text-white">ULTIMATE</span>
-          </h1>
-          <div className="flex items-center gap-2 text-[8px] text-gray-500 font-bold uppercase tracking-widest">
-            <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-            Connection: Secure Cloud Sync
-          </div>
+            <h1 class="orbitron text-2xl italic tracking-tighter text-white">
+                PROXY<span class="text-[#00ff41]">-X</span> <small class="text-[10px] tracking-widest block opacity-50 uppercase">Global Injection v5.0</small>
+            </h1>
         </div>
-        <div className="text-right">
-          <p className="text-[10px] font-bold text-white uppercase">Active Proxies</p>
-          <p className="text-lg font-black text-[#00ff41] leading-none">{activeProxies}</p>
-        </div>
-      </div>
-
-      {/* Main Console */}
-      <div className={`w-full max-w-lg bg-black/80 border-2 ${status === 'SUCCESS' ? 'border-yellow-500' : 'border-[#00ff41]/50'} p-8 rounded-lg relative overflow-hidden transition-all duration-300`}>
-        {/* Progress Bar Top */}
-        <div className="absolute top-0 left-0 h-1 bg-white/10 w-full">
-            <div className="h-full bg-[#00ff41] transition-all duration-300 shadow-[0_0_15px_#00ff41]" style={{ width: `${progress}%` }}></div>
-        </div>
-
-        <div className="space-y-8 relative z-10">
-          <div>
-            <div className="flex justify-between items-center mb-3">
-              <label className="text-[10px] uppercase font-black tracking-[0.2em] text-gray-400">Target User Identity (UID)</label>
-              {status === 'SUCCESS' ? <Unlock className="w-4 h-4 text-yellow-500" /> : <Lock className="w-4 h-4 text-gray-700" />}
-            </div>
-            <div className="relative">
-              <input 
-                type="number" 
-                value={playerID}
-                onChange={(e) => setPlayerID(e.target.value)}
-                placeholder="NHẬP UID GAME..."
-                disabled={isInjecting || status === 'SUCCESS'}
-                className="w-full bg-black border-2 border-[#00ff41]/30 p-4 text-2xl focus:outline-none focus:border-[#00ff41] transition-all text-white font-bold tracking-widest placeholder:text-gray-800"
-              />
-              <Wifi className={`absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 ${isInjecting ? 'animate-bounce text-red-500' : 'text-[#00ff41]/20'}`} />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border border-[#00ff41]/20 p-4 bg-[#00ff41]/5 rounded">
-              <p className="text-[8px] text-gray-500 uppercase font-bold mb-1">Spoof Source</p>
-              <p className="text-[10px] font-black text-white uppercase italic">TOP_1_RICHEST_VN</p>
-            </div>
-            <div className="border border-[#00ff41]/20 p-4 bg-[#00ff41]/5 rounded">
-              <p className="text-[8px] text-gray-500 uppercase font-bold mb-1">Packet Mode</p>
-              <p className="text-[10px] font-black text-white uppercase italic">Sync Emotes [ON]</p>
-            </div>
-          </div>
-
-          <button 
-            onClick={handleStart}
-            disabled={isInjecting || !playerID || status === 'SUCCESS'}
-            className={`w-full py-5 font-black italic text-xl border-2 transition-all relative overflow-hidden active:scale-95 ${
-              status === 'SUCCESS' ? 'bg-yellow-500 border-yellow-500 text-black' :
-              isInjecting ? 'bg-gray-900 border-gray-700 text-gray-500 cursor-wait' : 'bg-[#00ff41] border-[#00ff41] text-black hover:shadow-[0_0_30px_#00ff41]'
-            }`}
-          >
-            {status === 'SUCCESS' ? "ĐÃ KÍCH HOẠT" : isInjecting ? "ĐANG INJECT..." : "KÍCH HOẠT PROXY"}
-          </button>
-          
-          {status === 'SUCCESS' && (
-            <button onClick={() => location.reload()} className="w-full text-[10px] text-center text-gray-500 hover:text-white underline">HỦY KẾT NỐI PROXY</button>
-          )}
-        </div>
-      </div>
-
-      {/* Console Logs */}
-      <div className="w-full max-w-lg mt-6 bg-black/90 border border-[#00ff41]/30 p-5 rounded font-mono shadow-inner">
-        <div className="flex items-center gap-2 mb-4 text-[10px] font-black text-gray-600 border-b border-white/5 pb-2">
-            <Terminal className="w-3 h-3 text-[#00ff41]" />
-            <span>COMMAND LINE INTERFACE</span>
-        </div>
-        <div className="space-y-2 text-[10px]">
-          {logs.map((log, i) => (
-            <div key={i} className={`flex gap-3 ${log.includes("THÀNH CÔNG") ? "text-yellow-400 font-bold" : "text-gray-400"}`}>
-              <span className="text-[#00ff41] opacity-40 italic">user@proxy:~#</span>
-              <span>{log}</span>
-            </div>
-          ))}
-          <div className="animate-pulse inline-block w-2 h-4 bg-[#00ff41] ml-2"></div>
-        </div>
-      </div>
-
-      {/* Legal & Tech Note */}
-      <div className="w-full max-w-lg mt-6 p-4 border border-red-900/40 rounded bg-red-950/10 flex gap-5 items-start">
-        <ShieldAlert className="text-red-600 w-8 h-8 shrink-0 animate-pulse" />
-        <div className="space-y-1">
-            <p className="text-[9px] font-black text-red-500 uppercase">Warning: Virtual Identity Established</p>
-            <p className="text-[8px] text-gray-500 leading-relaxed uppercase font-medium">
-                Hệ thống đang chạy giả lập Identity của ID TOP 1. <br/>
-                - Vàng/KC/Đồ: Nạp vào Virtual Buffer (Ảo).<br/>
-                - Hành động: Ghi đè gói tin (Thật) - người khác có thể thấy.
+        <div class="text-right">
+            <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Server Status</p>
+            <p class="text-xs font-bold text-[#00ff41] flex items-center gap-1">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> ONLINE
             </p>
         </div>
-      </div>
+    </header>
 
-      <footer className="mt-auto py-8 opacity-20 flex flex-col items-center">
-        <div className="flex gap-10 mb-3">
-          <Database className="w-4 h-4" />
-          <Globe className="w-4 h-4" />
-          <Zap className="w-4 h-4" />
+    <!-- Main Tool -->
+    <main class="w-full max-w-lg space-y-6" id="main-content">
+        
+        <div class="proxy-container p-8 rounded-sm">
+            <div class="space-y-6">
+                <!-- UID Input -->
+                <div>
+                    <label class="text-[9px] uppercase font-bold text-gray-500 mb-3 block tracking-[0.2em]">Target Identity (UID)</label>
+                    <div class="relative">
+                        <i data-lucide="target" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 opacity-30"></i>
+                        <input type="number" id="player-id" placeholder="NHẬP ID NGƯỜI DÙNG..." 
+                               class="w-full bg-black/50 border border-green-900/50 p-4 pl-12 text-xl font-bold outline-none focus:border-[#00ff41] transition-all text-white">
+                    </div>
+                </div>
+
+                <!-- Info Cards -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-950/10 border border-green-900/30 p-3">
+                        <p class="text-[8px] text-gray-500 uppercase">Spoof Profile</p>
+                        <p class="text-[10px] font-bold text-white uppercase italic">Top 1 Wealthy VN</p>
+                    </div>
+                    <div class="bg-green-950/10 border border-green-900/30 p-3">
+                        <p class="text-[8px] text-gray-500 uppercase">Sync Status</p>
+                        <p class="text-[10px] font-bold text-white uppercase italic">Emotes: ENABLED</p>
+                    </div>
+                </div>
+
+                <!-- Progress Section (Hidden initially) -->
+                <div id="progress-section" class="hidden space-y-2">
+                    <div class="flex justify-between text-[10px] font-bold">
+                        <span id="status-text">ĐANG KHỞI TẠO...</span>
+                        <span id="percent-text">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button id="inject-btn" onclick="startInjection()" class="btn-inject w-full py-5 text-lg orbitron italic uppercase tracking-widest">
+                    Kích hoạt Proxy
+                </button>
+            </div>
         </div>
-        <p className="text-[7px] font-black tracking-[0.6em] uppercase text-white">Cloud Proxy Network v5.0.1</p>
-      </footer>
+
+        <!-- Terminal Logs -->
+        <div class="bg-black/80 border border-green-900/30 p-4 rounded-sm shadow-inner">
+            <div class="flex items-center gap-2 mb-3 border-b border-white/5 pb-2">
+                <i data-lucide="terminal" class="w-3 h-3 text-[#00ff41]"></i>
+                <span class="text-[9px] font-black text-gray-600 uppercase">System Logs</span>
+            </div>
+            <div id="logs" class="h-32 overflow-y-auto space-y-1 no-scrollbar font-mono">
+                <div class="log-entry text-gray-500">Waiting for UID input...</div>
+            </div>
+        </div>
+
+        <!-- Security Disclaimer -->
+        <div class="p-4 border border-red-900/30 bg-red-950/5 rounded flex gap-4">
+            <i data-lucide="shield-alert" class="text-red-600 w-8 h-8 shrink-0 animate-pulse"></i>
+            <div>
+                <p class="text-[9px] font-black text-red-500 uppercase mb-1">Cảnh báo: Virtual Identity</p>
+                <p class="text-[8px] text-gray-600 leading-relaxed uppercase">
+                    Mọi thay đổi về vật phẩm là ẢO (Client-side). Chỉ có HÀNH ĐỘNG (Emotes) được đồng bộ qua Proxy để người khác thấy. 
+                    Hệ thống đã mã hóa Proxy Top 1 VN.
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-overlay" class="fixed inset-0 bg-black/95 z-[100] hidden flex-col items-center justify-center p-8 text-center border-2 border-[#00ff41] m-6 animate-in zoom-in duration-300">
+        <div class="w-20 h-20 bg-[#00ff41] rounded-full flex items-center justify-center mb-8 shadow-[0_0_50px_rgba(0,255,65,0.4)]">
+            <i data-lucide="check" class="w-12 h-12 text-black" stroke-width="4"></i>
+        </div>
+        <h2 class="orbitron text-3xl font-black italic text-white mb-4">SPOOFING ACTIVE</h2>
+        <div class="bg-green-950/20 border border-green-500/30 p-6 rounded-lg max-w-sm space-y-4">
+            <p class="text-xs text-gray-400">Dữ liệu tài khoản của <b>Người giàu nhất VN</b> đã được nạp qua Proxy ảo vào ID: <span id="final-id" class="text-[#00ff41]"></span></p>
+            <div class="grid grid-cols-2 gap-2 text-[8px] text-left text-white/70 font-bold uppercase">
+                <div>• All Evo Gun Skins</div>
+                <div>• 9,999,999 Diamonds</div>
+                <div>• All Legendary Emotes</div>
+                <div>• Hip Hop Bundle</div>
+            </div>
+        </div>
+        <button onclick="location.reload()" class="mt-10 px-12 py-4 border border-[#00ff41] text-[#00ff41] text-xs font-black uppercase hover:bg-[#00ff41] hover:text-black transition-all">Hủy kết nối Proxy</button>
     </div>
-  );
-}
+
+    <!-- Firebase Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Vars
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'ff-proxy-web-v5';
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        window.startInjection = async function() {
+            const uidInput = document.getElementById('player-id');
+            const uid = uidInput.value;
+            
+            if (uid.length < 5) {
+                alert("VUI LÒNG NHẬP ID HỢP LỆ!");
+                return;
+            }
+
+            const btn = document.getElementById('inject-btn');
+            const progressSection = document.getElementById('progress-section');
+            const progressFill = document.getElementById('progress-fill');
+            const percentText = document.getElementById('percent-text');
+            const statusText = document.getElementById('status-text');
+
+            // Bắt đầu
+            btn.disabled = true;
+            btn.innerText = "INJECTING...";
+            progressSection.classList.remove('hidden');
+            
+            addLog(`Giao thức Spoofing khởi động cho ID: ${uid}...`);
+
+            try {
+                // Đăng nhập ẩn danh và lưu ID (Đây là phần có tác dụng thật 100% để lưu dữ liệu)
+                const userCredential = await signInAnonymously(auth);
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'proxy_sessions'), {
+                    player_id: uid,
+                    proxy_type: 'TOP_1_VN',
+                    timestamp: Date.now(),
+                    client_uid: userCredential.user.uid
+                });
+                
+                addLog("Kết nối Cloud Proxy thành công.");
+
+                // Quy trình giả lập chạy %
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 8;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        finish(uid);
+                    }
+                    
+                    progressFill.style.width = progress + "%";
+                    percentText.innerText = Math.floor(progress) + "%";
+
+                    if (progress > 30 && progress < 40) {
+                        statusText.innerText = "BYPASSING GARENA-VN...";
+                        addLog("Đang lách qua lớp bảo mật Garena...");
+                    }
+                    if (progress > 60 && progress < 70) {
+                        statusText.innerText = "SYNCING EMOTES...";
+                        addLog("Đang đồng bộ hóa gói tin hành động...");
+                    }
+                    if (progress > 85 && progress < 95) {
+                        statusText.innerText = "LOADING VIRTUAL ASSETS...";
+                        addLog("Đang nạp kho đồ ảo vào Buffer...");
+                    }
+                }, 200);
+
+            } catch (error) {
+                console.error(error);
+                addLog("LỖI KẾT NỐI SERVER!", "error");
+                btn.disabled = false;
+                btn.innerText = "KÍCH HOẠT LẠI";
+            }
+        };
+
+        function addLog(msg, type = '') {
+            const logs = document.getElementById('logs');
+            const div = document.createElement('div');
+            div.className = `log-entry ${type === 'error' ? 'text-red-500' : 'text-gray-400'}`;
+            div.innerHTML = `<span class="text-[#00ff41] mr-2">>></span> ${msg}`;
+            logs.appendChild(div);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function finish(uid) {
+            addLog("ĐÃ THIẾT LẬP IDENTITY SPOOFER!");
+            document.body.classList.add('shake');
+            setTimeout(() => {
+                document.getElementById('final-id').innerText = uid;
+                document.getElementById('success-overlay').classList.remove('hidden');
+                document.getElementById('success-overlay').classList.add('flex');
+            }, 500);
+        }
+    </script>
+</body>
+</html>
 
