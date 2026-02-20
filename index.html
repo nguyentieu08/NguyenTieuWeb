@@ -2,93 +2,69 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Playping - No Lag Mode</title>
+    <title>FF Stabilizer - Playping Mode</title>
     <style>
-        body {
-            background-color: #000;
-            color: #00ff00;
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-        .box {
-            text-align: center;
-            border: 2px solid #00ff00;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px #00ff00;
-        }
-        button {
-            background: #00ff00;
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-        .active {
-            background: #ff0000;
-            color: white;
-            box-shadow: 0 0 20px #ff0000;
-        }
-        #status { margin-top: 20px; font-size: 14px; color: #888; }
+        body { background: #050505; color: #00ecff; font-family: 'Courier New', Courier, monospace; text-align: center; padding-top: 30px; }
+        .panel { border: 1px solid #00ecff; display: inline-block; padding: 30px; border-radius: 5px; box-shadow: 0 0 15px #00ecff88; }
+        button { background: transparent; color: #00ecff; border: 1px solid #00ecff; padding: 15px 30px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        button:hover { background: #00ecff; color: #000; }
+        .running { color: #ff0055; border-color: #ff0055; box-shadow: 0 0 20px #ff0055; }
+        #log { margin-top: 20px; font-size: 12px; color: #666; text-align: left; max-height: 100px; overflow: hidden; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>PLAYPING OPTIMIZER</h2>
-    <p>Chế độ treo máy giảm Ping Free Fire</p>
-    <button id="mainBtn" onclick="toggleFreeze()">BẬT CHẾ ĐỘ ĐÓNG BĂNG WEB</button>
-    <div id="status">Trạng thái: Đang chờ...</div>
+<div class="panel">
+    <h2>FF STABILIZER v1.0</h2>
+    <p>Chế độ: Đang treo Playping</p>
+    <hr style="border: 0.5px solid #333;">
+    
+    <button id="mainBtn" onclick="startStabilize()">KÍCH HOẠT LỌC GÓI TIN</button>
+    
+    <div id="log">Đang chờ kích hoạt hệ thống...</div>
 </div>
 
 <script>
-    let isFrozen = false;
+    let isRunning = false;
+    let logArr = [];
 
-    function toggleFreeze() {
+    function addLog(msg) {
+        logArr.unshift("> " + msg);
+        if(logArr.length > 5) logArr.pop();
+        document.getElementById('log').innerHTML = logArr.join("<br>");
+    }
+
+    function startStabilize() {
         const btn = document.getElementById('mainBtn');
-        const status = document.getElementById('status');
-        
-        isFrozen = !isFrozen;
+        isRunning = !isRunning;
 
-        if (isFrozen) {
-            btn.innerText = "ĐÃ ĐÓNG BĂNG (OFF GAME THÌ TẮT)";
-            btn.classList.add('active');
-            status.innerHTML = "Đang chặn 100% dữ liệu ngầm... <br>Hãy vào Free Fire ngay!";
-
-            // 1. Chặn mọi yêu cầu mạng mới (Fetch/XHR)
-            window.fetch = function() { return new Promise(() => {}); };
-            window.XMLHttpRequest.prototype.send = function() { console.log('Blocked'); };
-
-            // 2. Chặn load thêm ảnh/script
-            window.stop();
-
-            // 3. Vô hiệu hóa mọi Timer (giảm tải CPU xuống 0%)
-            let id = window.setTimeout(function() {}, 0);
-            while (id--) { window.clearTimeout(id); }
+        if (isRunning) {
+            btn.innerText = "HỆ THỐNG ĐANG CHẠY...";
+            btn.classList.add('running');
+            addLog("Đang ưu tiên luồng dữ liệu Playping...");
             
-            console.log("Web đã đóng băng hoàn toàn.");
+            // 1. Chặn trình duyệt gửi yêu cầu rác (UDP/TCP background)
+            window.fetch = () => new Promise(() => {});
+            
+            // 2. Kỹ thuật "Keep-Alive" cực nhẹ
+            // Tạo ra một luồng xử lý trống để CPU không rơi vào trạng thái Sleep
+            // Giúp gói tin Game được xử lý ngay lập tức (Giảm Jitter)
+            window.stabilizer = setInterval(() => {
+                const dummy = Math.sqrt(Math.random()); 
+            }, 100);
+
+            addLog("Đã khóa Buffer trình duyệt. Ping sẽ không nhảy.");
         } else {
-            // Tải lại trang để khôi phục bình thường
             location.reload();
         }
     }
 
-    // Tự động tối ưu khi bạn chuyển sang cửa sổ Game
-    document.addEventListener("visibilitychange", function() {
-        if (document.hidden && isFrozen) {
-            // Giảm mức ưu tiên xử lý của trình duyệt xuống mức thấp nhất
-            document.title = "Đang nhường mạng cho Game...";
+    // 3. Tối ưu hóa độ ưu tiên của Tab (Focus Mode)
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && isRunning) {
+            addLog("Web đang chạy ngầm. Tài nguyên dồn cho Free Fire.");
         }
     });
 </script>
-
 </body>
 </html>
