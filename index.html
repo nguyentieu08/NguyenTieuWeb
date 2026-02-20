@@ -28,7 +28,7 @@
                                      window.webkitRequestAnimationFrame;
 
         setInterval(() => {
-            let garbage = new ArrayBuffer(1024 * 1024); // Tạo 1MB rác rồi xóa ngay
+            let garbage = new ArrayBuffer(1024 * 1024);
             garbage = null;
             document.getElementById('bar').style.width = Math.random() * 100 + "%";
         }, 50);
@@ -42,7 +42,7 @@
         window.alert = function() {};
         window.confirm = function() {};
 
-        document.querySelector('h1').innerText = "PING STABILIZED";
+        document.querySelector('h1').innerText = "SIFEXPING FIX";
         document.querySelector('h1').style.color = "#0f0";
         document.getElementById('bar').style.backgroundColor = "#0f0";
     }
