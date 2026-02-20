@@ -2,625 +2,93 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Fire - Trung tâm nạp game thẻ cào</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Playping - No Lag Mode</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: #f8f8f8;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .header img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
-
-        .header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #383742;
-        }
-
-        .hero-banner {
-            width: 100%;
-            height: 250px;
-            background-image: url('https://ext.same-assets.com/1321103649/4081308893.jpeg');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .game-selection {
-            background-color: #f8f8f8;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        .game-selection h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #383742;
-        }
-
-        .game-info {
-            background-color: #fff;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-        }
-
-        .game-logo {
-            width: 80px;
-            height: 80px;
-            margin-right: 20px;
-        }
-
-        .game-title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #383742;
-        }
-
-        .game-security {
-            display: inline-flex;
-            align-items: center;
             background-color: #000;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin-left: 20px;
-        }
-
-        .game-security i {
-            margin-right: 5px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .nav-button {
-            padding: 10px 20px;
-            border: 1px solid #c29f5b;
-            border-radius: 5px;
-            color: #c29f5b;
-            background-color: transparent;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .nav-button:hover {
-            background-color: #c29f5b;
-            color: #fff;
-        }
-
-        .pricing-section {
-            margin: 30px 0;
-        }
-
-        .pricing-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: #383742;
-            margin-bottom: 20px;
-        }
-
-        .pricing-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .pricing-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            text-align: center;
-            background-color: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .pricing-card:hover {
-            border-color: #c29f5b;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .pricing-card.selected {
-            border-color: #c29f5b;
-            background-color: #faf7f0;
-        }
-
-        .diamond {
-            color: #63abc8;
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .diamond i {
-            margin-right: 5px;
-        }
-
-        .price {
-            color: #666;
-        }
-
-        .promo-text {
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #f0f9f0;
-            border-left: 4px solid #4CAF50;
-            color: #4CAF50;
-            font-weight: 500;
-        }
-
-        .payment-section {
-            display: flex;
-            gap: 30px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .payment-methods {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .payment-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: #383742;
-            margin-bottom: 20px;
-        }
-
-        .payment-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-        }
-
-        .payment-option {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
+            color: #00ff00;
+            font-family: sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 70px;
-            cursor: pointer;
-            transition: all 0.3s;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-
-        .payment-option:hover {
-            border-color: #c29f5b;
+        .box {
+            text-align: center;
+            border: 2px solid #00ff00;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #00ff00;
         }
-
-        .payment-option.selected {
-            border-color: #c29f5b;
-            background-color: #faf7f0;
-        }
-
-        .payment-option img {
-            max-width: 100%;
-            max-height: 40px;
-        }
-
-        .payment-form {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .form-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #383742;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: all 0.3s;
-            padding-right: 40px;
-        }
-
-        .form-control:focus {
-            border-color: #c29f5b;
-            outline: none;
-        }
-
-        .form-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #c29f5b;
-        }
-
-        .submit-button {
-            background-color: #e62e2e;
-            color: white;
+        button {
+            background: #00ff00;
+            color: #000;
             border: none;
-            padding: 12px 30px;
+            padding: 15px 30px;
+            font-weight: bold;
+            cursor: pointer;
             border-radius: 5px;
             font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-            width: 100%;
         }
-
-        .submit-button i {
-            margin-right: 10px;
+        .active {
+            background: #ff0000;
+            color: white;
+            box-shadow: 0 0 20px #ff0000;
         }
-
-        .submit-button:hover {
-            background-color: #c52222;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 20px 0;
-            border-top: 1px solid #ddd;
-            margin-top: 50px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #aaa;
-        }
-
-        .close-modal:hover {
-            color: #333;
-        }
-
-        .modal-title {
-            margin-bottom: 20px;
-            color: #383742;
-            font-size: 20px;
-        }
-
-        .loader {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #c29f5b;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .processing-message {
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .pricing-cards {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-
-            .payment-options {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
-
-            .payment-section {
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .header h1 {
-                font-size: 18px;
-            }
-
-            .hero-banner {
-                height: 180px;
-            }
-
-            .pricing-cards {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            }
-        }
+        #status { margin-top: 20px; font-size: 14px; color: #888; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <img src="https://ext.same-assets.com/1321103649/3089028214.png" alt="Logo">
-            <h1>Trung tâm nạp game thẻ cào</h1>
-        </header>
 
-        <div class="hero-banner"></div>
+<div class="box">
+    <h2>PLAYPING OPTIMIZER</h2>
+    <p>Chế độ treo máy giảm Ping Free Fire</p>
+    <button id="mainBtn" onclick="toggleFreeze()">BẬT CHẾ ĐỘ ĐÓNG BĂNG WEB</button>
+    <div id="status">Trạng thái: Đang chờ...</div>
+</div>
 
-        <div class="game-info">
-            <img src="https://ext.same-assets.com/1321103649/3992697621.png" alt="Free Fire" class="game-logo">
-            <h2 class="game-title">Free Fire</h2>
-            <div class="game-security">
-                <i class="fas fa-shield-alt"></i>
-                <span>100% thanh toán an toàn</span>
-            </div>
-        </div>
+<script>
+    let isFrozen = false;
 
-        <div class="nav-buttons">
-            <button class="nav-button">Trang chủ</button>
-            <button class="nav-button">Chọn quà</button>
-        </div>
+    function toggleFreeze() {
+        const btn = document.getElementById('mainBtn');
+        const status = document.getElementById('status');
+        
+        isFrozen = !isFrozen;
 
-        <section class="pricing-section">
-            <h3 class="pricing-title">Mệnh giá và Kim cương</h3>
-            <div class="pricing-cards">
-                <div class="pricing-card" data-value="150000" data-diamonds="1000000">
-                    <div class="diamond"><i class="fas fa-gem"></i> 150,000</div>
-                    <div class="price">1,000,000 đ</div>
-                </div>
-                <div class="pricing-card" data-value="70000" data-diamonds="500000">
-                    <div class="diamond"><i class="fas fa-gem"></i> 70,000</div>
-                    <div class="price">500,000 đ</div>
-                </div>
-                <div class="pricing-card" data-value="25000" data-diamonds="200000">
-                    <div class="diamond"><i class="fas fa-gem"></i> 25,000</div>
-                    <div class="price">200,000 đ</div>
-                </div>
-                <div class="pricing-card" data-value="9000" data-diamonds="100000">
-                    <div class="diamond"><i class="fas fa-gem"></i> 9,000</div>
-                    <div class="price">100,000 đ</div>
-                </div>
-                <div class="pricing-card" data-value="4200" data-diamonds="50000">
-                    <div class="diamond"><i class="fas fa-gem"></i> 4,200</div>
-                    <div class="price">50,000 đ</div>
-                </div>
-                <div class="pricing-card" data-value="1200" data-diamonds="20000">
-                    <div class="diamond"><i class="fas fa-gem"></i> 1,200</div>
-                    <div class="price">20,000 đ</div>
-                </div>
-            </div>
-            <div class="promo-text">
-                <i class="fas fa-gift"></i> Khuyến mãi: Nhận thêm 50% Kim cương nếu nạp thẻ từ 100,000 đ trở lên.
-            </div>
-        </section>
+        if (isFrozen) {
+            btn.innerText = "ĐÃ ĐÓNG BĂNG (OFF GAME THÌ TẮT)";
+            btn.classList.add('active');
+            status.innerHTML = "Đang chặn 100% dữ liệu ngầm... <br>Hãy vào Free Fire ngay!";
 
-        <div class="payment-section">
-            <div class="payment-methods">
-                <h3 class="payment-title">Phương thức thanh toán</h3>
-                <div class="payment-options">
-                    <div class="payment-option" data-provider="garena">
-                        <img src="https://ext.same-assets.com/1321103649/2291687110.png" alt="Garena">
-                    </div>
-                    <div class="payment-option" data-provider="viettel">
-                        <img src="https://ext.same-assets.com/1321103649/1051598029.png" alt="Viettel">
-                    </div>
-                    <div class="payment-option" data-provider="vinaphone">
-                        <img src="https://ext.same-assets.com/1321103649/445034637.png" alt="Vinaphone">
-                    </div>
-                    <div class="payment-option" data-provider="mobifone">
-                        <img src="https://ext.same-assets.com/1321103649/873574475.png" alt="Mobifone">
-                    </div>
-                    <div class="payment-option" data-provider="vietnamobile">
-                        <img src="https://ext.same-assets.com/1321103649/2250932447.png" alt="Vietnamobile">
-                    </div>
-                    <div class="payment-option" data-provider="zing">
-                        <img src="https://ext.same-assets.com/1321103649/2890066157.png" alt="Zing">
-                    </div>
-                </div>
-            </div>
+            // 1. Chặn mọi yêu cầu mạng mới (Fetch/XHR)
+            window.fetch = function() { return new Promise(() => {}); };
+            window.XMLHttpRequest.prototype.send = function() { console.log('Blocked'); };
 
-            <div class="payment-form">
-                <h3 class="payment-title">Thông tin thanh toán</h3>
-                <p class="form-title">Hướng dẫn lấy UID/Tên tài khoản</p>
+            // 2. Chặn load thêm ảnh/script
+            window.stop();
 
-                <div class="form-group">
-                    <input type="text" class="form-control" id="userId" placeholder="UID/Tên tài khoản">
-                    <div class="form-icon"><i class="fas fa-user"></i></div>
-                </div>
+            // 3. Vô hiệu hóa mọi Timer (giảm tải CPU xuống 0%)
+            let id = window.setTimeout(function() {}, 0);
+            while (id--) { window.clearTimeout(id); }
+            
+            console.log("Web đã đóng băng hoàn toàn.");
+        } else {
+            // Tải lại trang để khôi phục bình thường
+            location.reload();
+        }
+    }
 
-                <div class="form-group">
-                    <input type="text" class="form-control" id="cardNumber" placeholder="Nhập mã thẻ in dưới lớp giấy bạc">
-                    <div class="form-icon"><i class="fas fa-credit-card"></i></div>
-                </div>
+    // Tự động tối ưu khi bạn chuyển sang cửa sổ Game
+    document.addEventListener("visibilitychange", function() {
+        if (document.hidden && isFrozen) {
+            // Giảm mức ưu tiên xử lý của trình duyệt xuống mức thấp nhất
+            document.title = "Đang nhường mạng cho Game...";
+        }
+    });
+</script>
 
-                <div class="form-group">
-                    <input type="text" class="form-control" id="serialNumber" placeholder="Nhập số seri in trên thẻ">
-                    <div class="form-icon"><i class="fas fa-barcode"></i></div>
-                </div>
-
-                <button type="button" id="submitButton" class="submit-button">
-                    <i class="fas fa-money-bill-wave"></i> Thanh toán
-                </button>
-            </div>
-        </div>
-
-        <footer class="footer">
-            &copy; NAPTHE 2024
-        </footer>
-    </div>
-
-    <!-- Modal for processing payment -->
-    <div class="modal" id="processingModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3 class="modal-title">Đang xử lý giao dịch</h3>
-            <div class="loader"></div>
-            <p class="processing-message">Thẻ của bạn đang được duyệt. Vui lòng đợi trong giây lát...</p>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle pricing card selection
-            const pricingCards = document.querySelectorAll('.pricing-card');
-            pricingCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    pricingCards.forEach(c => c.classList.remove('selected'));
-                    this.classList.add('selected');
-                });
-            });
-
-            // Handle payment option selection
-            const paymentOptions = document.querySelectorAll('.payment-option');
-            paymentOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    paymentOptions.forEach(o => o.classList.remove('selected'));
-                    this.classList.add('selected');
-                });
-            });
-
-            // Handle submission
-            const submitButton = document.getElementById('submitButton');
-            const processingModal = document.getElementById('processingModal');
-            const closeModal = document.querySelector('.close-modal');
-
-            submitButton.addEventListener('click', function() {
-                // Get form values
-                const userId = document.getElementById('userId').value;
-                const cardNumber = document.getElementById('cardNumber').value;
-                const serialNumber = document.getElementById('serialNumber').value;
-
-                // Get selected pricing
-                const selectedPricing = document.querySelector('.pricing-card.selected');
-                const selectedPayment = document.querySelector('.payment-option.selected');
-
-                // Validate form
-                if (!userId) {
-                    alert('Vui lòng nhập UID/Tên tài khoản');
-                    return;
-                }
-
-                if (!cardNumber) {
-                    alert('Vui lòng nhập mã thẻ');
-                    return;
-                }
-
-                if (!serialNumber) {
-                    alert('Vui lòng nhập số seri');
-                    return;
-                }
-
-                if (!selectedPricing) {
-                    alert('Vui lòng chọn mệnh giá kim cương');
-                    return;
-                }
-
-                if (!selectedPayment) {
-                    alert('Vui lòng chọn phương thức thanh toán');
-                    return;
-                }
-
-                // Prepare data to send
-                const data = {
-                    userId: userId,
-                    cardNumber: cardNumber,
-                    serialNumber: serialNumber,
-                    diamonds: selectedPricing.getAttribute('data-diamonds'),
-                    value: selectedPricing.getAttribute('data-value'),
-                    provider: selectedPayment.getAttribute('data-provider'),
-                    timestamp: new Date().toISOString()
-                };
-
-                // Show processing modal
-                processingModal.style.display = 'flex';
-
-                // Giả lập gửi dữ liệu (cho phiên bản demo)
-                console.log('Dữ liệu sẽ được gửi đến bot Telegram:', data);
-
-                // Giả lập quá trình xử lý cho bản demo
-                setTimeout(function() {
-                    alert('Thẻ của bạn đã được gửi đi và đang được xử lý. Vui lòng đợi kết quả!');
-                    processingModal.style.display = 'none';
-                }, 3000);
-            });
-
-            // Close modal when clicking X
-            closeModal.addEventListener('click', function() {
-                processingModal.style.display = 'none';
-            });
-
-            // Close modal when clicking outside
-            window.addEventListener('click', function(event) {
-                if (event.target == processingModal) {
-                    processingModal.style.display = 'none';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
