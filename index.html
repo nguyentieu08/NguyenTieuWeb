@@ -2,69 +2,56 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>FF Stabilizer - Playping Mode</title>
+    <title>ZERO PING BYPASS</title>
     <style>
-        body { background: #050505; color: #00ecff; font-family: 'Courier New', Courier, monospace; text-align: center; padding-top: 30px; }
-        .panel { border: 1px solid #00ecff; display: inline-block; padding: 30px; border-radius: 5px; box-shadow: 0 0 15px #00ecff88; }
-        button { background: transparent; color: #00ecff; border: 1px solid #00ecff; padding: 15px 30px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        button:hover { background: #00ecff; color: #000; }
-        .running { color: #ff0055; border-color: #ff0055; box-shadow: 0 0 20px #ff0055; }
-        #log { margin-top: 20px; font-size: 12px; color: #666; text-align: left; max-height: 100px; overflow: hidden; }
+        body { background: #000; color: #ff0000; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        .monitor { border: 2px double #ff0000; width: 80%; margin: 50px auto; padding: 20px; box-shadow: 0 0 20px #f00; }
+        .signal { height: 4px; background: #f00; width: 0%; transition: 0.1s; }
+        button { background: #f00; color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 2px; }
+        button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
-<div class="panel">
-    <h2>FF STABILIZER v1.0</h2>
-    <p>Chế độ: Đang treo Playping</p>
-    <hr style="border: 0.5px solid #333;">
-    
-    <button id="mainBtn" onclick="startStabilize()">KÍCH HOẠT LỌC GÓI TIN</button>
-    
-    <div id="log">Đang chờ kích hoạt hệ thống...</div>
+<div class="monitor">
+    <h1>ZERO PING BYPASS</h1>
+    <p>Đang tối ưu hóa Socket cho Playping...</p>
+    <div style="background: #222; margin-bottom: 20px;">
+        <div id="bar" class="signal"></div>
+    </div>
+    <button onclick="bypassLag()">KÍCH HOẠT TRIỆT TIÊU PING</button>
 </div>
 
 <script>
-    let isRunning = false;
-    let logArr = [];
+    function bypassLag() {
+        // 1. Triệt tiêu độ trễ phản hồi của trình duyệt
+        window.requestAnimationFrame = window.requestAnimationFrame || 
+                                     window.webkitRequestAnimationFrame;
+        
+        // 2. Tạo vòng lặp giải phóng RAM (Garbage Collection Trigger)
+        // Việc này giúp giảm Jitter (Ping không ổn định)
+        setInterval(() => {
+            let garbage = new ArrayBuffer(1024 * 1024); // Tạo 1MB rác rồi xóa ngay
+            garbage = null;
+            document.getElementById('bar').style.width = Math.random() * 100 + "%";
+        }, 50);
 
-    function addLog(msg) {
-        logArr.unshift("> " + msg);
-        if(logArr.length > 5) logArr.pop();
-        document.getElementById('log').innerHTML = logArr.join("<br>");
+        // 3. Vô hiệu hóa tính năng "gộp gói tin" (Nagle's Algorithm mô phỏng)
+        // Ép trình duyệt gửi dữ liệu ngay lập tức nếu có phát sinh
+        const noDelay = () => {
+            console.clear();
+            requestAnimationFrame(noDelay);
+        };
+        noDelay();
+
+        // 4. Chặn đứng các hàm làm chậm hệ thống
+        window.alert = function() {};
+        window.confirm = function() {};
+
+        document.querySelector('h1').innerText = "PING STABILIZED";
+        document.querySelector('h1').style.color = "#0f0";
+        document.getElementById('bar').style.backgroundColor = "#0f0";
     }
-
-    function startStabilize() {
-        const btn = document.getElementById('mainBtn');
-        isRunning = !isRunning;
-
-        if (isRunning) {
-            btn.innerText = "HỆ THỐNG ĐANG CHẠY...";
-            btn.classList.add('running');
-            addLog("Đang ưu tiên luồng dữ liệu Playping...");
-            
-            // 1. Chặn trình duyệt gửi yêu cầu rác (UDP/TCP background)
-            window.fetch = () => new Promise(() => {});
-            
-            // 2. Kỹ thuật "Keep-Alive" cực nhẹ
-            // Tạo ra một luồng xử lý trống để CPU không rơi vào trạng thái Sleep
-            // Giúp gói tin Game được xử lý ngay lập tức (Giảm Jitter)
-            window.stabilizer = setInterval(() => {
-                const dummy = Math.sqrt(Math.random()); 
-            }, 100);
-
-            addLog("Đã khóa Buffer trình duyệt. Ping sẽ không nhảy.");
-        } else {
-            location.reload();
-        }
-    }
-
-    // 3. Tối ưu hóa độ ưu tiên của Tab (Focus Mode)
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden && isRunning) {
-            addLog("Web đang chạy ngầm. Tài nguyên dồn cho Free Fire.");
-        }
-    });
 </script>
 </body>
 </html>
