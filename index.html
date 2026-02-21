@@ -2,49 +2,66 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>SIFEXPING BYPASS</title>
+    <title>SIFEXPING BYPASS PRO</title>
     <style>
-        body { background: #000; color: #ff0000; font-family: 'Segoe UI', sans-serif; text-align: center; }
-        .monitor { border: 2px double #ff0000; width: 80%; margin: 50px auto; padding: 20px; box-shadow: 0 0 20px #f00; }
-        .signal { height: 4px; background: #f00; width: 0%; transition: 0.1s; }
-        button { background: #f00; color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 2px; }
-        button:active { transform: scale(0.95); }
+        body { background: #000; color: #00ffea; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        .monitor { border: 2px solid #00ffea; width: 85%; margin: 50px auto; padding: 30px; box-shadow: 0 0 30px #00ffea44; border-radius: 10px; }
+        .signal { height: 6px; background: #00ffea; width: 0%; transition: 0.05s; box-shadow: 0 0 10px #00ffea; }
+        button { background: #00ffea; color: #000; border: none; padding: 20px 40px; font-weight: bold; cursor: pointer; border-radius: 5px; font-size: 1.1rem; }
+        button:active { transform: scale(0.98); background: #fff; }
+        #ram-info { margin-top: 15px; font-size: 0.8rem; color: #666; }
     </style>
 </head>
 <body>
 
 <div class="monitor">
-    <h1>SIFEXPING BYPASS</h1>
-    <p>Đang tối ưu hóa Socket cho SifexPing...</p>
-    <div style="background: #222; margin-bottom: 20px;">
+    <h1>SIFEXPING BYPASS PRO</h1>
+    <div style="background: #111; margin: 20px 0; border-radius: 10px; overflow: hidden;">
         <div id="bar" class="signal"></div>
     </div>
-    <button onclick="bypassLag()">KÍCH HOẠT FIX SIFEXPING</button>
+    <button id="btn" onclick="bypassLag()">KÍCH HOẠT 100MB BYPASS</button>
+    <div id="ram-info">STATUS: READY</div>
 </div>
 
 <script>
+    let isActive = false;
+
     function bypassLag() {
-        window.requestAnimationFrame = window.requestAnimationFrame || 
-                                     window.webkitRequestAnimationFrame;
+        if(isActive) return;
+        isActive = true;
+
+        const btn = document.getElementById('btn');
+        const bar = document.getElementById('bar');
+        const info = document.getElementById('ram-info');
+
+        btn.innerText = "RUNNING 100MB CYCLE...";
+        btn.style.background = "#555";
+        btn.style.color = "#fff";
 
         setInterval(() => {
-            let garbage = new ArrayBuffer(1024 * 1024);
-            garbage = null;
-            document.getElementById('bar').style.width = Math.random() * 100 + "%";
-        }, 50);
+            let buffer = new ArrayBuffer(104857600); 
+            let view = new Uint8Array(buffer);
+            view[0] = 255; 
 
-        const noDelay = () => {
-            console.clear();
-            requestAnimationFrame(noDelay);
+            bar.style.width = "100%";
+            info.innerText = "ALLOCATED 100MB -> CLEARING";
+
+            buffer = null; 
+            view = null;
+
+            setTimeout(() => {
+                bar.style.width = "0%";
+            }, 100);
+
+        }, 200);
+
+        const optimize = () => {
+            requestAnimationFrame(optimize);
         };
-        noDelay();
+        optimize();
 
-        window.alert = function() {};
-        window.confirm = function() {};
-
-        document.querySelector('h1').innerText = "SIFEXPING FIX";
-        document.querySelector('h1').style.color = "#0f0";
-        document.getElementById('bar').style.backgroundColor = "#0f0";
+        window.alert = () => {};
+        console.clear();
     }
 </script>
 </body>
