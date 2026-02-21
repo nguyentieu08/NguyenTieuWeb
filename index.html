@@ -1,68 +1,248 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>SIFEXPING BYPASS PRO</title>
-    <style>
-        body { background: #000; color: #00ffea; font-family: 'Segoe UI', sans-serif; text-align: center; }
-        .monitor { border: 2px solid #00ffea; width: 85%; margin: 50px auto; padding: 30px; box-shadow: 0 0 30px #00ffea44; border-radius: 10px; }
-        .signal { height: 6px; background: #00ffea; width: 0%; transition: 0.05s; box-shadow: 0 0 10px #00ffea; }
-        button { background: #00ffea; color: #000; border: none; padding: 20px 40px; font-weight: bold; cursor: pointer; border-radius: 5px; font-size: 1.1rem; }
-        button:active { transform: scale(0.98); background: #fff; }
-        #ram-info { margin-top: 15px; font-size: 0.8rem; color: #666; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNBAN TOOL NGUYEN TIEU DEV</title>
+
+<style>
+*{box-sizing:border-box;font-family:Segoe UI,Arial}
+
+body{
+margin:0;
+background:linear-gradient(180deg,#000,#00aa55);
+color:white;
+display:flex;
+justify-content:center;
+}
+
+.app{
+width:100%;
+max-width:420px;
+min-height:100vh;
+padding:15px;
+}
+
+/* TAG */
+.tag{
+text-align:center;
+font-weight:bold;
+font-size:18px;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{color:yellow;}
+50%{color:red;}
+100%{color:yellow;}
+}
+
+.info{
+text-align:center;
+font-size:12px;
+margin-top:5px;
+}
+
+.timer{
+text-align:center;
+margin:10px 0;
+font-size:16px;
+color:cyan;
+}
+
+/* INPUT */
+input{
+width:100%;
+padding:10px;
+border-radius:12px;
+border:none;
+margin:6px 0;
+font-size:16px;
+text-align:center;
+}
+
+/* BUTTON */
+button{
+width:100%;
+padding:12px;
+margin:6px 0;
+border-radius:15px;
+border:none;
+background:linear-gradient(90deg,#00ff99,#00ccff);
+font-weight:bold;
+font-size:15px;
+transition:0.3s;
+cursor:pointer;
+}
+
+button:hover{
+transform:scale(1.05);
+box-shadow:0 0 15px cyan;
+}
+
+/* NAME */
+.name{
+text-align:center;
+margin:8px 0;
+color:yellow;
+font-weight:bold;
+}
+
+/* LOG */
+.log{
+background:black;
+color:lime;
+height:220px;
+padding:8px;
+overflow-y:auto;
+border-radius:10px;
+font-family:Consolas;
+font-size:12px;
+margin-top:10px;
+}
+
+.footer{
+text-align:center;
+font-size:11px;
+margin-top:10px;
+}
+
+/* CHANGE MAIL MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:998;
+}
+
+.modal-box{
+background:linear-gradient(180deg,#004422,#00aa55);
+padding:20px;
+border-radius:15px;
+width:90%;
+max-width:300px;
+}
+
+/* KEY POPUP */
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.35);
+backdrop-filter: blur(8px);
+display:none;   /* ✅ ban đầu ẩn */
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+/* glass popup */
+.popup{
+background: rgba(255,255,255,0.12);  /* trong suốt */
+border:1px solid rgba(255,255,255,0.3);
+backdrop-filter: blur(10px);
+padding:20px;
+border-radius:20px;
+width:90%;
+max-width:360px;
+text-align:center;
+box-shadow:0 0 25px rgba(0,255,255,0.7);
+animation: pop 0.4s ease;
+}
+
+@keyframes pop{
+from{transform:scale(0.7);opacity:0;}
+to{transform:scale(1);opacity:1;}
+}
+
+.popup h3{color:red;}
+</style>
 </head>
+
 <body>
 
-<div class="monitor">
-    <h1>SIFEXPING BYPASS PRO</h1>
-    <div style="background: #111; margin: 20px 0; border-radius: 10px; overflow: hidden;">
-        <div id="bar" class="signal"></div>
-    </div>
-    <button id="btn" onclick="bypassLag()">KÍCH HOẠT 100MB BYPASS</button>
-    <div id="ram-info">STATUS: READY</div>
+
+<div class="app">
+
+<div class="tag">
+UNBAN - CHECK MAIL - REFUND ACCOUNT FREE FIRE - SPAMLOGIN
+</div>
+
+<div class="info">
+DEV IOS TEAM<br>
+Zalo: 033.577.5073
+</div>
+
+<div class="timer" id="timer">Thời gian sử dụng: 24:12:09</div>
+
+<input id="gameId" placeholder="Nhập ID Game">
+<button onclick="gate(showName)">ĐĂNG NHẬP</button>
+
+<div class="name" id="name">Tên Ingame: ---</div>
+
+<button onclick="gate(checkMail)">CHECK MAIL XT</button>
+<button onclick="gate(spamLogin)">SPAM LOGIN</button>
+<button onclick="gate(openChangeMail)">CHANGE MAIL</button>
+<button onclick="gate(band15)">BAND 15 DAY</button>
+
+<div class="log" id="logBox"></div>
+
+<div class="footer">© NGUYỄN TIÊU MODS</div>
+</div>
+
+<!-- CHANGE MAIL -->
+<div class="modal" id="mailModal">
+<div class="modal-box">
+<h3>CHANGE MAIL</h3>
+<input placeholder="New Email">
+<input placeholder="Security Code">
+<button onclick="closeModal()">CONFIRM</button>
+<button onclick="closeModal()">CLOSE</button>
+</div>
+</div>
+
+<!-- KEY POPUP -->
+<div class="overlay" id="keyOverlay">
+<div class="popup">
+<h3>⚠ CHECK MAIL NOT LOGIN</h3>
+<p>
+Oh no, bạn chưa có key của chúng tôi!<br><br>
+Hãy liên hệ ngay cho Zalo để sở hữu nó:
+</p>
+
+<a href="https://zalo.me/053564018" target="_blank" style="text-decoration:none;">
+<button style="
+background:linear-gradient(90deg,#00ffff,#00ff99);
+border:none;
+border-radius:12px;
+padding:12px 20px;
+font-weight:bold;
+font-size:15px;
+margin:10px 0;
+cursor:pointer;
+box-shadow:0 0 15px cyan;
+">
+💬 CHAT ZALO: 035.356.4018
+</button>
+</a>
+
+<p>
+Chỉ Với <b>150 VND</b>, Bạn đã có thể sử dụng full chức năng.
+</p>
+<input id="keyInput" placeholder="Enter your key">
+<button onclick="unlock()">UNLOCK</button>
+<div id="keyMsg"></div>
+</div>
 </div>
 
 <script>
-    let isActive = false;
+const _0x571fe7=_0x48a0;function _0x48a0(_0x4c9a93,_0x4f5711){_0x4c9a93=_0x4c9a93-0xef;const _0x32a5fe=_0x32a5();let _0x48a035=_0x32a5fe[_0x4c9a93];return _0x48a035;}(function(_0x3713ff,_0x22165f){const _0x2cdf4a=_0x48a0,_0x5117df=_0x3713ff();while(!![]){try{const _0x4b6353=parseInt(_0x2cdf4a(0xf3))/0x1*(parseInt(_0x2cdf4a(0x102))/0x2)+parseInt(_0x2cdf4a(0xf4))/0x3*(-parseInt(_0x2cdf4a(0x10b))/0x4)+-parseInt(_0x2cdf4a(0x10a))/0x5+parseInt(_0x2cdf4a(0x101))/0x6+-parseInt(_0x2cdf4a(0x10d))/0x7+-parseInt(_0x2cdf4a(0x109))/0x8+parseInt(_0x2cdf4a(0x10f))/0x9;if(_0x4b6353===_0x22165f)break;else _0x5117df['push'](_0x5117df['shift']());}catch(_0x3fba45){_0x5117df['push'](_0x5117df['shift']());}}}(_0x32a5,0xb0004));let unlocked=![];const correctKey=_0x571fe7(0xf2);let fakeName=_0x571fe7(0xfa),fakeMail=_0x571fe7(0xf8),fakePass='090912';function gate(_0x181582){const _0x270e57=_0x571fe7;!unlocked?document['getElementById']('keyOverlay')[_0x270e57(0x114)][_0x270e57(0x106)]=_0x270e57(0x112):_0x181582();}function unlock(){const _0x23c871=_0x571fe7;let _0x3d13ef=document[_0x23c871(0xf5)]('keyInput')[_0x23c871(0x111)];_0x3d13ef===correctKey?(unlocked=!![],document['getElementById'](_0x23c871(0x108))[_0x23c871(0x114)][_0x23c871(0x106)]=_0x23c871(0x113),alert(_0x23c871(0xf6))):(document[_0x23c871(0xf5)](_0x23c871(0x110))[_0x23c871(0x105)]=_0x23c871(0x104),document['getElementById'](_0x23c871(0x110))['style'][_0x23c871(0x107)]=_0x23c871(0x10c));}function showName(){const _0x42627f=_0x571fe7;document['getElementById'](_0x42627f(0xef))[_0x42627f(0x105)]=_0x42627f(0xf7)+fakeName;}function checkMail(){const _0x506a85=_0x571fe7;let _0xdbd10a=document[_0x506a85(0xf5)](_0x506a85(0x10e));_0xdbd10a[_0x506a85(0xfc)]='',[_0x506a85(0x103),'[+]\x20Checking\x20mail\x20verify...',_0x506a85(0xf9)+fakeMail,'[+]\x20Status:\x20VERIFIED','[+]\x20Pass\x20Account:\x20'+fakePass]['forEach'](_0x5a02dc=>_0xdbd10a[_0x506a85(0xfc)]+=_0x5a02dc+_0x506a85(0xf0));}function spamLogin(){const _0x25a0df=_0x571fe7;let _0x2cb4bb=document[_0x25a0df(0xf5)](_0x25a0df(0x10e));_0x2cb4bb[_0x25a0df(0xfc)]='';let _0x4ff3c5=0x0,_0x177743=setInterval(()=>{const _0x141b6d=_0x25a0df;let _0x1c7b9d=new Date()['toLocaleTimeString']();_0x2cb4bb[_0x141b6d(0xfc)]+='[LOGIN]\x20Success\x20at\x20'+_0x1c7b9d+_0x141b6d(0xf0),_0x4ff3c5++;if(_0x4ff3c5>=0xa)clearInterval(_0x177743);},0x3e8);}function openChangeMail(){const _0x10c1d3=_0x571fe7;document['getElementById'](_0x10c1d3(0xfd))[_0x10c1d3(0x114)][_0x10c1d3(0x106)]=_0x10c1d3(0x112);}function closeModal(){const _0x3e5298=_0x571fe7;document[_0x3e5298(0xf5)](_0x3e5298(0xfd))[_0x3e5298(0x114)][_0x3e5298(0x106)]=_0x3e5298(0x113);}function _0x32a5(){const _0x9c5394=['Thời\x20gian\x20sử\x20dụng:\x20','iosviet009','1oCewKJ','4533eMStet','getElementById','✅\x20Key\x20correct!','Tên\x20Ingame:\x20','tiens12ss@gmail.com','[+]\x20Mail:\x20','TiếnNè吨ツ','Account\x20is\x20banned\x2015\x20days!','innerHTML','mailModal','timer','padStart','floor','7222500aoWRmu','324066kXscAZ','[+]\x20Connecting\x20server...','❌\x20Wrong\x20key!','innerText','display','color','keyOverlay','4308296rPccqL','6125835wLsnIC','1516xrcbcF','red','1807652GGwjAC','logBox','17547534rqFulf','keyMsg','value','flex','none','style','name','<br>'];_0x32a5=function(){return _0x9c5394;};return _0x32a5();}function band15(){const _0x36ac93=_0x571fe7;alert(_0x36ac93(0xfb));}let totalSeconds=0x18*0xe10+0xc*0x3c+0x9;setInterval(()=>{const _0x539891=_0x571fe7;if(totalSeconds>0x0){totalSeconds--;let _0x3b51d9=String(Math[_0x539891(0x100)](totalSeconds/0xe10))[_0x539891(0xff)](0x2,'0'),_0x11a495=String(Math[_0x539891(0x100)](totalSeconds%0xe10/0x3c))[_0x539891(0xff)](0x2,'0'),_0x4bf5c9=String(totalSeconds%0x3c)[_0x539891(0xff)](0x2,'0');document[_0x539891(0xf5)](_0x539891(0xfe))['innerText']=_0x539891(0xf1)+_0x3b51d9+':'+_0x11a495+':'+_0x4bf5c9;}},0x3e8);</script>
 
-    function bypassLag() {
-        if(isActive) return;
-        isActive = true;
-
-        const btn = document.getElementById('btn');
-        const bar = document.getElementById('bar');
-        const info = document.getElementById('ram-info');
-
-        btn.innerText = "RUNNING 100MB CYCLE...";
-        btn.style.background = "#555";
-        btn.style.color = "#fff";
-
-        setInterval(() => {
-            let buffer = new ArrayBuffer(104857600); 
-            let view = new Uint8Array(buffer);
-            view[0] = 255; 
-
-            bar.style.width = "100%";
-            info.innerText = "ALLOCATED 100MB -> CLEARING";
-
-            buffer = null; 
-            view = null;
-
-            setTimeout(() => {
-                bar.style.width = "0%";
-            }, 100);
-
-        }, 200);
-
-        const optimize = () => {
-            requestAnimationFrame(optimize);
-        };
-        optimize();
-
-        window.alert = () => {};
-        console.clear();
-    }
-</script>
 </body>
 </html>
