@@ -3,92 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SifexPing - Hệ Thống Key Tự Động</title>
+    <title>SifexPing - Hệ Thống Key GitHub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #050505; color: #00E6FF; font-family: 'Segoe UI', sans-serif; }
         .neon-border { border: 2px solid #00E6FF; box-shadow: 0 0 15px rgba(0, 230, 255, 0.3); }
-        .key-text { text-shadow: 0 0 10px #00E6FF; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
     <div class="max-w-md w-full bg-[#0A0A0A] p-8 rounded-3xl neon-border text-center">
         <h1 class="text-3xl font-bold mb-2">XÁC THỰC XONG</h1>
-        <p class="text-gray-400 text-sm mb-8 italic">Cảm ơn bạn đã ủng hộ SifexPing Pro!</p>
+        <p class="text-gray-400 text-sm mb-8 italic">Cảm ơn bạn đã ủng hộ SifexPing!</p>
 
-        <div class="bg-[#111] border-2 border-dashed border-[#00E6FF] p-6 rounded-2xl mb-6 relative group cursor-pointer" onclick="copyKey()">
-            <span id="keyDisplay" class="text-2xl font-mono font-bold tracking-widest key-text">ĐANG TẠO...</span>
-            <div id="copyTooltip" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-green-500 text-black text-xs px-2 py-1 rounded hidden">Đã chép!</div>
+        <div class="bg-[#111] border-2 border-dashed border-[#00E6FF] p-6 rounded-2xl mb-6 cursor-pointer" onclick="copyKey()">
+            <span id="keyDisplay" class="text-2xl font-mono font-bold tracking-widest text-[#FFD700]">ĐANG TẠO...</span>
         </div>
 
-        <p class="text-xs text-gray-500 mb-6">Lưu ý: Key có hạn dùng 24h và chỉ sử dụng cho 1 thiết bị duy nhất khi đã kích hoạt.</p>
+        <p class="text-xs text-gray-500 mb-6">Key có hạn dùng 24h kể từ lúc tạo trên hệ thống.</p>
         
-        <button id="btnGen" onclick="location.reload()" class="w-full bg-[#00E6FF] text-black font-bold py-3 rounded-xl hover:opacity-80 transition active:scale-95">
+        <button id="btnGen" onclick="location.reload()" class="w-full bg-[#00E6FF] text-black font-bold py-3 rounded-xl active:scale-95 transition">
             LẤY KEY MỚI
         </button>
 
-        <div id="status" class="mt-4 text-[10px] text-gray-600 uppercase tracking-tighter">Đang kết nối cơ sở dữ liệu...</div>
+        <div id="status" class="mt-4 text-[10px] text-gray-600 uppercase">Đang kết nối GitHub API...</div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+    <script>
+        // --- CẤU HÌNH GITHUB ---
+        const GITHUB_TOKEN = "YOUR_TOKEN_HERE"; // Dán Token GitHub vào đây
+        const REPO_OWNER = "YOUR_USERNAME";     // Tên tài khoản GitHub
+        const REPO_NAME = "YOUR_REPO";           // Tên Repository
+        const FILE_PATH = "keys.txt";           // Tên file lưu trữ
 
-        // THAY THẾ CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY
-        const firebaseConfig = {
-            apiKey: "", // Bạn lấy trong Firebase Console -> Project Settings
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "12345",
-            appId: "1:12345:web:abc"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        async function createNewKey() {
+        async function createKey() {
             const keyEl = document.getElementById('keyDisplay');
             const statusEl = document.getElementById('status');
             
-            // 1. Tạo mã Key ngẫu nhiên
+            // 1. Tạo Key ngẫu nhiên và hạn dùng
             const randomID = Math.random().toString(36).substring(2, 10).toUpperCase();
             const fullKey = "SIFEX-" + randomID;
-
-            // 2. Tính ngày hết hạn (Hôm nay + 1 ngày)
             const expiry = new Date();
             expiry.setDate(expiry.getDate() + 1);
-            const expiryStr = expiry.toISOString().split('T')[0]; // Định dạng yyyy-mm-dd
+            const expiryStr = expiry.toISOString().split('T')[0]; 
+
+            const newEntry = `${fullKey}|${expiryStr}`;
 
             try {
-                // 3. Đẩy lên Firestore (Collection: keys, Document: tên key)
-                await setDoc(doc(db, "keys", fullKey), {
-                    expiry: expiryStr,
-                    deviceId: "" // Để trống để App Android tự khóa vào sau
+                // 2. Lấy nội dung file hiện tại và SHA
+                const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+                const getRes = await fetch(url, {
+                    headers: { "Authorization": `token ${GITHUB_TOKEN}` }
+                });
+                
+                const fileData = await getRes.json();
+                const sha = fileData.sha;
+                const oldContent = atob(fileData.content);
+                
+                // Thêm dòng mới vào file
+                const updatedContent = oldContent + (oldContent.endsWith('\n') ? '' : '\n') + newEntry + '\n';
+
+                // 3. Đẩy nội dung mới lên GitHub
+                const putRes = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `token ${GITHUB_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: "Auto-add key: " + fullKey,
+                        content: btoa(updatedContent),
+                        sha: sha
+                    })
                 });
 
-                keyEl.innerText = fullKey;
-                statusEl.innerText = "Đã lưu mã thành công!";
-                statusEl.classList.add('text-green-500');
+                if (putRes.ok) {
+                    keyEl.innerText = fullKey;
+                    statusEl.innerText = "Đã lưu Key lên GitHub!";
+                } else {
+                    throw new Error("Lỗi API GitHub");
+                }
             } catch (error) {
-                keyEl.innerText = "LỖI KẾT NỐI";
-                statusEl.innerText = "Lỗi: " + error.message;
-                statusEl.classList.add('text-red-500');
+                keyEl.innerText = "LỖI!";
+                statusEl.innerText = error.message;
             }
         }
 
         window.copyKey = () => {
             const text = document.getElementById('keyDisplay').innerText;
-            if (text.includes("...")) return;
+            if(text.includes("...")) return;
             navigator.clipboard.writeText(text);
-            const tip = document.getElementById('copyTooltip');
-            tip.classList.remove('hidden');
-            setTimeout(() => tip.classList.add('hidden'), 1500);
+            alert("Đã sao chép Key!");
         };
 
-        createNewKey();
+        createKey();
     </script>
 </body>
 </html>
