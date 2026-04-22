@@ -4,1802 +4,522 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NizeWeak</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
 
-        :root {
-            --bg-primary: #0a0e17;
-            --bg-secondary: #111827;
-            --bg-card: #1a1f2e;
-            --accent: #00f0ff;
-            --accent2: #7b2fff;
-            --accent3: #ff2d75;
-            --text: #e0e6f0;
-            --text-dim: #6b7a99;
-            --border: #1e2a42;
-            --success: #00ff88;
-            --warning: #ffaa00;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'JetBrains Mono', monospace;
-            background: var(--bg-primary);
-            color: var(--text);
+            background: #0a0a0f;
+            color: #00ff88;
+            font-family: 'Share Tech Mono', monospace;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
+        /* Animated background */
         .bg-grid {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image:
-                linear-gradient(rgba(0,240,255,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             z-index: 0;
-            animation: gridMove 20s linear infinite;
+            animation: gridMove 8s linear infinite;
         }
 
         @keyframes gridMove {
             0% { transform: translate(0, 0); }
-            100% { transform: translate(40px, 40px); }
-        }
-
-        .floating-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-            z-index: 0;
-            animation: orbFloat 15s ease-in-out infinite;
-        }
-        .orb1 { width: 400px; height: 400px; background: var(--accent); top: -100px; left: -100px; }
-        .orb2 { width: 350px; height: 350px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -5s; }
-        .orb3 { width: 300px; height: 300px; background: var(--accent3); top: 50%; left: 50%; animation-delay: -10s; }
-
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(10, 14, 23, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 900;
-            font-family: 'Orbitron', sans-serif;
-            color: var(--bg-primary);
-            animation: logoPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes logoPulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(0,240,255,0.3); }
-            50% { box-shadow: 0 0 25px rgba(0,240,255,0.6); }
-        }
-
-        .logo-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textShine 4s linear infinite;
-        }
-
-        @keyframes textShine {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        .settings-btn {
-            width: 44px;
-            height: 44px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .settings-btn:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0,240,255,0.2);
-            transform: rotate(90deg);
-        }
-
-        .settings-btn span {
-            display: block;
-            width: 20px;
-            height: 2px;
-            background: var(--text);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .settings-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .settings-btn.active span:nth-child(2) { opacity: 0; }
-        .settings-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-        .settings-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(5px);
-            z-index: 200;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .settings-overlay.active { opacity: 1; visibility: visible; }
-
-        .settings-panel {
-            position: fixed;
-            top: 0;
-            right: -420px;
-            width: 400px;
-            max-width: 90vw;
-            height: 100%;
-            background: var(--bg-secondary);
-            border-left: 1px solid var(--border);
-            z-index: 201;
-            overflow-y: auto;
-            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 24px;
-        }
-
-        .settings-panel.active { right: 0; }
-
-        .settings-panel::-webkit-scrollbar { width: 4px; }
-        .settings-panel::-webkit-scrollbar-track { background: transparent; }
-        .settings-panel::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-
-        .settings-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .settings-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .close-settings {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .close-settings:hover {
-            border-color: var(--accent3);
-            color: var(--accent3);
-            transform: rotate(90deg);
-        }
-
-        .settings-group {
-            margin-bottom: 24px;
-            animation: slideInRight 0.4s ease forwards;
-            opacity: 0;
-        }
-
-        .settings-group:nth-child(2) { animation-delay: 0.05s; }
-        .settings-group:nth-child(3) { animation-delay: 0.1s; }
-        .settings-group:nth-child(4) { animation-delay: 0.15s; }
-        .settings-group:nth-child(5) { animation-delay: 0.2s; }
-        .settings-group:nth-child(6) { animation-delay: 0.25s; }
-
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .group-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-dim);
-            margin-bottom: 12px;
-        }
-
-        .setting-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .setting-item:hover {
-            border-color: rgba(0,240,255,0.3);
-            background: rgba(26, 31, 46, 0.8);
-        }
-
-        .setting-item-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .setting-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .setting-icon.blue { background: rgba(0,240,255,0.1); color: var(--accent); }
-        .setting-icon.purple { background: rgba(123,47,255,0.1); color: var(--accent2); }
-        .setting-icon.pink { background: rgba(255,45,117,0.1); color: var(--accent3); }
-        .setting-icon.green { background: rgba(0,255,136,0.1); color: var(--success); }
-        .setting-icon.orange { background: rgba(255,170,0,0.1); color: var(--warning); }
-
-        .setting-label { font-size: 13px; font-weight: 500; }
-        .setting-desc { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
-
-        .toggle {
-            width: 48px;
-            height: 26px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
-        }
-
-        .toggle::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--text-dim);
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .toggle.active {
-            background: rgba(0,240,255,0.2);
-            border-color: var(--accent);
-        }
-
-        .toggle.active::after {
-            background: var(--accent);
-            left: 24px;
-            box-shadow: 0 0 10px rgba(0,240,255,0.5);
-        }
-
-        .timer-input-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .timer-input {
-            width: 60px;
-            padding: 6px 10px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--accent);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            text-align: center;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .timer-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 10px rgba(0,240,255,0.2);
-        }
-
-        .timer-unit { font-size: 11px; color: var(--text-dim); }
-
-        .timer-start-btn {
-            padding: 6px 14px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border: none;
-            border-radius: 8px;
-            color: var(--bg-primary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .timer-start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0,240,255,0.4);
-        }
-
-        .timer-stop-btn {
-            padding: 6px 14px;
-            background: linear-gradient(135deg, var(--accent3), #ff6b6b);
-            border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: none;
-        }
-
-        .timer-stop-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255,45,117,0.4);
-        }
-
-        .timer-stop-btn.visible { display: inline-block; }
-
-        .timer-status {
-            font-size: 10px;
-            color: var(--warning);
-            margin-top: 6px;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .timer-status.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .policy-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-
-        .policy-link:hover {
-            border-color: rgba(0,240,255,0.3);
-            transform: translateX(4px);
-        }
-
-        .policy-link .arrow {
-            margin-left: auto;
-            color: var(--text-dim);
-            transition: all 0.3s ease;
-        }
-
-        .policy-link:hover .arrow {
-            color: var(--accent);
-            transform: translateX(4px);
-        }
-
-        .main {
-            position: relative;
-            z-index: 1;
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 24px 16px;
-        }
-
-        .url-input-area {
-            margin-bottom: 24px;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: stretch;
-        }
-
-        .url-input {
-            flex: 1;
-            padding: 14px 18px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .url-input::placeholder { color: var(--text-dim); }
-
-        .url-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0,240,255,0.15);
-        }
-
-        .play-btn {
-            padding: 14px 24px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            border: none;
-            border-radius: 12px;
-            color: var(--bg-primary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        .play-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,240,255,0.3);
-        }
-
-        .play-btn:active { transform: translateY(0); }
-
-        .status-bar {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding: 12px 18px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            font-size: 12px;
-            animation: fadeInUp 0.6s ease 0.1s both;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--text-dim);
-            transition: all 0.4s ease;
-        }
-
-        .status-dot.active {
-            background: var(--success);
-            box-shadow: 0 0 10px rgba(0,255,136,0.5);
-            animation: dotPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes dotPulse {
-            0%, 100% { box-shadow: 0 0 5px rgba(0,255,136,0.3); }
-            50% { box-shadow: 0 0 15px rgba(0,255,136,0.7); }
-        }
-
-        .status-text { color: var(--text-dim); }
-        .status-text.active { color: var(--success); }
-        .status-spacer { flex: 1; }
-
-        .status-info {
-            color: var(--text-dim);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .player-container {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            animation: fadeInUp 0.6s ease 0.2s both;
-            transition: all 0.5s ease;
-        }
-
-        .player-container.off {
-            opacity: 0.4;
-            pointer-events: none;
-            filter: grayscale(0.5);
-        }
-
-        .player-container.off::after {
-            content: 'PLAYER OFF';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--accent3);
-            text-shadow: 0 0 20px rgba(255,45,117,0.5);
-            z-index: 10;
-        }
-
-        .player-aspect {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-        }
-
-        .player-aspect iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .player-placeholder {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            color: var(--text-dim);
-        }
-
-        .player-placeholder i {
-            font-size: 48px;
-            animation: floatIcon 3s ease-in-out infinite;
-        }
-
-        @keyframes floatIcon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .player-placeholder p { font-size: 14px; }
-
-        .playlist-area {
-            margin-top: 24px;
-            animation: fadeInUp 0.6s ease 0.3s both;
-        }
-
-        .playlist-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .playlist-title {
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .playlist-title i { color: var(--accent2); }
-
-        .playlist-count {
-            font-size: 11px;
-            color: var(--text-dim);
-            background: var(--bg-card);
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-        }
-
-        .playlist-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .playlist-list::-webkit-scrollbar { width: 4px; }
-        .playlist-list::-webkit-scrollbar-track { background: transparent; }
-        .playlist-list::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 4px; }
-
-        .playlist-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: slideIn 0.3s ease forwards;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .playlist-item:hover {
-            border-color: rgba(123,47,255,0.4);
-            transform: translateX(4px);
-        }
-
-        .playlist-item.playing {
-            border-color: var(--accent);
-            background: rgba(0,240,255,0.05);
-        }
-
-        .playlist-item-num {
-            width: 28px;
-            height: 28px;
-            background: var(--bg-primary);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-dim);
-            flex-shrink: 0;
-        }
-
-        .playlist-item.playing .playlist-item-num {
-            background: rgba(0,240,255,0.15);
-            color: var(--accent);
-        }
-
-        .playlist-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .playlist-item-url {
-            font-size: 12px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .playlist-item-id {
-            font-size: 10px;
-            color: var(--text-dim);
-            margin-top: 2px;
-        }
-
-        .playlist-item-remove {
-            width: 28px;
-            height: 28px;
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: 6px;
-            color: var(--text-dim);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .playlist-item-remove:hover {
-            border-color: var(--accent3);
-            color: var(--accent3);
-            background: rgba(255,45,117,0.1);
-        }
-
-        .empty-playlist {
-            text-align: center;
-            padding: 32px;
-            color: var(--text-dim);
-            font-size: 13px;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px);
-            z-index: 300;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            padding: 20px;
-        }
-
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-
-        .modal {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            max-width: 560px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            transform: scale(0.9) translateY(20px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .modal-overlay.active .modal { transform: scale(1) translateY(0); }
-
-        .modal::-webkit-scrollbar { width: 4px; }
-        .modal::-webkit-scrollbar-track { background: transparent; }
-        .modal::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close:hover { border-color: var(--accent3); color: var(--accent3); }
-
-        .modal-body {
-            padding: 24px;
-            font-size: 13px;
-            line-height: 1.8;
-            color: var(--text-dim);
-        }
-
-        .modal-body h3 { color: var(--text); font-size: 14px; margin: 16px 0 8px; }
-        .modal-body h3:first-child { margin-top: 0; }
-        .modal-body ul { margin: 8px 0; padding-left: 20px; }
-        .modal-body li { margin-bottom: 6px; }
-
-        .toast-container {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 400;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .toast {
-            padding: 14px 20px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: toastIn 0.4s ease forwards;
-            backdrop-filter: blur(10px);
-            min-width: 250px;
-        }
-
-        .toast.success { border-color: var(--success); }
-        .toast.success i { color: var(--success); }
-        .toast.warning { border-color: var(--warning); }
-        .toast.warning i { color: var(--warning); }
-        .toast.error { border-color: var(--accent3); }
-        .toast.error i { color: var(--accent3); }
-        .toast.info { border-color: var(--accent); }
-        .toast.info i { color: var(--accent); }
-
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateX(40px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes toastOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(40px); }
+            100% { transform: translate(50px, 50px); }
         }
 
         .scanline {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 999;
             background: repeating-linear-gradient(
                 0deg,
                 transparent,
                 transparent 2px,
-                rgba(0,0,0,0.03) 2px,
-                rgba(0,0,0,0.03) 4px
+                rgba(0,255,136,0.01) 2px,
+                rgba(0,255,136,0.01) 4px
             );
+            z-index: 1;
+            pointer-events: none;
         }
 
-        @media (max-width: 640px) {
-            .header { padding: 12px 16px; }
-            .logo-text { font-size: 18px; }
-            .main { padding: 16px 12px; }
-            .input-wrapper { flex-direction: column; }
-            .play-btn { justify-content: center; }
-            .status-bar { flex-wrap: wrap; gap: 8px; }
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ff88, #00ccff, #00ff88);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0,255,136,0.3);
+            animation: glow 3s ease-in-out infinite;
+            letter-spacing: 5px;
+        }
+
+        @keyframes glow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header .subtitle {
+            font-size: 0.85em;
+            color: #00ccff;
+            margin-top: 8px;
+            letter-spacing: 3px;
+            opacity: 0.7;
+        }
+
+        .header .line {
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+            margin: 15px auto 0;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: rgba(0,255,136,0.03);
+            border: 1px solid rgba(0,255,136,0.15);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-section::before {
+            content: '> SYSTEM.INPUT';
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-size: 0.65em;
+            color: rgba(0,255,136,0.3);
+            letter-spacing: 2px;
+        }
+
+        .input-section label {
+            display: block;
+            font-size: 0.85em;
+            color: #00ccff;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(0,255,136,0.3);
+            border-radius: 5px;
+            padding: 14px 18px;
+            color: #00ff88;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.1em;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(0,255,136,0.25);
+        }
+
+        .input-group input:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0,255,136,0.15), inset 0 0 15px rgba(0,255,136,0.05);
+        }
+
+        .btn-tra {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #0a0a0f;
+            border: none;
+            border-radius: 5px;
+            padding: 14px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.95em;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-tra:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 25px rgba(0,255,136,0.4);
+        }
+
+        .btn-tra:active {
+            transform: translateY(0);
+        }
+
+        .btn-tra:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .loading .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0,255,136,0.15);
+            border-top-color: #00ff88;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            margin-top: 12px;
+            font-size: 0.85em;
+            color: #00ccff;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Result Section */
+        .result-section {
+            display: none;
+            background: rgba(0,255,136,0.03);
+            border: 1px solid rgba(0,255,136,0.15);
+            border-radius: 8px;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,204,255,0.1));
+            padding: 15px 25px;
+            border-bottom: 1px solid rgba(0,255,136,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1em;
+            color: #00ff88;
+            letter-spacing: 3px;
+        }
+
+        .result-header .status {
+            font-size: 0.75em;
+            color: #00ccff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .result-header .status .dot {
+            width: 6px;
+            height: 6px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .result-body {
+            padding: 20px 25px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,255,136,0.06);
+            transition: background 0.2s;
+        }
+
+        .info-row:hover {
+            background: rgba(0,255,136,0.03);
+            padding-left: 8px;
+            padding-right: 8px;
+            margin-left: -8px;
+            margin-right: -8px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row .label {
+            font-size: 0.85em;
+            color: #00ccff;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-row .label .icon {
+            width: 18px;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        .info-row .value {
+            font-size: 0.95em;
+            color: #00ff88;
+            text-align: right;
+            word-break: break-all;
+        }
+
+        .info-row .value.highlight {
+            color: #ffcc00;
+            text-shadow: 0 0 8px rgba(255,204,0,0.3);
+        }
+
+        .info-row .value.rank {
+            color: #ff6b6b;
+            text-shadow: 0 0 8px rgba(255,107,107,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.7em;
+            color: rgba(0,255,136,0.25);
+            letter-spacing: 2px;
+        }
+
+        /* Particles */
+        .particle {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(100vh); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-10vh); }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .header h1 { font-size: 2em; }
+            .input-group { flex-direction: column; }
+            .btn-tra { width: 100%; }
+            .info-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .info-row .value { text-align: left; }
         }
     </style>
 </head>
 <body>
 
     <div class="bg-grid"></div>
-    <div class="floating-orb orb1"></div>
-    <div class="floating-orb orb2"></div>
-    <div class="floating-orb orb3"></div>
     <div class="scanline"></div>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="logo-area">
-            <div class="logo-icon">NW</div>
-            <div class="logo-text">NizeWeak</div>
-        </div>
-        <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </header>
-
-    <!-- SETTINGS PANEL -->
-    <div class="settings-overlay" id="settingsOverlay" onclick="toggleSettings()"></div>
-    <div class="settings-panel" id="settingsPanel">
-        <div class="settings-header">
-            <div class="settings-title"><i class="fas fa-cog"></i> Cài Đặt</div>
-            <button class="close-settings" onclick="toggleSettings()"><i class="fas fa-times"></i></button>
+    <div class="container">
+        <div class="header">
+            <h1>NizeWeak</h1>
+            <div class="subtitle">FREE FIRE UID LOOKUP SYSTEM</div>
+            <div class="line"></div>
         </div>
 
-        <div class="settings-group">
-            <div class="group-label">Trình phát</div>
-            <div class="setting-item">
-                <div class="setting-item-left">
-                    <div class="setting-icon blue"><i class="fas fa-power-off"></i></div>
-                    <div>
-                        <div class="setting-label">Bật / Tắt Player</div>
-                        <div class="setting-desc">Kích hoạt hoặc tắt trình phát video</div>
-                    </div>
-                </div>
-                <div class="toggle active" id="togglePlayer" onclick="togglePlayerFunc()"></div>
+        <div class="input-section">
+            <label>// NHẬP UID FREE FIRE</label>
+            <div class="input-group">
+                <input type="text" id="uidInput" placeholder="Dán UID tại đây..." maxlength="20" autocomplete="off">
+                <button class="btn-tra" id="btnTra" onclick="traCuu()">TRA</button>
             </div>
         </div>
 
-        <div class="settings-group">
-            <div class="group-label">Phát lại</div>
-            <div class="setting-item">
-                <div class="setting-item-left">
-                    <div class="setting-icon purple"><i class="fas fa-repeat"></i></div>
-                    <div>
-                        <div class="setting-label">Lặp lại video</div>
-                        <div class="setting-desc">Tự động phát lại khi kết thúc</div>
-                    </div>
-                </div>
-                <div class="toggle" id="toggleLoop" onclick="toggleLoopFunc()"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>> ĐANG TRUY VẤN DỮ LIỆU...</p>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="result-header">
+                <h2>KẾT QUẢ</h2>
+                <div class="status"><div class="dot"></div> ONLINE</div>
             </div>
-            <div class="setting-item">
-                <div class="setting-item-left">
-                    <div class="setting-icon green"><i class="fas fa-forward"></i></div>
-                    <div>
-                        <div class="setting-label">Tự động chuyển tiếp</div>
-                        <div class="setting-desc">Chuyển sang video tiếp theo trong danh sách</div>
-                    </div>
-                </div>
-                <div class="toggle" id="toggleAutoplay" onclick="toggleAutoplayFunc()"></div>
+            <div class="result-body" id="resultBody">
+                <!-- Data will be injected here -->
             </div>
         </div>
 
-        <div class="settings-group">
-            <div class="group-label">Hẹn giờ</div>
-            <div class="setting-item" style="flex-direction: column; align-items: flex-start; gap: 12px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                    <div class="setting-item-left">
-                        <div class="setting-icon orange"><i class="fas fa-clock"></i></div>
-                        <div>
-                            <div class="setting-label">Hẹn giờ ngừng phát</div>
-                            <div class="setting-desc">Dừng video sau khoảng thời gian chỉ định</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="timer-input-group">
-                    <input type="number" class="timer-input" id="timerHours" min="0" max="24" value="0" placeholder="0">
-                    <span class="timer-unit">giờ</span>
-                    <input type="number" class="timer-input" id="timerMinutes" min="0" max="59" value="30" placeholder="0">
-                    <span class="timer-unit">phút</span>
-                    <button class="timer-start-btn" id="timerStartBtn" onclick="startTimer()">Bắt đầu</button>
-                    <button class="timer-stop-btn" id="timerStopBtn" onclick="stopTimer()">Huỷ</button>
-                </div>
-                <div class="timer-status" id="timerStatus"></div>
-            </div>
-        </div>
-
-        <div class="settings-group">
-            <div class="group-label">Pháp lý</div>
-            <div class="policy-link" onclick="openModal('privacy')">
-                <div class="setting-icon blue"><i class="fas fa-shield-halved"></i></div>
-                <div>
-                    <div class="setting-label">Chính sách quyền riêng tư</div>
-                    <div class="setting-desc">Cách chúng tôi bảo vệ dữ liệu của bạn</div>
-                </div>
-                <i class="fas fa-chevron-right arrow"></i>
-            </div>
-            <div class="policy-link" onclick="openModal('terms')">
-                <div class="setting-icon purple"><i class="fas fa-file-contract"></i></div>
-                <div>
-                    <div class="setting-label">Điều khoản sử dụng</div>
-                    <div class="setting-desc">Quy định và điều kiện sử dụng dịch vụ</div>
-                </div>
-                <i class="fas fa-chevron-right arrow"></i>
-            </div>
-        </div>
-
-        <div class="settings-group">
-            <div style="text-align: center; padding: 16px; color: var(--text-dim); font-size: 11px;">
-                NizeWeak v2.0.0 · Built with <span style="color: var(--accent3);">&#9829;</span>
-            </div>
+        <div class="footer">
+            NIZEWEAK SYSTEM v2.0 &bull; FOR EDUCATIONAL PURPOSES ONLY
         </div>
     </div>
 
-    <!-- PRIVACY MODAL -->
-    <div class="modal-overlay" id="privacyModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-shield-halved"></i> Chính Sách Quyền Riêng Tư</div>
-                <button class="modal-close" onclick="closeModal('privacy')"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <h3>1. Thu thập dữ liệu</h3>
-                <p>NizeWeak không thu thập, lưu trữ hay chia sẻ bất kỳ dữ liệu cá nhân nào của người dùng. Ứng dụng hoạt động hoàn toàn trên trình duyệt của bạn.</p>
-                <h3>2. Cookie & Local Storage</h3>
-                <p>Chúng tôi sử dụng Local Storage để lưu trữ các tuỳ chọn cài đặt của bạn (chế độ lặp lại, tự động chuyển tiếp, v.v.). Không có cookie theo dõi nào được sử dụng.</p>
-                <h3>3. Dữ liệu duyệt web</h3>
-                <p>Các liên kết YouTube bạn nhập chỉ được xử lý cục bộ trên trình duyệt. Không có dữ liệu nào được gửi đến máy chủ của chúng tôi.</p>
-                <h3>4. Dịch vụ bên thứ ba</h3>
-                <ul>
-                    <li><strong>YouTube:</strong> Video được nhúng từ YouTube thông qua API chính thức. Chính sách quyền riêng tư của YouTube áp dụng cho nội dung video.</li>
-                    <li><strong>Font Awesome & Google Fonts:</strong> Các tài nguyên này có thể ghi log yêu cầu theo chính sách riêng của họ.</li>
-                </ul>
-                <h3>5. Bảo mật</h3>
-                <p>Ứng dụng sử dụng kết nối HTTPS và không truyền tải dữ liệu nhạy cảm. Mọi hoạt động đều diễn ra trong môi trường trình duyệt cục bộ.</p>
-                <h3>6. Quyền của bạn</h3>
-                <p>Bạn có toàn quyền kiểm soát dữ liệu của mình. Bạn có thể xoá tất cả cài đặt bất cứ lúc nào bằng cách xoá dữ liệu trình duyệt.</p>
-                <h3>7. Cập nhật chính sách</h3>
-                <p>Chúng tôi có thể cập nhật chính sách này theo thời gian. Mọi thay đổi quan trọng sẽ được thông báo rõ ràng trong ứng dụng.</p>
-                <p style="margin-top: 20px; font-style: italic;">Cập nhật lần cuối: Tháng 4, 2026</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- TERMS MODAL -->
-    <div class="modal-overlay" id="termsModal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title"><i class="fas fa-file-contract"></i> Điều Khoản Sử Dụng</div>
-                <button class="modal-close" onclick="closeModal('terms')"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <h3>1. Chấp nhận điều khoản</h3>
-                <p>Bằng việc sử dụng NizeWeak, bạn đồng ý với các điều khoản sau. Nếu không đồng ý, vui lòng không sử dụng ứng dụng.</p>
-                <h3>2. Mô tả dịch vụ</h3>
-                <p>NizeWeak là một trình phát video YouTube không quảng cáo, cho phép người dùng xem video thông qua liên kết, với các tính năng bổ sung như lặp lại, tự động chuyển tiếp và hẹn giờ.</p>
-                <h3>3. Sử dụng hợp pháp</h3>
-                <ul>
-                    <li>Chỉ sử dụng liên kết YouTube hợp pháp và công khai.</li>
-                    <li>Không sử dụng ứng dụng cho bất kỳ mục đích vi phạm bản quyền nào.</li>
-                    <li>Không cố tình vượt qua hoặc can thiệp vào các cơ chế bảo vệ của YouTube.</li>
-                    <li>Không sử dụng tự động hóa hoặc bot để truy cập dịch vụ.</li>
-                </ul>
-                <h3>4. Nội dung</h3>
-                <p>NizeWeak không lưu trữ hay kiểm soát nội dung video. Mọi nội dung thuộc về chủ sở hữu gốc trên YouTube. Chúng tôi không chịu trách nhiệm về nội dung bên thứ ba.</p>
-                <h3>5. Miễn trừ trách nhiệm</h3>
-                <ul>
-                    <li>Dịch vụ được cung cấp "nguyên trạng", không có bảo hành nào.</li>
-                    <li>Chúng tôi không đảm bảo dịch vụ sẽ hoạt động liên tục hoặc không lỗi.</li>
-                    <li>Không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc sử dụng dịch vụ.</li>
-                </ul>
-                <h3>6. Thay đổi điều khoản</h3>
-                <p>Chúng tôi có quyền thay đổi các điều khoản này bất cứ lúc nào. Việc tiếp tục sử dụng sau khi thay đổi đồng nghĩa với việc bạn chấp nhận điều khoản mới.</p>
-                <h3>7. Chấm dứt</h3>
-                <p>Chúng tôi có quyền chấm dứt hoặc hạn chế quyền truy cập của bạn bất cứ lúc nào mà không cần thông báo trước.</p>
-                <p style="margin-top: 20px; font-style: italic;">Cập nhật lần cuối: Tháng 4, 2026</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <main class="main">
-        <div class="url-input-area">
-            <div class="input-wrapper">
-                <input type="text" class="url-input" id="urlInput" placeholder="Dán liên kết YouTube vào đây..." onkeydown="if(event.key==='Enter')addVideo()">
-                <button class="play-btn" onclick="addVideo()">
-                    <i class="fas fa-plus"></i> Thêm Video
-                </button>
-            </div>
-        </div>
-
-        <div class="status-bar">
-            <div class="status-dot" id="statusDot"></div>
-            <span class="status-text" id="statusText">Chưa phát</span>
-            <div class="status-spacer"></div>
-            <div class="status-info" id="timerInfo" style="display: none;">
-                <i class="fas fa-hourglass-half"></i>
-                <span id="timerCountdown"></span>
-            </div>
-            <div class="status-info">
-                <i class="fas fa-list"></i>
-                <span id="queueCount">0 video</span>
-            </div>
-        </div>
-
-        <div class="player-container" id="playerContainer">
-            <div class="player-aspect">
-                <div class="player-placeholder" id="playerPlaceholder">
-                    <i class="fas fa-play-circle"></i>
-                    <p>Thêm liên kết YouTube để bắt đầu phát</p>
-                </div>
-                <div id="playerArea" style="display:none;"></div>
-            </div>
-        </div>
-
-        <div class="playlist-area">
-            <div class="playlist-header">
-                <div class="playlist-title">
-                    <i class="fas fa-list-ul"></i> Danh sách phát
-                </div>
-                <div class="playlist-count" id="playlistCount">0 video</div>
-            </div>
-            <div class="playlist-list" id="playlistList">
-                <div class="empty-playlist" id="emptyPlaylist">
-                    <i class="fas fa-inbox" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>
-                    Chưa có video nào trong danh sách
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- TOAST CONTAINER -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- Floating particles -->
+    <div class="particle" style="left:10%; animation-delay:0s; animation-duration:7s;"></div>
+    <div class="particle" style="left:25%; animation-delay:1.5s; animation-duration:5.5s;"></div>
+    <div class="particle" style="left:45%; animation-delay:3s; animation-duration:8s;"></div>
+    <div class="particle" style="left:65%; animation-delay:0.5s; animation-duration:6s;"></div>
+    <div class="particle" style="left:80%; animation-delay:2s; animation-duration:7.5s;"></div>
+    <div class="particle" style="left:92%; animation-delay:4s; animation-duration:5s;"></div>
 
     <script>
-        // ========== STATE ==========
-        let playlist = [];
-        let currentIndex = -1;
-        let playerOn = true;
-        let loopEnabled = false;
-        let autoplayEnabled = false;
-        let timerInterval = null;
-        let timerRemaining = 0;
-        let player = null;
-        let isPlayerReady = false;
-
-        // ========== INIT ==========
-        window.addEventListener('DOMContentLoaded', () => {
-            // Load settings from localStorage
-            const saved = localStorage.getItem('nizeweak_settings');
-            if (saved) {
-                try {
-                    const s = JSON.parse(saved);
-                    if (s.playerOn !== undefined) playerOn = s.playerOn;
-                    if (s.loopEnabled !== undefined) loopEnabled = s.loopEnabled;
-                    if (s.autoplayEnabled !== undefined) autoplayEnabled = s.autoplayEnabled;
-                } catch(e) {}
-            }
-
-            // Load playlist from localStorage
-            const savedPlaylist = localStorage.getItem('nizeweak_playlist');
-            if (savedPlaylist) {
-                try {
-                    playlist = JSON.parse(savedPlaylist);
-                    renderPlaylist();
-                    updateQueueCount();
-                } catch(e) {}
-            }
-
-            // Apply settings to UI
-            applySettings();
-
-            // Load YouTube IFrame API
-            loadYouTubeAPI();
-        });
-
-        function loadYouTubeAPI() {
-            const tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            const firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        // Random data generator
+        function randInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // YouTube API callback
-        window.onYouTubeIframeAPIReady = function() {
-            isPlayerReady = true;
-            // If there's a video to play, play it
-            if (playlist.length > 0 && currentIndex >= 0) {
-                playVideoAtIndex(currentIndex);
-            }
-        };
-
-        // ========== SETTINGS ==========
-        function applySettings() {
-            const togglePlayerEl = document.getElementById('togglePlayer');
-            const toggleLoopEl = document.getElementById('toggleLoop');
-            const toggleAutoplayEl = document.getElementById('toggleAutoplay');
-            const playerContainer = document.getElementById('playerContainer');
-
-            if (playerOn) {
-                togglePlayerEl.classList.add('active');
-                playerContainer.classList.remove('off');
-            } else {
-                togglePlayerEl.classList.remove('active');
-                playerContainer.classList.add('off');
-            }
-
-            if (loopEnabled) {
-                toggleLoopEl.classList.add('active');
-            } else {
-                toggleLoopEl.classList.remove('active');
-            }
-
-            if (autoplayEnabled) {
-                toggleAutoplayEl.classList.add('active');
-            } else {
-                toggleAutoplayEl.classList.remove('active');
-            }
-
-            // Update player loop setting
-            if (player && typeof player.setLoop === 'function') {
-                player.setLoop(loopEnabled);
-            }
-
-            saveSettings();
+        function randDate(startYear, endYear) {
+            const start = new Date(startYear, 0, 1).getTime();
+            const end = new Date(endYear, 11, 31).getTime();
+            const d = new Date(start + Math.random() * (end - start));
+            return d.toLocaleDateString('vi-VN');
         }
 
-        function saveSettings() {
-            localStorage.setItem('nizeweak_settings', JSON.stringify({
-                playerOn,
-                loopEnabled,
-                autoplayEnabled
-            }));
-        }
+        const rankList = ['Đồng IV','Đồng III','Đồng II','Đồng I','Bạc IV','Bạc III','Bạc II','Bạc I','Vàng IV','Vàng III','Vàng II','Vàng I','Bạch Kim IV','Bạch Kim III','Bạch Kim II','Bạch Kim I','Kim Cương IV','Kim Cương III','Kim Cương II','Kim Cương I','Anh Hùng','Huyền Thoại','Đại Nguyên Soái'];
+        const nameList = ['ShadowHunter','NightWolf','DragonSlayer','PhantomX','BlazeKing','StormRider','IronFist','DarkViper','ThunderBolt','FrostBite','GhostRecon','AlphaStrike','NovaStar','CyberNinja','RogueAgent'];
+        const emailDomains = ['gmail.com','yahoo.com','outlook.com','hotmail.com'];
 
-        function togglePlayerFunc() {
-            playerOn = !playerOn;
-            applySettings();
+        function generateData(uid) {
+            const name = nameList[randInt(0, nameList.length - 1)] + randInt(10, 999);
+            const email = name.toLowerCase() + randInt(1,99) + '@' + emailDomains[randInt(0, emailDomains.length - 1)];
+            const verifyCode = Array.from({length: 6}, () => randInt(0,9)).join('');
 
-            if (!playerOn && player && typeof player.pauseVideo === 'function') {
-                player.pauseVideo();
-                updateStatus(false);
-            } else if (playerOn && player && typeof player.playVideo === 'function') {
-                player.playVideo();
-                updateStatus(true);
-            }
-
-            showToast(playerOn ? 'Player đã bật' : 'Player đã tắt', playerOn ? 'success' : 'warning');
-        }
-
-        function toggleLoopFunc() {
-            loopEnabled = !loopEnabled;
-            applySettings();
-            showToast(loopEnabled ? 'Lặp lại video: BẬT' : 'Lặp lại video: TẮT', 'info');
-        }
-
-        function toggleAutoplayFunc() {
-            autoplayEnabled = !autoplayEnabled;
-            applySettings();
-            showToast(autoplayEnabled ? 'Tự động chuyển tiếp: BẬT' : 'Tự động chuyển tiếp: TẮT', 'info');
-        }
-
-        // ========== SETTINGS PANEL ==========
-        function toggleSettings() {
-            const panel = document.getElementById('settingsPanel');
-            const overlay = document.getElementById('settingsOverlay');
-            const btn = document.getElementById('settingsBtn');
-
-            panel.classList.toggle('active');
-            overlay.classList.toggle('active');
-            btn.classList.toggle('active');
-        }
-
-        // ========== EXTRACT VIDEO ID ==========
-        function extractVideoId(url) {
-            if (!url) return null;
-            url = url.trim();
-
-            // Direct video ID (11 chars)
-            if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
-
-            let match;
-
-            // Standard youtube.com/watch?v=
-            match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-
-            // youtu.be/ short links
-            match = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-
-            // youtube.com/embed/
-            match = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-
-            // youtube.com/v/
-            match = url.match(/youtube\.com\/v\/([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-
-            // youtube.com/shorts/
-            match = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-
-            // youtube.com/live/
-            match = url.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-
-            return null;
-        }
-
-        // ========== ADD VIDEO ==========
-        function addVideo() {
-            const input = document.getElementById('urlInput');
-            const url = input.value.trim();
-
-            if (!url) {
-                showToast('Vui lòng nhập liên kết YouTube', 'error');
-                return;
-            }
-
-            const videoId = extractVideoId(url);
-
-            if (!videoId) {
-                showToast('Liên kết không hợp lệ. Vui lòng nhập liên kết YouTube đúng định dạng.', 'error');
-                return;
-            }
-
-            // Check duplicate
-            if (playlist.some(item => item.id === videoId)) {
-                showToast('Video này đã có trong danh sách', 'warning');
-                return;
-            }
-
-            playlist.push({
-                id: videoId,
-                url: url,
-                addedAt: Date.now()
-            });
-
-            savePlaylist();
-            renderPlaylist();
-            updateQueueCount();
-            input.value = '';
-
-            showToast('Đã thêm video vào danh sách', 'success');
-
-            // Auto play first video or if autoplay is on
-            if (currentIndex === -1) {
-                currentIndex = 0;
-                playVideoAtIndex(0);
-            }
-        }
-
-        // ========== PLAY VIDEO ==========
-        function playVideoAtIndex(index) {
-            if (index < 0 || index >= playlist.length) return;
-
-            currentIndex = index;
-            const videoId = playlist[index].id;
-
-            const playerPlaceholder = document.getElementById('playerPlaceholder');
-            const playerArea = document.getElementById('playerArea');
-
-            playerPlaceholder.style.display = 'none';
-            playerArea.style.display = 'block';
-
-            if (!playerOn) return;
-
-            if (isPlayerReady) {
-                // If player exists, load new video
-                if (player) {
-                    player.loadVideoById(videoId);
-                } else {
-                    createPlayer(videoId);
-                }
-            } else {
-                // API not ready yet, create player when ready
-                createPlayer(videoId);
-            }
-
-            renderPlaylist();
-        }
-
-        function createPlayer(videoId) {
-            const playerArea = document.getElementById('playerArea');
-            playerArea.innerHTML = '<div id="ytPlayer"></div>';
-
-            player = new YT.Player('ytPlayer', {
-                videoId: videoId,
-                playerVars: {
-                    autoplay: 1,
-                    controls: 1,
-                    modestbranding: 1,
-                    rel: 0,
-                    fs: 1,
-                    playsinline: 1,
-                    enablejsapi: 1,
-                    origin: window.location.origin,
-                    widget_referrer: window.location.origin,
-                    loop: loopEnabled ? 1 : 0,
-                    playlist: loopEnabled ? videoId : undefined
-                },
-                events: {
-                    onReady: onPlayerReady,
-                    onStateChange: onPlayerStateChange,
-                    onError: onPlayerError
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            event.target.playVideo();
-            updateStatus(true);
-        }
-
-        function onPlayerStateChange(event) {
-            const state = event.data;
-
-            if (state === YT.PlayerState.PLAYING) {
-                updateStatus(true);
-            } else if (state === YT.PlayerState.PAUSED) {
-                updateStatus(false, 'Đã tạm dừng');
-            } else if (state === YT.PlayerState.ENDED) {
-                if (loopEnabled) {
-                    // Loop: replay current video
-                    player.playVideo();
-                } else if (autoplayEnabled) {
-                    // Autoplay: go to next video
-                    playNextVideo();
-                } else {
-                    updateStatus(false, 'Đã kết thúc');
-                }
-            } else if (state === YT.PlayerState.BUFFERING) {
-                updateStatus(true, 'Đang tải...');
-            }
-        }
-
-        function onPlayerError(event) {
-            const errorCodes = {
-                2: 'Yêu cầu không hợp lệ',
-                5: 'Lỗi HTML5 Player',
-                100: 'Video không tìm thấy hoặc riêng tư',
-                101: 'Video không cho phép nhúng',
-                150: 'Video không cho phép nhúng'
+            return {
+                tenTaiKhoan: name,
+                level: randInt(1, 85),
+                luotThich: randInt(50, 50000).toLocaleString('vi-VN'),
+                mucRank: rankList[randInt(0, rankList.length - 1)],
+                br: randInt(500, 8000),
+                cs: randInt(500, 8000),
+                ngayTao: randDate(2018, 2024),
+                dangNhapCuoi: randDate(2025, 2026),
+                kimCuong: randInt(0, 150000).toLocaleString('vi-VN'),
+                emailXacThuc: email,
+                maXacThuc: verifyCode
             };
-
-            const msg = errorCodes[event.data] || 'Lỗi không xác định';
-            showToast('Lỗi phát video: ' + msg, 'error');
-
-            // Try next video if autoplay is on
-            if (autoplayEnabled) {
-                setTimeout(() => playNextVideo(), 2000);
-            }
         }
 
-        function playNextVideo() {
-            if (playlist.length === 0) return;
+        function traCuu() {
+            const uid = document.getElementById('uidInput').value.trim();
+            const btn = document.getElementById('btnTra');
+            const loading = document.getElementById('loading');
+            const result = document.getElementById('resultSection');
 
-            let nextIndex = currentIndex + 1;
-            if (nextIndex >= playlist.length) {
-                nextIndex = 0; // Wrap around
-            }
-
-            if (nextIndex === currentIndex && playlist.length === 1) {
-                // Only one video, just replay
-                if (player) player.playVideo();
-                return;
-            }
-
-            playVideoAtIndex(nextIndex);
-        }
-
-        function playPrevVideo() {
-            if (playlist.length === 0) return;
-
-            let prevIndex = currentIndex - 1;
-            if (prevIndex < 0) {
-                prevIndex = playlist.length - 1;
-            }
-
-            playVideoAtIndex(prevIndex);
-        }
-
-        // ========== STATUS ==========
-        function updateStatus(playing, customText) {
-            const dot = document.getElementById('statusDot');
-            const text = document.getElementById('statusText');
-
-            if (playing) {
-                dot.classList.add('active');
-                text.classList.add('active');
-                text.textContent = customText || 'Đang phát';
-            } else {
-                dot.classList.remove('active');
-                text.classList.remove('active');
-                text.textContent = customText || 'Chưa phát';
-            }
-        }
-
-        function updateQueueCount() {
-            const count = playlist.length;
-            document.getElementById('queueCount').textContent = count + ' video';
-            document.getElementById('playlistCount').textContent = count + ' video';
-        }
-
-        // ========== PLAYLIST ==========
-        function renderPlaylist() {
-            const list = document.getElementById('playlistList');
-            const empty = document.getElementById('emptyPlaylist');
-
-            if (playlist.length === 0) {
-                list.innerHTML = '';
-                list.appendChild(createEmptyPlaylistEl());
-                return;
-            }
-
-            list.innerHTML = '';
-            playlist.forEach((item, index) => {
-                const el = document.createElement('div');
-                el.className = 'playlist-item' + (index === currentIndex ? ' playing' : '');
-                el.style.animationDelay = (index * 0.05) + 's';
-
-                el.innerHTML = `
-                    <div class="playlist-item-num">${index === currentIndex ? '<i class="fas fa-play" style="font-size:10px;"></i>' : (index + 1)}</div>
-                    <div class="playlist-item-info">
-                        <div class="playlist-item-url">Video ${item.id}</div>
-                        <div class="playlist-item-id">${item.id}</div>
-                    </div>
-                    <button class="playlist-item-remove" onclick="event.stopPropagation(); removeVideo(${index})" title="Xoá">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                `;
-
-                el.addEventListener('click', () => playVideoAtIndex(index));
-                list.appendChild(el);
-            });
-        }
-
-        function createEmptyPlaylistEl() {
-            const div = document.createElement('div');
-            div.className = 'empty-playlist';
-            div.innerHTML = '<i class="fas fa-inbox" style="font-size: 24px; display: block; margin-bottom: 8px;"></i>Chưa có video nào trong danh sách';
-            return div;
-        }
-
-        function removeVideo(index) {
-            const wasPlaying = index === currentIndex;
-
-            playlist.splice(index, 1);
-            savePlaylist();
-            renderPlaylist();
-            updateQueueCount();
-
-            if (wasPlaying) {
-                if (playlist.length > 0) {
-                    // Play next video or the one at the same index
-                    const newIndex = Math.min(index, playlist.length - 1);
-                    currentIndex = newIndex;
-                    playVideoAtIndex(newIndex);
-                } else {
-                    // No more videos
-                    currentIndex = -1;
-                    destroyPlayer();
-                    updateStatus(false);
-                }
-            } else if (index < currentIndex) {
-                // Adjust current index since a video before it was removed
-                currentIndex--;
-            }
-
-            showToast('Đã xoá video khỏi danh sách', 'info');
-        }
-
-        function destroyPlayer() {
-            if (player) {
-                try { player.destroy(); } catch(e) {}
-                player = null;
-            }
-
-            const playerArea = document.getElementById('playerArea');
-            playerArea.innerHTML = '';
-            playerArea.style.display = 'none';
-
-            const playerPlaceholder = document.getElementById('playerPlaceholder');
-            playerPlaceholder.style.display = 'flex';
-        }
-
-        function savePlaylist() {
-            localStorage.setItem('nizeweak_playlist', JSON.stringify(playlist));
-        }
-
-        // ========== TIMER ==========
-        function startTimer() {
-            const hours = parseInt(document.getElementById('timerHours').value) || 0;
-            const minutes = parseInt(document.getElementById('timerMinutes').value) || 0;
-
-            const totalSeconds = (hours * 3600) + (minutes * 60);
-
-            if (totalSeconds <= 0) {
-                showToast('Vui lòng đặt thời gian lớn hơn 0', 'error');
-                return;
-            }
-
-            // Clear existing timer
-            if (timerInterval) {
-                clearInterval(timerInterval);
-            }
-
-            timerRemaining = totalSeconds;
-
-            const timerStatus = document.getElementById('timerStatus');
-            const timerInfo = document.getElementById('timerInfo');
-            const timerStartBtn = document.getElementById('timerStartBtn');
-            const timerStopBtn = document.getElementById('timerStopBtn');
-
-            timerStartBtn.style.display = 'none';
-            timerStopBtn.classList.add('visible');
-            timerInfo.style.display = 'flex';
-
-            updateTimerDisplay();
-            timerStatus.classList.add('active');
-            timerStatus.textContent = 'Hẹn giờ đã đặt: ' + formatTime(timerRemaining);
-
-            showToast('Hẹn giờ ngừng phát sau ' + formatTime(timerRemaining), 'success');
-
-            timerInterval = setInterval(() => {
-                timerRemaining--;
-
-                if (timerRemaining <= 0) {
-                    // Time's up - stop playback
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-
-                    if (player && typeof player.pauseVideo === 'function') {
-                        player.pauseVideo();
-                    }
-
-                    updateStatus(false, 'Đã dừng (hẹn giờ)');
-                    resetTimerUI();
-                    showToast('Đã đến giờ dừng phát video!', 'warning');
-                    return;
-                }
-
-                updateTimerDisplay();
-                timerStatus.textContent = 'Còn lại: ' + formatTime(timerRemaining);
-            }, 1000);
-        }
-
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-
-            resetTimerUI();
-            showToast('Đã huỷ hẹn giờ', 'info');
-        }
-
-        function resetTimerUI() {
-            const timerStatus = document.getElementById('timerStatus');
-            const timerInfo = document.getElementById('timerInfo');
-            const timerStartBtn = document.getElementById('timerStartBtn');
-            const timerStopBtn = document.getElementById('timerStopBtn');
-
-            timerStatus.classList.remove('active');
-            timerStatus.textContent = '';
-            timerInfo.style.display = 'none';
-            timerStartBtn.style.display = 'inline-block';
-            timerStopBtn.classList.remove('visible');
-        }
-
-        function updateTimerDisplay() {
-            const countdown = document.getElementById('timerCountdown');
-            countdown.textContent = formatTime(timerRemaining);
-        }
-
-        function formatTime(seconds) {
-            const h = Math.floor(seconds / 3600);
-            const m = Math.floor((seconds % 3600) / 60);
-            const s = seconds % 60;
-
-            if (h > 0) {
-                return h + 'g ' + String(m).padStart(2, '0') + 'p ' + String(s).padStart(2, '0') + 's';
-            }
-            return m + 'p ' + String(s).padStart(2, '0') + 's';
-        }
-
-        // ========== MODALS ==========
-        function openModal(type) {
-            const modalId = type + 'Modal';
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('active');
-            }
-        }
-
-        function closeModal(type) {
-            const modalId = type + 'Modal';
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('active');
-            }
-        }
-
-        // Close modal on overlay click
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-
-        // ========== TOAST ==========
-        function showToast(message, type) {
-            type = type || 'info';
-
-            const container = document.getElementById('toastContainer');
-
-            const icons = {
-                success: 'fas fa-check-circle',
-                warning: 'fas fa-exclamation-triangle',
-                error: 'fas fa-times-circle',
-                info: 'fas fa-info-circle'
-            };
-
-            const toast = document.createElement('div');
-            toast.className = 'toast ' + type;
-            toast.innerHTML = '<i class="' + (icons[type] || icons.info) + '"></i><span>' + message + '</span>';
-
-            container.appendChild(toast);
-
-            // Auto remove after 3 seconds
-            setTimeout(() => {
-                toast.style.animation = 'toastOut 0.4s ease forwards';
+            if (!uid) {
+                document.getElementById('uidInput').style.borderColor = '#ff4444';
                 setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 400);
-            }, 3000);
+                    document.getElementById('uidInput').style.borderColor = 'rgba(0,255,136,0.3)';
+                }, 1500);
+                return;
+            }
+
+            btn.disabled = true;
+            loading.classList.add('active');
+            result.classList.remove('active');
+
+            const delay = randInt(1500, 3000);
+
+            setTimeout(() => {
+                const data = generateData(uid);
+
+                const rows = [
+                    { icon: '👤', label: 'Tên Tài Khoản', value: data.tenTaiKhoan, cls: '' },
+                    { icon: '⭐', label: 'Level', value: data.level, cls: 'highlight' },
+                    { icon: '❤️', label: 'Lượt Thích', value: data.luotThich, cls: '' },
+                    { icon: '🏆', label: 'Mức Rank', value: data.mucRank, cls: 'rank' },
+                    { icon: '🎯', label: 'BR', value: data.br.toLocaleString('vi-VN'), cls: '' },
+                    { icon: '⚔️', label: 'CS', value: data.cs.toLocaleString('vi-VN'), cls: '' },
+                    { icon: '📅', label: 'Ngày Tạo Tài Khoản', value: data.ngayTao, cls: '' },
+                    { icon: '🕐', label: 'Đăng Nhập Lần Cuối', value: data.dangNhapCuoi, cls: '' },
+                    { icon: '💎', label: 'Tổng Nạp Kim Cương', value: data.kimCuong, cls: 'highlight' },
+                    { icon: '📧', label: 'Email Xác Thực', value: data.emailXacThuc, cls: '' },
+                    { icon: '🔐', label: 'Mã Email Xác Thực', value: data.maXacThuc, cls: 'rank' }
+                ];
+
+                let html = '';
+                rows.forEach(row => {
+                    html += `
+                        <div class="info-row">
+                            <div class="label"><span class="icon">${row.icon}</span> ${row.label}</div>
+                            <div class="value ${row.cls}">${row.value}</div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('resultBody').innerHTML = html;
+                loading.classList.remove('active');
+                result.classList.add('active');
+                btn.disabled = false;
+            }, delay);
         }
 
-        // ========== KEYBOARD SHORTCUTS ==========
-        document.addEventListener('keydown', function(e) {
-            // Escape to close settings/modals
-            if (e.key === 'Escape') {
-                const settingsPanel = document.getElementById('settingsPanel');
-                if (settingsPanel.classList.contains('active')) {
-                    toggleSettings();
-                    return;
-                }
-
-                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
-                    modal.classList.remove('active');
-                });
-            }
-        });
-
-        // ========== BACKGROUND 24/7 INDICATOR ==========
-        // Keep-alive: prevent page from sleeping
-        let keepAliveInterval = setInterval(() => {
-            // Small activity to prevent browser throttling
-            if (navigator.vibrate) navigator.vibrate(0);
-        }, 30000);
-
-        // Show running indicator
-        (function showRunningIndicator() {
-            const statusText = document.getElementById('statusText');
-            if (playlist.length === 0 && currentIndex === -1) {
-                // nothing playing, that's fine
-            }
-        })();
-
-        // ========== PAGE VISIBILITY ==========
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden && player && playerOn) {
-                // Page is visible again, ensure playback continues
-                const state = player.getPlayerState && player.getPlayerState();
-                if (state === YT.PlayerState.PLAYING) {
-                    updateStatus(true);
-                }
-            }
-        });
-
-        // ========== PREVENT CONTEXT MENU ON PLAYER ==========
-        document.getElementById('playerContainer').addEventListener('contextmenu', function(e) {
-            e.preventDefault();
+        // Enter key support
+        document.getElementById('uidInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') traCuu();
         });
     </script>
 </body>
