@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Tải Video Pro | TikTok · YouTube · Facebook</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: radial-gradient(circle at 20% 30%, #0B0F1E, #03060C);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #E0F2FE;
+    padding: 1.5rem;
+    min-height: 100vh;
+  }
+
+  /* container chính */
+  .app-container {
+    max-width: 780px;
+    margin: 0 auto;
+    background: rgba(8, 12, 25, 0.65);
+    backdrop-filter: blur(12px);
+    border-radius: 2rem;
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    padding: 1.8rem 1.8rem 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 212, 255, 0.1) inset;
+  }
+
+  /* header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px dashed #2A3A60;
+    padding-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .title h1 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    background: linear-gradient(135deg, #A5F0FF, #3B82F6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.3px;
+  }
+  .title p {
+    font-size: 0.7rem;
+    color: #7B8D9B;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .badge {
+    background: #0E162A;
+    border-radius: 40px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+    border: 1px solid #2A4C6E;
+    color: #7DF9FF;
+    font-family: monospace;
+  }
+
+  /* tab */
+  .tab-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px solid #1F2A44;
+  }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #8A9BB0;
+    cursor: pointer;
+    transition: 0.2s;
+    border-radius: 40px 40px 0 0;
+    font-family: inherit;
+  }
+  .tab-btn .emoji {
+    margin-right: 0.4rem;
+  }
+  .tab-btn.active {
+    color: #0FF;
+    background: rgba(0, 255, 255, 0.08);
+    border-bottom: 2px solid #0FF;
+  }
+  .tab-btn[data-tab="tiktok"].active { color: #FF3B5C; border-bottom-color: #FF3B5C; }
+  .tab-btn[data-tab="youtube"].active { color: #FF3B3B; border-bottom-color: #FF3B3B; }
+  .tab-btn[data-tab="facebook"].active { color: #3B82F6; border-bottom-color: #3B82F6; }
+
+  /* panel */
+  .panel {
+    display: none;
+    animation: fade 0.2s ease;
+  }
+  .panel.active {
+    display: block;
+  }
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(5px);}
+    to { opacity: 1; transform: translateY(0);}
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .input-group input {
+    flex: 1;
+    background: #0A1020;
+    border: 1.5px solid #253457;
+    border-radius: 60px;
+    padding: 0.9rem 1.2rem;
+    color: #EFF6FF;
+    font-size: 0.85rem;
+    outline: none;
+    transition: 0.2s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .input-group input:focus {
+    border-color: #0FF;
+    box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.15);
+  }
+  .input-group button {
+    background: #131C2E;
+    border: 1px solid #2F416B;
+    border-radius: 60px;
+    padding: 0 1.5rem;
+    font-weight: 500;
+    color: #B9D0F0;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .input-group button:hover {
+    background: #1E2A44;
+    border-color: #0FF;
+    color: #0FF;
+  }
+
+  .download-main {
+    width: 100%;
+    background: linear-gradient(95deg, #121B30, #0C1122);
+    border: 1px solid #2F4A6E;
+    border-radius: 40px;
+    padding: 0.9rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #D9E6FF;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .download-main:hover {
+    background: #1A2740;
+    border-color: #0FF;
+    color: #0FF;
+    transform: translateY(-1px);
+  }
+
+  /* result */
+  .result-area {
+    margin-top: 1.5rem;
+    background: #060B18;
+    border-radius: 1rem;
+    border: 1px solid #202D48;
+    overflow: hidden;
+  }
+  .result-header {
+    padding: 0.8rem 1rem;
+    background: #0C1222;
+    font-family: monospace;
+    font-size: 0.7rem;
+    border-bottom: 1px solid #1F2F50;
+    color: #6B8CBE;
+    letter-spacing: 1px;
+  }
+  .result-body {
+    padding: 1rem;
+  }
+  .video-info {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+    color: #A9C3E8;
+  }
+  .dl-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .dl-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0E1628;
+    border: 1px solid #2C3F60;
+    border-radius: 50px;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .dl-btn:hover:not(:disabled) {
+    border-color: #0FF;
+    background: #111C30;
+  }
+  .dl-btn .left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+  .quality-badge {
+    background: #1A2940;
+    padding: 2px 10px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    font-family: monospace;
+  }
+  .dl-btn.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .loader {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #2C5F8A;
+    border-top-color: #0FF;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-text {
+    color: #FF7676;
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+    text-align: center;
+  }
+  .footer {
+    font-size: 0.65rem;
+    text-align: center;
+    margin-top: 1.8rem;
+    color: #4F658D;
+    border-top: 1px solid #1A2540;
+    padding-top: 1rem;
+  }
+  @media (max-width: 540px) {
+    body { padding: 1rem; }
+    .app-container { padding: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="header">
+    <div class="title">
+      <h1>▸ MediaFetch Pro</h1>
+      <p>TikTok · YouTube · Facebook — Tải video không quảng cáo, chất lượng gốc</p>
+    </div>
+    <div class="badge">v2.5 · nâng cấp tải mượt</div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="tiktok"><span class="emoji">🎵</span> TikTok</button>
+    <button class="tab-btn" data-tab="youtube"><span class="emoji">▶️</span> YouTube</button>
+    <button class="tab-btn" data-tab="facebook"><span class="emoji">📘</span> Facebook</button>
+  </div>
+
+  <!-- TIKTOK PANEL -->
+  <div class="panel active" id="panel-tiktok">
+    <div class="input-group">
+      <input type="text" id="tt-url" placeholder="https://www.tiktok.com/@user/video/xxxx  hoặc vm.tiktok.com/xxxx" spellcheck="false">
+      <button id="tt-paste">📋 Dán</button>
+    </div>
+    <button class="download-main" id="tt-fetch">⚡ Tải video TikTok</button>
+    <div id="tt-result" class="result-area" style="display: none;"></div>
+    <div id="tt-error" class="error-text"></div>
+  </div>
+
+  <!-- YOUTUBE PANEL -->
+  <div class="panel" id="panel-youtube">
+    <div class="input-group">
+      <input type="text" id="yt-url" placeholder="https://www.youtube.com/watch?v=...  hoặc youtu.be/..." spellcheck="false">
+      <button id="yt-paste">📋 Dán</button>
+    </div>
+    <button class="download-main" id="yt-fetch">▶ Tải video YouTube</button>
+    <div id="yt-result" class="result-area" style="display: none;"></div>
+    <div id="yt-error" class="error-text"></div>
+  </div>
+
+  <!-- FACEBOOK PANEL -->
+  <div class="panel" id="panel-facebook">
+    <div class="input-group">
+      <input type="text" id="fb-url" placeholder="https://www.facebook.com/watch?v=...  hoặc fb.watch/..." spellcheck="false">
+      <button id="fb-paste">📋 Dán</button>
+    </div>
+    <button class="download-main" id="fb-fetch">📥 Tải video Facebook</button>
+    <div id="fb-result" class="result-area" style="display: none;"></div>
+    <div id="fb-error" class="error-text"></div>
+  </div>
+
+  <div class="footer">
+    ⚡ Tải trực tiếp · Không cài đặt · Hỗ trợ đa định dạng · Cập nhật 2025
+  </div>
+</div>
+
+<script>
+  (function(){
+    // ------------------- UTILS -------------------
+    const corsProxies = [
+      url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+      url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+      url => `https://proxy.cors.sh/${url}`,
+    ];
+
+    async function fetchWithTimeout(url, options = {}, timeout = 15000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      try {
+        const res = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(id);
+        return res;
+      } catch (err) {
+        clearTimeout(id);
+        throw err;
+      }
+    }
+
+    async function fetchResource(url, mode = 'cors') {
+      // try direct first
+      try {
+        const r = await fetchWithTimeout(url, { mode, credentials: 'omit' });
+        if (r.ok && r.headers.get('content-length') !== '0') return await r.blob();
+      } catch(e) {}
+      // try proxies
+      for (const proxy of corsProxies) {
+        try {
+          const res = await fetchWithTimeout(proxy(url), {}, 18000);
+          if (res.ok) {
+            const blob = await res.blob();
+            if (blob.size > 1024) return blob;
+          }
+        } catch(e) {}
+      }
+      throw new Error('CORS_BLOCKED');
+    }
+
+    async function downloadBlob(url, filename) {
+      const blob = await fetchResource(url);
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 30000);
+    }
+
+
+    // ------------------- TIKTOK (tikwm.com) -------------------
+    const ttInput = document.getElementById('tt-url');
+    const ttBtn = document.getElementById('tt-fetch');
+    const ttResultDiv = document.getElementById('tt-result');
+    const ttError = document.getElementById('tt-error');
+
+    async function fetchTikTok() {
+      let url = ttInput.value.trim();
+      if (!url) {
+        ttError.innerText = '⚠️ Nhập link TikTok';
+        return;
+      }
+      ttError.innerText = '';
+      ttResultDiv.style.display = 'none';
+      ttBtn.disabled = true;
+      ttBtn.innerHTML = '<div class="loader"></div> Đang lấy thông tin ...';
+      try {
+        const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
+        const resp = await fetch(apiUrl);
+        const data = await resp.json();
+        if (data.code !== 0 || !data.data) throw new Error('Không thể parse video');
+        const videoData = data.data;
+        const title = (videoData.title || 'tiktok_video').slice(0, 50).replace(/[^\w\s-]/g, '').replace(/\s+/g,'_');
+        let linksHtml = '';
+        if (videoData.hdplay) {
+          linksHtml += `<div class="dl-btn" data-url="${videoData.hdplay}" data-filename="${title}_HD.mp4"><div class="left">🎬 HD không logo</div><span class="quality-badge">MP4 • Chất lượng cao</span></div>`;
+        }
+        if (videoData.play && videoData.play !== videoData.hdplay) {
+          linksHtml += `<div class="dl-btn" data-url="${videoData.play}" data-filename="${title}_SD.mp4"><div class="left">📱 SD không logo</div><span class="quality-badge">MP4 • Tiết kiệm dung lượng</span></div>`;
+        }
+        if (videoData.music) {
+          linksHtml += `<div class="dl-btn" data-url="${videoData.music}" data-filename="${title}_audio.mp3"><div class="left">🎵 Chỉ âm thanh (MP3)</div><span class="quality-badge">Audio gốc</span></div>`;
+        }
+        ttResultDiv.innerHTML = `<div class="result-header">✅ THÔNG TIN VIDEO — CHỌN CHẤT LƯỢNG</div>
+                                  <div class="result-body"><div class="video-info">🎬 ${escapeHtml(videoData.title || 'Video')} · ❤️ ${videoData.digg_count || '?'} · 💬 ${videoData.comment_count || '?'}</div>
+                                  <div class="dl-links">${linksHtml}</div></div>`;
+        ttResultDiv.style.display = 'block';
+        // attach event
+        document.querySelectorAll('#tt-result .dl-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const url = btn.getAttribute('data-url');
+            const filename = btn.getAttribute('data-filename');
+            downloadBlob(url, filename).catch(err => ttError.innerText = '❌ Lỗi tải: ' + err.message);
+          });
+        });
+      } catch (err) {
+        ttError.innerText = '❌ Lỗi: ' + (err.message || 'Không thể xử lý link');
+      } finally {
+        ttBtn.disabled = false;
+        ttBtn.innerHTML = '⚡ Tải video TikTok';
+      }
+    }
+
+    // ------------------- YOUTUBE (cobalt tools) -------------------
+    const ytInput = document.getElementById('yt-url');
+    const ytBtn = document.getElementById('yt-fetch');
+    const ytResultDiv = document.getElementById('yt-result');
+    const ytError = document.getElementById('yt-error');
+
+    async function fetchYouTube() {
+      let url = ytInput.value.trim();
+      if (!url) { ytError.innerText = '⚠️ Nhập link YouTube'; return; }
+      ytError.innerText = '';
+      ytResultDiv.style.display = 'none';
+      ytBtn.disabled = true;
+      ytBtn.innerHTML = '<div class="loader"></div> Xử lý video ...';
+      try {
+        const apiUrl = 'https://api.cobalt.tools/';
+        const qualities = ['1080', '720', '480', '360'];
+        let linksHtml = '';
+        for (let q of qualities) {
+          const payload = { url, videoQuality: q, downloadMode: 'auto' };
+          const resp = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await resp.json();
+          if (data.status === 'tunnel' && data.url) {
+            const label = q === '1080' ? 'Full HD' : (q === '720' ? 'HD' : (q === '480' ? 'SD' : '360p'));
+            linksHtml += `<div class="dl-btn" data-url="${data.url}" data-filename="youtube_${q}.mp4"><div class="left">🎬 ${label} (${q}p)</div><span class="quality-badge">MP4</span></div>`;
+          }
+        }
+        // audio
+        const audioPayload = { url, downloadMode: 'audio' };
+        const audioResp = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(audioPayload)
+        });
+        const audioData = await audioResp.json();
+        if (audioData.status === 'tunnel' && audioData.url) {
+          linksHtml += `<div class="dl-btn" data-url="${audioData.url}" data-filename="youtube_audio.mp3"><div class="left">🎵 Chỉ âm thanh (MP3)</div><span class="quality-badge">AUDIO</span></div>`;
+        }
+        if (!linksHtml) throw new Error('Không lấy được link tải');
+        ytResultDiv.innerHTML = `<div class="result-header">🎬 YOUTUBE — CHỌN CHẤT LƯỢNG MUỐN TẢI</div>
+                                  <div class="result-body"><div class="dl-links">${linksHtml}</div></div>`;
+        ytResultDiv.style.display = 'block';
+        document.querySelectorAll('#yt-result .dl-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const u = btn.getAttribute('data-url');
+            const f = btn.getAttribute('data-filename');
+            downloadBlob(u, f).catch(e => ytError.innerText = 'Lỗi tải');
+          });
+        });
+      } catch (err) {
+        ytError.innerText = '❌ Lỗi: ' + (err.message || 'YouTube không hợp lệ');
+      } finally {
+        ytBtn.disabled = false;
+        ytBtn.innerHTML = '▶ Tải video YouTube';
+      }
+    }
+
+    // ------------------- FACEBOOK (cobalt tools) -------------------
+    const fbInput = document.getElementById('fb-url');
+    const fbBtn = document.getElementById('fb-fetch');
+    const fbResultDiv = document.getElementById('fb-result');
+    const fbError = document.getElementById('fb-error');
+
+    async function fetchFacebook() {
+      let url = fbInput.value.trim();
+      if (!url) { fbError.innerText = '⚠️ Nhập link Facebook'; return; }
+      fbError.innerText = '';
+      fbResultDiv.style.display = 'none';
+      fbBtn.disabled = true;
+      fbBtn.innerHTML = '<div class="loader"></div> Đang lấy video ...';
+      try {
+        const apiUrl = 'https://api.cobalt.tools/';
+        const hdPayload = { url, videoQuality: '1080', downloadMode: 'auto' };
+        const sdPayload = { url, videoQuality: '480', downloadMode: 'auto' };
+        const [hdRes, sdRes] = await Promise.allSettled([
+          fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(hdPayload) }),
+          fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(sdPayload) })
+        ]);
+        let linksHtml = '';
+        if (hdRes.status === 'fulfilled') {
+          const data = await hdRes.value.json();
+          if (data.status === 'tunnel' && data.url)
+            linksHtml += `<div class="dl-btn" data-url="${data.url}" data-filename="facebook_hd.mp4"><div class="left">🎬 HD (1080p)</div><span class="quality-badge">MP4</span></div>`;
+        }
+        if (sdRes.status === 'fulfilled') {
+          const data = await sdRes.value.json();
+          if (data.status === 'tunnel' && data.url && !linksHtml.includes(data.url))
+            linksHtml += `<div class="dl-btn" data-url="${data.url}" data-filename="facebook_sd.mp4"><div class="left">📱 SD (480p)</div><span class="quality-badge">MP4</span></div>`;
+        }
+        if (!linksHtml) throw new Error('Không lấy được link (có thể video chế độ riêng tư)');
+        fbResultDiv.innerHTML = `<div class="result-header">✅ FACEBOOK — CHẤT LƯỢNG CÓ SẴN</div>
+                                  <div class="result-body"><div class="dl-links">${linksHtml}</div></div>`;
+        fbResultDiv.style.display = 'block';
+        document.querySelectorAll('#fb-result .dl-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const u = btn.getAttribute('data-url');
+            const f = btn.getAttribute('data-filename');
+            downloadBlob(u, f);
+          });
+        });
+      } catch (err) {
+        fbError.innerText = '❌ ' + (err.message || 'Lỗi khi tải video');
+      } finally {
+        fbBtn.disabled = false;
+        fbBtn.innerHTML = '📥 Tải video Facebook';
+      }
+    }
+
+    // event listeners
+    ttBtn.addEventListener('click', fetchTikTok);
+    ytBtn.addEventListener('click', fetchYouTube);
+    fbBtn.addEventListener('click', fetchFacebook);
+    document.getElementById('tt-paste').addEventListener('click', () => navigator.clipboard.readText().then(t => ttInput.value = t).catch(()=> alert('Dán thủ công')));
+    document.getElementById('yt-paste').addEventListener('click', () => navigator.clipboard.readText().then(t => ytInput.value = t).catch(()=> alert('Dán thủ công')));
+    document.getElementById('fb-paste').addEventListener('click', () => navigator.clipboard.readText().then(t => fbInput.value = t).catch(()=> alert('Dán thủ công')));
+
+    // tab switching
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.panel');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.getAttribute('data-tab');
+        tabs.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        panels.forEach(panel => panel.classList.remove('active'));
+        document.getElementById(`panel-${tabName}`).classList.add('active');
+        // clear error display when switch
+        document.querySelectorAll('.error-text').forEach(el => el.innerText = '');
+      });
+    });
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+  })();
+</script>
+</body>
+</html>
