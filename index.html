@@ -357,91 +357,59 @@
 
 <script>
 // ════════════════════════════════════════════════════════
-//  DIRECT BLOB DOWNLOAD ENGINE
+//  BLOB DOWNLOAD ENGINE
+//  Thử tải trực tiếp, rồi thử qua CORS proxy
 // ════════════════════════════════════════════════════════
 
-// CORS proxy list — thử lần lượt cho đến khi thành công
-const CORS_PROXIES = [
-  u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
-  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+const PROXIES = [
+  u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
   u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-  u => `https://corsproxy.org/?${encodeURIComponent(u)}`,
-  u => `https://proxy.cors.sh/${u}`,
+  u => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(u)}`,
 ];
 
-// Fetch 1 URL với timeout (ms)
-async function fetchWithTimeout(url, options = {}, ms = 18000) {
-  const ctrl = new AbortController();
-  const tid  = setTimeout(() => ctrl.abort(), ms);
-  try {
-    const r = await fetch(url, { ...options, signal: ctrl.signal });
-    clearTimeout(tid);
-    return r;
-  } catch (e) {
-    clearTimeout(tid);
-    throw e;
-  }
-}
-
-// Cố tải URL thành Blob — thử nhiều cách
 async function fetchAsBlob(rawUrl) {
-  // 1. Fetch thẳng (Cobalt tunnel URLs có CORS header sẵn)
+  // 1. Thử thẳng
   try {
-    const r = await fetchWithTimeout(rawUrl, { mode: 'cors', credentials: 'omit' });
+    const r = await fetch(rawUrl, { mode: 'cors' });
     if (r.ok) return await r.blob();
   } catch (_) {}
-
-  // 2. Thử lần lượt qua CORS proxies
-  for (const mkP of CORS_PROXIES) {
+  // 2. Thử từng proxy
+  for (const mkProxy of PROXIES) {
     try {
-      const r = await fetchWithTimeout(mkP(rawUrl), {}, 20000);
-      if (r.ok) {
-        const blob = await r.blob();
-        if (blob.size > 500) return blob; // bỏ qua blob rỗng / lỗi
-      }
+      const r = await fetch(mkProxy(rawUrl));
+      if (r.ok) return await r.blob();
     } catch (_) {}
   }
-
-  throw new Error('CORS_FAIL');
+  throw new Error('Không thể tải file. Vui lòng thử lại.');
 }
 
-// Lưu blob về máy
-function triggerBlobSave(blob, filename) {
-  if (!filename.match(/\.(mp4|mp3|m4a|webm|mov)$/i)) {
+function saveBlob(blob, filename) {
+  // Đảm bảo đuôi file đúng
+  if (!filename.match(/\.(mp4|mp3|m4a|webm)$/i)) {
     filename += blob.type.includes('audio') ? '.mp3' : '.mp4';
   }
-  const blobUrl = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = blobUrl; a.download = filename;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(blobUrl), 120000);
+  const url = URL.createObjectURL(blob);
+  const a   = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
 
-// Fallback: mở link thẳng với thẻ <a download> (trình duyệt tự xử lý)
-function fallbackDirectLink(rawUrl, filename) {
-  const a = document.createElement('a');
-  a.href = rawUrl; a.download = filename; a.target = '_blank';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-}
-
-// Giả lập progress bar
+// Animate progress bar in button
 function animateBar(barEl) {
   let pct = 0;
   return setInterval(() => {
-    const step = pct < 40 ? 6 : pct < 75 ? 3 : 0.8;
-    pct = Math.min(pct + step + Math.random() * 2, 90);
+    pct = Math.min(pct + Math.random() * 9 + 1, 88);
     if (barEl) barEl.style.width = pct + '%';
-  }, 300);
+  }, 350);
 }
 
-// ── Nút tải chính — nhận btnId, tra URL từ registry ──
-async function triggerDownload(btnId) {
+// Core: download dengan button state management
+async function triggerDownload(videoUrl, filename, btnId) {
   const btn = document.getElementById(btnId);
   if (!btn || btn.disabled) return;
-  const entry = _DL[btnId];
-  if (!entry) return;
-  const { url: videoUrl, filename } = entry;
-  const orig = btn.innerHTML;
+  const originalHTML = btn.innerHTML;
   btn.disabled = true;
   btn.classList.add('loading');
   btn.innerHTML = `<div class="dl-bar" id="${btnId}_bar"></div>
@@ -451,48 +419,38 @@ async function triggerDownload(btnId) {
   const timer = animateBar(barEl);
 
   try {
-    // Thử tải blob về trước
     const blob = await fetchAsBlob(videoUrl);
     clearInterval(timer);
     if (barEl) barEl.style.width = '100%';
-    await new Promise(r => setTimeout(r, 120));
-    triggerBlobSave(blob, filename);
+    await new Promise(r => setTimeout(r, 150)); // brief flash full
+    saveBlob(blob, filename);
 
-    btn.classList.remove('loading'); btn.classList.add('success');
-    btn.innerHTML = `<span class="dl-label">✅ Đã lưu về máy thành công!</span>
-      <span class="dl-quality" style="color:var(--accent2)">XONG ✓</span>`;
-    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('success'); btn.disabled = false; }, 5000);
+    btn.classList.remove('loading');
+    btn.classList.add('success');
+    btn.innerHTML = `<span class="dl-label">✅ Đã lưu về máy thành công!</span><span class="dl-quality" style="color:var(--accent2)">XONG ✓</span>`;
+    setTimeout(() => {
+      btn.innerHTML = originalHTML; btn.classList.remove('success'); btn.disabled = false;
+    }, 5000);
 
   } catch (err) {
     clearInterval(timer);
-
-    if (err.message === 'CORS_FAIL') {
-      // Fallback: link trực tiếp — trình duyệt sẽ tải hoặc mở
-      if (barEl) barEl.style.width = '100%';
-      fallbackDirectLink(videoUrl, filename);
-      btn.classList.remove('loading'); btn.classList.add('success');
-      btn.innerHTML = `<span class="dl-label">⬇ Đang tải (trình duyệt xử lý)...</span>
-        <span class="dl-quality" style="color:var(--accent2)">OK</span>`;
-      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('success'); btn.disabled = false; }, 6000);
-    } else {
-      btn.classList.remove('loading'); btn.classList.add('fail');
-      btn.innerHTML = `<span class="dl-label">❌ Lỗi — Nhấn để thử lại</span>
-        <span class="dl-quality" style="color:var(--accent3)">RETRY</span>`;
-      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('fail'); btn.disabled = false; }, 4000);
-    }
+    btn.classList.remove('loading'); btn.classList.add('fail');
+    btn.innerHTML = `<span class="dl-label">❌ Tải thất bại — Nhấn để thử lại</span><span class="dl-quality" style="color:var(--accent3)">LỖI</span>`;
+    setTimeout(() => {
+      btn.innerHTML = originalHTML; btn.classList.remove('fail'); btn.disabled = false;
+    }, 4000);
   }
 }
 
 // ════════════════════════════════════════════════════════
-//  COBALT API (YouTube + Facebook)
+//  COBALT TOOLS API (YouTube + Facebook)
 // ════════════════════════════════════════════════════════
 async function cobaltFetch(url, opts = {}) {
-  const body = JSON.stringify({ url, downloadMode: 'auto', videoQuality: '1080', ...opts });
-  const res = await fetchWithTimeout('https://api.cobalt.tools/', {
+  const res = await fetch('https://api.cobalt.tools/', {
     method : 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body,
-  }, 20000);
+    body   : JSON.stringify({ url, downloadMode: 'auto', videoQuality: '1080', ...opts }),
+  });
   if (!res.ok) throw new Error('Cobalt API lỗi ' + res.status);
   return res.json();
 }
@@ -532,27 +490,16 @@ function setMainBtn(p, dis) { document.querySelector('.' + p + '-btn').disabled 
 function reset(p) { setLoading(p, false); setError(p, ''); setResult(p, false); }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// Registry lưu URL/filename — tránh nhúng URL thẳng vào onclick (lỗi dấu ' hoặc ký tự đặc biệt)
-const _DL = {};
 let _bid = 0;
-
 function makeDlBtn(label, quality, emoji, videoUrl, filename) {
   const id = 'db' + (++_bid);
-  _DL[id] = { url: videoUrl, filename };          // lưu an toàn vào registry
-  return `<button class="dl-btn" id="${id}" onclick="triggerDownload('${id}')">
+  const safeUrl = esc(videoUrl), safeName = esc(filename);
+  return `<button class="dl-btn" id="${id}"
+    onclick="triggerDownload('${safeUrl}','${safeName}','${id}')">
     <div class="dl-bar"></div>
     <span class="dl-label">${emoji} ${label}</span>
     <span class="dl-quality">${quality} ⬇</span>
   </button>`;
-}
-
-// Tên file an toàn — giữ tiếng Việt, loại ký tự không hợp lệ
-function safeFilename(raw, ext) {
-  return ((raw || 'video')
-    .replace(/[\\/:*?"<>|]/g, '')
-    .replace(/\s+/g, '_')
-    .substring(0, 60)
-    .replace(/^_+|_+$/g, '') || 'video') + ext;
 }
 
 // ════════════════════════════════════════════════════════
@@ -571,21 +518,20 @@ async function fetchTikTok() {
     if (data.code !== 0 || !data.data) throw new Error('Không phân tích được link. Kiểm tra lại.');
 
     const d      = data.data;
-    const title  = d.title || 'Video TikTok';
-    const slug   = safeFilename(title, '');      // tên file an toàn, giữ tiếng Việt
+    const slug   = (d.title || 'tiktok').replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'_').slice(0,40) || 'tiktok';
     const author = d.author?.nickname || '';
     const dur    = d.duration ? d.duration + 's' : '';
     const plays  = d.play_count ? Number(d.play_count).toLocaleString('vi') + ' lượt xem' : '';
 
     let links = '';
-    if (d.hdplay)                      links += makeDlBtn('Video HD (Không Logo)', 'HD',    '🎬', d.hdplay, safeFilename(title, '_HD.mp4'));
-    if (d.play && d.play !== d.hdplay) links += makeDlBtn('Video SD (Không Logo)', 'SD',    '📹', d.play,   safeFilename(title, '_SD.mp4'));
-    if (d.music)                       links += makeDlBtn('Âm thanh (MP3)',         'AUDIO', '🎵', d.music,  safeFilename(title, '_audio.mp3'));
+    if (d.hdplay)                   links += makeDlBtn('Video HD (Không Logo)', 'HD', '🎬', d.hdplay, slug + '_HD.mp4');
+    if (d.play && d.play !== d.hdplay) links += makeDlBtn('Video SD (Không Logo)', 'SD', '📹', d.play,   slug + '_SD.mp4');
+    if (d.music)                    links += makeDlBtn('Âm thanh (MP3)',          'AUDIO','🎵', d.music,  slug + '_audio.mp3');
 
     setLoading('tiktok', false);
     $('tiktok-body').innerHTML = `
       <div class="video-meta">
-        <div class="video-title">${esc(title)}</div>
+        <div class="video-title">${esc(d.title || 'Video TikTok')}</div>
         <div class="video-info">@${esc(author)} &nbsp;·&nbsp; ${dur} &nbsp;·&nbsp; ${plays}</div>
       </div>
       <div class="dl-links">${links}</div>`;
@@ -715,7 +661,7 @@ const MODALS = {
     title: '👨‍💻 NHÀ PHÁT TRIỂN',
     html: `<div class="dev-card"><div class="dev-avatar">NT</div><div class="dev-info"><div class="dev-name">Nguyễn Tiêu</div><div class="dev-role">// Developer · UI/UX Designer</div></div></div>
     <h3 style="margin-top:18px">Giới thiệu</h3><p>Tải Video Mxh All được phát triển bởi Nguyễn Tiêu — nhà phát triển ứng dụng với đam mê thiết kế giao diện đẹp và trải nghiệm người dùng mượt mà.</p>
-    <h3>Dự án</h3><p>Ứng dụng web miễn phí, không quảng cáo, giúp tải video từ mạng xã hội nhanh chóng và tiện lợi.</p><div style="margin-top:14px"><span class="version-badge">🚀 Phiên bản 1.0 · 2024</span></div>`
+    <h3>Dự án</h3><p>Ứng dụng web miễn phí, không quảng cáo, giúp tải video từ mạng xã hội nhanh chóng và tiện lợi.</p><div style="margin-top:14px"><span class="version-badge">🚀 Phiên bản 1.0 · 2026</span></div>`
   },
   version: {
     title: '🚀 PHIÊN BẢN',
