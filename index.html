@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tải Video Mxh All</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #050a0f;
+    --bg2: #090f17;
+    --panel: #0d1622;
+    --panel2: #111d2e;
+    --border: #1a3a5c;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --accent3: #ff3c6e;
+    --tiktok: #fe2c55;
+    --youtube: #ff0000;
+    --facebook: #1877f2;
+    --text: #c8e6f7;
+    --text-dim: #5a7a9a;
+    --glow: 0 0 20px rgba(0,212,255,0.3);
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; position: relative; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+    pointer-events: none; z-index: 0;
+  }
+  .container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* HEADER */
+  header { display: flex; align-items: center; justify-content: space-between; padding: 22px 0 18px; border-bottom: 1px solid var(--border); position: relative; }
+  .logo-wrap { display: flex; align-items: center; gap: 14px; }
+  .logo-icon { width: 42px; height: 42px; border: 2px solid var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: var(--glow), inset 0 0 10px rgba(0,212,255,0.1); animation: pulse-border 3s ease-in-out infinite; }
+  @keyframes pulse-border { 0%,100%{box-shadow:var(--glow),inset 0 0 10px rgba(0,212,255,0.1);} 50%{box-shadow:0 0 30px rgba(0,212,255,0.6),inset 0 0 15px rgba(0,212,255,0.2);} }
+  .logo-icon svg { width: 22px; height: 22px; }
+  .site-title { font-family: var(--font-display); font-size: clamp(13px,3vw,19px); font-weight: 900; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; text-shadow: 0 0 20px rgba(0,212,255,0.5); }
+  .title-sub { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); letter-spacing: 3px; margin-top: 2px; }
+
+  /* HAMBURGER */
+  .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); transition: all .3s; z-index: 100; }
+  .hamburger:hover { border-color: var(--accent); box-shadow: var(--glow); }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--accent); transition: all .35s cubic-bezier(.4,0,.2,1); transform-origin: center; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MENU DROPDOWN */
+  .menu-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 280px; background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6),var(--glow); opacity: 0; transform: translateY(-10px) scale(0.97); pointer-events: none; transition: all .3s cubic-bezier(.4,0,.2,1); z-index: 200; }
+  .menu-dropdown.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+  .menu-header { padding: 12px 16px; font-family: var(--font-mono); font-size: 10px; color: var(--accent2); letter-spacing: 3px; border-bottom: 1px solid var(--border); background: rgba(0,255,157,0.05); }
+  .menu-item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; border-bottom: 1px solid rgba(26,58,92,0.5); transition: all .2s; }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-item:hover { background: rgba(0,212,255,0.07); color: var(--accent); padding-left: 22px; }
+  .menu-item .m-icon { font-size: 16px; width: 20px; text-align: center; }
+  .menu-item .m-badge { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); background: var(--panel); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+
+  /* STATUS BAR */
+  .status-bar { display: flex; align-items: center; gap: 16px; margin: 24px 0 32px; padding: 10px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); overflow: hidden; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); box-shadow: 0 0 8px var(--accent2); animation: blink 2s ease-in-out infinite; flex-shrink: 0; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+  .status-text { color: var(--accent2); }
+  .status-sep { color: var(--border); }
+  .ticker { flex: 1; overflow: hidden; }
+  .ticker-inner { animation: ticker 18s linear infinite; white-space: nowrap; }
+  @keyframes ticker { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); }
+  .tab-btn { display: flex; align-items: center; gap: 8px; padding: 12px 20px; font-family: var(--font-body); font-size: 14px; font-weight: 700; letter-spacing: 1px; color: var(--text-dim); background: transparent; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; transition: all .25s; text-transform: uppercase; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-btn.active.tiktok-tab { color: var(--tiktok); border-bottom-color: var(--tiktok); }
+  .tab-btn.active.youtube-tab { color: var(--youtube); border-bottom-color: var(--youtube); }
+  .tab-btn.active.fb-tab { color: var(--facebook); border-bottom-color: var(--facebook); }
+  .tab-icon { font-size: 18px; }
+
+  /* PANELS */
+  .panel-wrap { display: none; }
+  .panel-wrap.active { display: block; }
+  .downloader-card { background: var(--panel); border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px; padding: 32px; position: relative; overflow: hidden; }
+  .downloader-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg,transparent,var(--accent),transparent); opacity: .5; }
+  .downloader-card.tiktok-card::before { background: linear-gradient(90deg,transparent,var(--tiktok),transparent); }
+  .downloader-card.youtube-card::before { background: linear-gradient(90deg,transparent,var(--youtube),transparent); }
+  .downloader-card.fb-card::before { background: linear-gradient(90deg,transparent,var(--facebook),transparent); }
+
+  .platform-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+  .platform-logo { width: 56px; height: 56px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+  .tiktok-logo { background: rgba(254,44,85,0.15); border: 1px solid rgba(254,44,85,0.3); }
+  .youtube-logo { background: rgba(255,0,0,0.12); border: 1px solid rgba(255,0,0,0.25); }
+  .fb-logo { background: rgba(24,119,242,0.15); border: 1px solid rgba(24,119,242,0.3); }
+  .platform-info h2 { font-family: var(--font-display); font-size: 16px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+  .tiktok-h { color: var(--tiktok); text-shadow: 0 0 15px rgba(254,44,85,0.4); }
+  .youtube-h { color: var(--youtube); text-shadow: 0 0 15px rgba(255,0,0,0.4); }
+  .fb-h { color: var(--facebook); text-shadow: 0 0 15px rgba(24,119,242,0.4); }
+  .platform-info p { font-size: 13px; color: var(--text-dim); font-family: var(--font-mono); }
+
+  .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+  .url-input { flex: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-family: var(--font-mono); font-size: 13px; color: var(--text); outline: none; transition: border-color .25s, box-shadow .25s; }
+  .url-input::placeholder { color: var(--text-dim); }
+  .url-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,212,255,0.08); }
+  .url-input.tiktok-inp:focus { border-color: var(--tiktok); box-shadow: 0 0 0 3px rgba(254,44,85,0.08); }
+  .url-input.youtube-inp:focus { border-color: var(--youtube); box-shadow: 0 0 0 3px rgba(255,0,0,0.08); }
+  .url-input.fb-inp:focus { border-color: var(--facebook); box-shadow: 0 0 0 3px rgba(24,119,242,0.08); }
+  .paste-btn { padding: 0 16px; background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); cursor: pointer; transition: all .2s; white-space: nowrap; }
+  .paste-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  .download-btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; position: relative; overflow: hidden; transition: all .3s; }
+  .download-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right,transparent,rgba(255,255,255,0.12),transparent); transform: translateX(-100%); transition: transform .6s; }
+  .download-btn:hover::after { transform: translateX(100%); }
+  .tiktok-btn { background: linear-gradient(135deg,#fe2c55,#c4003b); color: #fff; box-shadow: 0 4px 20px rgba(254,44,85,0.3); }
+  .tiktok-btn:hover { box-shadow: 0 6px 30px rgba(254,44,85,0.5); transform: translateY(-1px); }
+  .youtube-btn { background: linear-gradient(135deg,#ff0000,#b30000); color: #fff; box-shadow: 0 4px 20px rgba(255,0,0,0.3); }
+  .youtube-btn:hover { box-shadow: 0 6px 30px rgba(255,0,0,0.5); transform: translateY(-1px); }
+  .fb-btn { background: linear-gradient(135deg,#1877f2,#0a5cbf); color: #fff; box-shadow: 0 4px 20px rgba(24,119,242,0.3); }
+  .fb-btn:hover { box-shadow: 0 6px 30px rgba(24,119,242,0.5); transform: translateY(-1px); }
+  .download-btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
+
+  /* RESULT */
+  .result-box { margin-top: 20px; display: none; }
+  .result-box.show { display: block; }
+  .result-inner { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .result-header { padding: 10px 16px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 3px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .result-body { padding: 20px; }
+  .video-meta { margin-bottom: 16px; }
+  .video-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--text); line-height: 1.4; }
+  .video-info { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+  .dl-links { display: flex; flex-direction: column; gap: 8px; }
+
+  /* DL BUTTON */
+  .dl-btn { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color .2s, color .2s, background .2s; width: 100%; text-align: left; font-family: var(--font-body); position: relative; overflow: hidden; }
+  .dl-btn:hover:not(:disabled) { border-color: var(--accent2); color: var(--accent2); background: rgba(0,255,157,0.05); }
+  .dl-btn:disabled { cursor: not-allowed; }
+  .dl-btn .dl-label { display: flex; align-items: center; gap: 8px; position: relative; z-index: 1; }
+  .dl-btn .dl-quality { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); position: relative; z-index: 1; }
+  /* Progress fill */
+  .dl-btn .dl-bar { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: rgba(0,212,255,0.07); transition: width .35s ease; pointer-events: none; }
+  /* States */
+  .dl-btn.loading { border-color: var(--accent) !important; animation: btn-pulse 1s ease-in-out infinite; }
+  @keyframes btn-pulse { 0%,100%{box-shadow:none;} 50%{box-shadow:0 0 14px rgba(0,212,255,0.25);} }
+  .dl-btn.success { border-color: var(--accent2) !important; color: var(--accent2) !important; background: rgba(0,255,157,0.06) !important; }
+  .dl-btn.fail { border-color: var(--accent3) !important; color: var(--accent3) !important; background: rgba(255,60,110,0.06) !important; }
+
+  /* LOADING BOX */
+  .loading-box { display: none; text-align: center; padding: 30px 20px; margin-top: 20px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; }
+  .loading-box.show { display: block; }
+  .loader { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to{transform:rotate(360deg);} }
+  .loading-text { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); }
+  .loading-dots::after { content: '...'; animation: dots 1.5s steps(3,end) infinite; }
+  @keyframes dots { 0%{content:'';} 33%{content:'.';} 66%{content:'..';} 100%{content:'...';} }
+
+  /* ERROR */
+  .error-box { display: none; padding: 14px 16px; background: rgba(255,60,110,0.08); border: 1px solid rgba(255,60,110,0.3); border-radius: 8px; margin-top: 16px; font-size: 13px; color: #ff3c6e; font-family: var(--font-mono); }
+  .error-box.show { display: block; }
+
+  /* TIPS */
+  .tips { margin-top: 20px; padding: 14px 16px; background: rgba(0,212,255,0.04); border: 1px solid rgba(0,212,255,0.1); border-radius: 8px; border-left: 3px solid var(--accent); }
+  .tips p { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); line-height: 1.8; }
+  .tips span { color: var(--accent); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--panel2); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,0.7),var(--glow); }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--panel2); }
+  .modal-title { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 1px; color: var(--accent); }
+  .modal-close { width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel); color: var(--text-dim); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+  .modal-close:hover { border-color: var(--accent3); color: var(--accent3); }
+  .modal-body { padding: 20px; }
+  .modal-body h3 { font-size: 14px; font-weight: 700; color: var(--accent2); margin-bottom: 10px; margin-top: 18px; }
+  .modal-body h3:first-child { margin-top: 0; }
+  .modal-body p { font-size: 13px; color: var(--text-dim); line-height: 1.8; font-family: var(--font-mono); }
+  .dev-card { margin-top: 20px; padding: 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; gap: 14px; }
+  .dev-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg,var(--accent),var(--accent2)); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--bg); flex-shrink: 0; }
+  .dev-info .dev-name { font-weight: 700; font-size: 15px; color: var(--text); }
+  .dev-info .dev-role { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+  .version-badge { display: inline-block; margin-top: 12px; padding: 4px 12px; background: rgba(0,255,157,0.1); border: 1px solid rgba(0,255,157,0.3); border-radius: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--accent2); }
+
+  footer { margin-top: 48px; padding: 20px 0; border-top: 1px solid var(--border); text-align: center; font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+  footer span { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .input-group { flex-direction: column; }
+    .paste-btn { padding: 12px; }
+    .downloader-card { padding: 20px; }
+    .tab-btn { padding: 10px 12px; font-size: 12px; }
+    .tab-icon { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="site-title">Tải Video Mxh All</div>
+        <div class="title-sub">// VIDEO DOWNLOADER v1.0</div>
+      </div>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="menu-dropdown" id="menuDropdown">
+      <div class="menu-header">// SYSTEM MENU</div>
+      <div class="menu-item" onclick="openModal('privacy')"><span class="m-icon">🔒</span> Chính sách quyền riêng tư</div>
+      <div class="menu-item" onclick="openModal('terms')"><span class="m-icon">📄</span> Điều khoản sử dụng</div>
+      <div class="menu-item" onclick="openModal('dev')"><span class="m-icon">👨‍💻</span> Nhà phát triển<span class="m-badge">Nguyễn Tiêu</span></div>
+      <div class="menu-item" onclick="openModal('version')"><span class="m-icon">🚀</span> Phiên bản<span class="m-badge">1.0</span></div>
+    </div>
+  </header>
+
+  <div class="status-bar">
+    <div class="status-dot"></div>
+    <span class="status-text">ONLINE</span>
+    <span class="status-sep">|</span>
+    <div class="ticker"><div class="ticker-inner">Hỗ trợ TikTok (không logo) • YouTube • Facebook • Nhập link → Tải trực tiếp về máy • Miễn phí hoàn toàn</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn tiktok-tab active" onclick="switchTab('tiktok',this)"><span class="tab-icon">🎵</span> TikTok</button>
+    <button class="tab-btn youtube-tab" onclick="switchTab('youtube',this)"><span class="tab-icon">▶️</span> YouTube</button>
+    <button class="tab-btn fb-tab" onclick="switchTab('facebook',this)"><span class="tab-icon">📘</span> Facebook</button>
+  </div>
+
+  <!-- TIKTOK -->
+  <div class="panel-wrap active" id="panel-tiktok">
+    <div class="downloader-card tiktok-card">
+      <div class="platform-hero">
+        <div class="platform-logo tiktok-logo">🎵</div>
+        <div class="platform-info">
+          <h2 class="tiktok-h">TikTok Downloader</h2>
+          <p>// Tải video không logo · chất lượng gốc · về máy trực tiếp</p>
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="text" id="tiktok-url" class="url-input tiktok-inp" placeholder="https://www.tiktok.com/@user/video/..."/>
+        <button class="paste-btn" onclick="pasteUrl('tiktok-url')">📋 Dán</button>
+      </div>
+      <button class="download-btn tiktok-btn" onclick="fetchTikTok()">⬇ Tải Video TikTok</button>
+      <div class="loading-box" id="tiktok-loading">
+        <div class="loader" style="border-top-color:var(--tiktok)"></div>
+        <div class="loading-text" id="tiktok-load-txt">Đang lấy thông tin<span class="loading-dots"></span></div>
+      </div>
+      <div class="error-box" id="tiktok-error"></div>
+      <div class="result-box" id="tiktok-result">
+        <div class="result-inner">
+          <div class="result-header" style="color:var(--tiktok)">✅ // CHỌN CHẤT LƯỢNG — TẢI THẲNG VỀ MÁY</div>
+          <div class="result-body" id="tiktok-body"></div>
+        </div>
+      </div>
+      <div class="tips">
+        <p><span>//</span> Mở TikTok → Chọn video → Chia sẻ → Sao chép liên kết → Dán vào ô trên<br/>
+        <span>//</span> Hỗ trợ: tiktok.com · vm.tiktok.com · vt.tiktok.com</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- YOUTUBE -->
+  <div class="panel-wrap" id="panel-youtube">
+    <div class="downloader-card youtube-card">
+      <div class="platform-hero">
+        <div class="platform-logo youtube-logo">▶️</div>
+        <div class="platform-info">
+          <h2 class="youtube-h">YouTube Downloader</h2>
+          <p>// Tải video MP4 · nhiều chất lượng · về máy trực tiếp</p>
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="text" id="youtube-url" class="url-input youtube-inp" placeholder="https://www.youtube.com/watch?v=..."/>
+        <button class="paste-btn" onclick="pasteUrl('youtube-url')">📋 Dán</button>
+      </div>
+      <button class="download-btn youtube-btn" onclick="fetchYouTube()">⬇ Tải Video YouTube</button>
+      <div class="loading-box" id="youtube-loading">
+        <div class="loader" style="border-top-color:var(--youtube)"></div>
+        <div class="loading-text" id="youtube-load-txt">Đang lấy thông tin<span class="loading-dots"></span></div>
+      </div>
+      <div class="error-box" id="youtube-error"></div>
+      <div class="result-box" id="youtube-result">
+        <div class="result-inner">
+          <div class="result-header" style="color:var(--youtube)">✅ // CHỌN CHẤT LƯỢNG — TẢI THẲNG VỀ MÁY</div>
+          <div class="result-body" id="youtube-body"></div>
+        </div>
+      </div>
+      <div class="tips">
+        <p><span>//</span> Dán link đầy đủ từ youtube.com hoặc youtu.be<br/>
+        <span>//</span> Ví dụ: https://youtu.be/xxxxx · https://youtube.com/watch?v=xxxxx</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FACEBOOK -->
+  <div class="panel-wrap" id="panel-facebook">
+    <div class="downloader-card fb-card">
+      <div class="platform-hero">
+        <div class="platform-logo fb-logo">📘</div>
+        <div class="platform-info">
+          <h2 class="fb-h">Facebook Downloader</h2>
+          <p>// Tải video FB · HD &amp; SD · về máy trực tiếp</p>
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="text" id="facebook-url" class="url-input fb-inp" placeholder="https://www.facebook.com/watch?v=..."/>
+        <button class="paste-btn" onclick="pasteUrl('facebook-url')">📋 Dán</button>
+      </div>
+      <button class="download-btn fb-btn" onclick="fetchFacebook()">⬇ Tải Video Facebook</button>
+      <div class="loading-box" id="facebook-loading">
+        <div class="loader" style="border-top-color:var(--facebook)"></div>
+        <div class="loading-text" id="facebook-load-txt">Đang lấy thông tin<span class="loading-dots"></span></div>
+      </div>
+      <div class="error-box" id="facebook-error"></div>
+      <div class="result-box" id="facebook-result">
+        <div class="result-inner">
+          <div class="result-header" style="color:var(--facebook)">✅ // CHỌN CHẤT LƯỢNG — TẢI THẲNG VỀ MÁY</div>
+          <div class="result-body" id="facebook-body"></div>
+        </div>
+      </div>
+      <div class="tips">
+        <p><span>//</span> Mở Facebook → Chọn video → Chia sẻ → Sao chép liên kết<br/>
+        <span>//</span> Hỗ trợ: facebook.com/watch · fb.watch · facebook.com/reel · Video phải ở chế độ công khai</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>Tải Video Mxh All</span> — Phát triển bởi <span>Nguyễn Tiêu</span> · Phiên bản <span>1.0</span>
+  </footer>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title-text">THÔNG TIN</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  DIRECT BLOB DOWNLOAD ENGINE
+// ════════════════════════════════════════════════════════
+
+// CORS proxy list — thử lần lượt cho đến khi thành công
+const CORS_PROXIES = [
+  u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u => `https://corsproxy.org/?${encodeURIComponent(u)}`,
+  u => `https://proxy.cors.sh/${u}`,
+];
+
+// Fetch 1 URL với timeout (ms)
+async function fetchWithTimeout(url, options = {}, ms = 18000) {
+  const ctrl = new AbortController();
+  const tid  = setTimeout(() => ctrl.abort(), ms);
+  try {
+    const r = await fetch(url, { ...options, signal: ctrl.signal });
+    clearTimeout(tid);
+    return r;
+  } catch (e) {
+    clearTimeout(tid);
+    throw e;
+  }
+}
+
+// Cố tải URL thành Blob — thử nhiều cách
+async function fetchAsBlob(rawUrl) {
+  // 1. Fetch thẳng (Cobalt tunnel URLs có CORS header sẵn)
+  try {
+    const r = await fetchWithTimeout(rawUrl, { mode: 'cors', credentials: 'omit' });
+    if (r.ok) return await r.blob();
+  } catch (_) {}
+
+  // 2. Thử lần lượt qua CORS proxies
+  for (const mkP of CORS_PROXIES) {
+    try {
+      const r = await fetchWithTimeout(mkP(rawUrl), {}, 20000);
+      if (r.ok) {
+        const blob = await r.blob();
+        if (blob.size > 500) return blob; // bỏ qua blob rỗng / lỗi
+      }
+    } catch (_) {}
+  }
+
+  throw new Error('CORS_FAIL');
+}
+
+// Lưu blob về máy
+function triggerBlobSave(blob, filename) {
+  if (!filename.match(/\.(mp4|mp3|m4a|webm|mov)$/i)) {
+    filename += blob.type.includes('audio') ? '.mp3' : '.mp4';
+  }
+  const blobUrl = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = blobUrl; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(blobUrl), 120000);
+}
+
+// Fallback: mở link thẳng với thẻ <a download> (trình duyệt tự xử lý)
+function fallbackDirectLink(rawUrl, filename) {
+  const a = document.createElement('a');
+  a.href = rawUrl; a.download = filename; a.target = '_blank';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+// Giả lập progress bar
+function animateBar(barEl) {
+  let pct = 0;
+  return setInterval(() => {
+    const step = pct < 40 ? 6 : pct < 75 ? 3 : 0.8;
+    pct = Math.min(pct + step + Math.random() * 2, 90);
+    if (barEl) barEl.style.width = pct + '%';
+  }, 300);
+}
+
+// ── Nút tải chính — nhận btnId, tra URL từ registry ──
+async function triggerDownload(btnId) {
+  const btn = document.getElementById(btnId);
+  if (!btn || btn.disabled) return;
+  const entry = _DL[btnId];
+  if (!entry) return;
+  const { url: videoUrl, filename } = entry;
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.classList.add('loading');
+  btn.innerHTML = `<div class="dl-bar" id="${btnId}_bar"></div>
+    <span class="dl-label">⏳ Đang tải về máy<span class="loading-dots"></span></span>
+    <span class="dl-quality" style="color:var(--accent)">XIN CHỜ</span>`;
+  const barEl = document.getElementById(btnId + '_bar');
+  const timer = animateBar(barEl);
+
+  try {
+    // Thử tải blob về trước
+    const blob = await fetchAsBlob(videoUrl);
+    clearInterval(timer);
+    if (barEl) barEl.style.width = '100%';
+    await new Promise(r => setTimeout(r, 120));
+    triggerBlobSave(blob, filename);
+
+    btn.classList.remove('loading'); btn.classList.add('success');
+    btn.innerHTML = `<span class="dl-label">✅ Đã lưu về máy thành công!</span>
+      <span class="dl-quality" style="color:var(--accent2)">XONG ✓</span>`;
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('success'); btn.disabled = false; }, 5000);
+
+  } catch (err) {
+    clearInterval(timer);
+
+    if (err.message === 'CORS_FAIL') {
+      // Fallback: link trực tiếp — trình duyệt sẽ tải hoặc mở
+      if (barEl) barEl.style.width = '100%';
+      fallbackDirectLink(videoUrl, filename);
+      btn.classList.remove('loading'); btn.classList.add('success');
+      btn.innerHTML = `<span class="dl-label">⬇ Đang tải (trình duyệt xử lý)...</span>
+        <span class="dl-quality" style="color:var(--accent2)">OK</span>`;
+      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('success'); btn.disabled = false; }, 6000);
+    } else {
+      btn.classList.remove('loading'); btn.classList.add('fail');
+      btn.innerHTML = `<span class="dl-label">❌ Lỗi — Nhấn để thử lại</span>
+        <span class="dl-quality" style="color:var(--accent3)">RETRY</span>`;
+      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('fail'); btn.disabled = false; }, 4000);
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  COBALT API (YouTube + Facebook)
+// ════════════════════════════════════════════════════════
+async function cobaltFetch(url, opts = {}) {
+  const body = JSON.stringify({ url, downloadMode: 'auto', videoQuality: '1080', ...opts });
+  const res = await fetchWithTimeout('https://api.cobalt.tools/', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body,
+  }, 20000);
+  if (!res.ok) throw new Error('Cobalt API lỗi ' + res.status);
+  return res.json();
+}
+
+// ════════════════════════════════════════════════════════
+//  UI HELPERS
+// ════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+function switchTab(name, btn) {
+  document.querySelectorAll('.panel-wrap').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  $('panel-' + name).classList.add('active'); btn.classList.add('active');
+}
+function toggleMenu() {
+  $('hamburger').classList.toggle('open');
+  $('menuDropdown').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.hamburger') && !e.target.closest('.menu-dropdown')) {
+    $('hamburger').classList.remove('open'); $('menuDropdown').classList.remove('open');
+  }
+});
+async function pasteUrl(id) {
+  try { $(id).value = await navigator.clipboard.readText(); }
+  catch { alert('Vui lòng dán thủ công (Ctrl+V).'); }
+}
+
+function setLoading(p, on, txt) {
+  $(p + '-loading').classList.toggle('show', on);
+  if (txt) $(p + '-load-txt').innerHTML = txt + '<span class="loading-dots"></span>';
+}
+function setError(p, msg) {
+  const el = $(p + '-error'); el.textContent = msg; el.classList.toggle('show', !!msg);
+}
+function setResult(p, on) { $(p + '-result').classList.toggle('show', on); }
+function setMainBtn(p, dis) { document.querySelector('.' + p + '-btn').disabled = dis; }
+function reset(p) { setLoading(p, false); setError(p, ''); setResult(p, false); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Registry lưu URL/filename — tránh nhúng URL thẳng vào onclick (lỗi dấu ' hoặc ký tự đặc biệt)
+const _DL = {};
+let _bid = 0;
+
+function makeDlBtn(label, quality, emoji, videoUrl, filename) {
+  const id = 'db' + (++_bid);
+  _DL[id] = { url: videoUrl, filename };          // lưu an toàn vào registry
+  return `<button class="dl-btn" id="${id}" onclick="triggerDownload('${id}')">
+    <div class="dl-bar"></div>
+    <span class="dl-label">${emoji} ${label}</span>
+    <span class="dl-quality">${quality} ⬇</span>
+  </button>`;
+}
+
+// Tên file an toàn — giữ tiếng Việt, loại ký tự không hợp lệ
+function safeFilename(raw, ext) {
+  return ((raw || 'video')
+    .replace(/[\\/:*?"<>|]/g, '')
+    .replace(/\s+/g, '_')
+    .substring(0, 60)
+    .replace(/^_+|_+$/g, '') || 'video') + ext;
+}
+
+// ════════════════════════════════════════════════════════
+//  TIKTOK
+// ════════════════════════════════════════════════════════
+async function fetchTikTok() {
+  const url = $('tiktok-url').value.trim();
+  if (!url) { setError('tiktok','// Vui lòng nhập link TikTok'); return; }
+  if (!/tiktok\.com|vm\.tiktok|vt\.tiktok/.test(url)) {
+    setError('tiktok','// Link không hợp lệ. Cần link từ tiktok.com'); return;
+  }
+  reset('tiktok'); setLoading('tiktok', true, 'Đang lấy thông tin video'); setMainBtn('tiktok', true);
+  try {
+    const res  = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`);
+    const data = await res.json();
+    if (data.code !== 0 || !data.data) throw new Error('Không phân tích được link. Kiểm tra lại.');
+
+    const d      = data.data;
+    const title  = d.title || 'Video TikTok';
+    const slug   = safeFilename(title, '');      // tên file an toàn, giữ tiếng Việt
+    const author = d.author?.nickname || '';
+    const dur    = d.duration ? d.duration + 's' : '';
+    const plays  = d.play_count ? Number(d.play_count).toLocaleString('vi') + ' lượt xem' : '';
+
+    let links = '';
+    if (d.hdplay)                      links += makeDlBtn('Video HD (Không Logo)', 'HD',    '🎬', d.hdplay, safeFilename(title, '_HD.mp4'));
+    if (d.play && d.play !== d.hdplay) links += makeDlBtn('Video SD (Không Logo)', 'SD',    '📹', d.play,   safeFilename(title, '_SD.mp4'));
+    if (d.music)                       links += makeDlBtn('Âm thanh (MP3)',         'AUDIO', '🎵', d.music,  safeFilename(title, '_audio.mp3'));
+
+    setLoading('tiktok', false);
+    $('tiktok-body').innerHTML = `
+      <div class="video-meta">
+        <div class="video-title">${esc(title)}</div>
+        <div class="video-info">@${esc(author)} &nbsp;·&nbsp; ${dur} &nbsp;·&nbsp; ${plays}</div>
+      </div>
+      <div class="dl-links">${links}</div>`;
+    setResult('tiktok', true);
+  } catch(e) {
+    setLoading('tiktok', false); setError('tiktok', '// Lỗi: ' + (e.message || 'Không xử lý được link'));
+  } finally { setMainBtn('tiktok', false); }
+}
+
+// ════════════════════════════════════════════════════════
+//  YOUTUBE
+// ════════════════════════════════════════════════════════
+async function fetchYouTube() {
+  const url = $('youtube-url').value.trim();
+  if (!url) { setError('youtube','// Vui lòng nhập link YouTube'); return; }
+  if (!/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/.test(url)) {
+    setError('youtube','// Link không hợp lệ. Cần link từ youtube.com hoặc youtu.be'); return;
+  }
+  reset('youtube'); setLoading('youtube', true, 'Đang xử lý video'); setMainBtn('youtube', true);
+  try {
+    // Lấy nhiều chất lượng song song
+    const qualities = ['1080','720','480','360'];
+    const results   = await Promise.allSettled(qualities.map(q => cobaltFetch(url, { videoQuality: q })));
+    const audioRes  = await cobaltFetch(url, { downloadMode: 'audio' }).catch(() => null);
+
+    const seen  = new Set();
+    let   links = '';
+    const qLabel = { '1080':'1080p HD','720':'720p','480':'480p','360':'360p SD' };
+    const qEmoji = { '1080':'🎬','720':'📹','480':'📹','360':'📹' };
+
+    results.forEach((r, i) => {
+      if (r.status !== 'fulfilled') return;
+      const d = r.value;
+      const q = qualities[i];
+      if (d.status === 'tunnel' && d.url && !seen.has(d.url)) {
+        seen.add(d.url);
+        links += makeDlBtn(`Tải Video ${qLabel[q]}`, q, qEmoji[q], d.url, `youtube_${q}p.mp4`);
+      }
+    });
+    if (audioRes?.status === 'tunnel' && audioRes.url)
+      links += makeDlBtn('Chỉ âm thanh (MP3)', 'AUDIO', '🎵', audioRes.url, 'youtube_audio.mp3');
+
+    if (!links) throw new Error('Không lấy được link tải. Thử link khác.');
+
+    setLoading('youtube', false);
+    $('youtube-body').innerHTML = `
+      <div class="video-meta">
+        <div class="video-title">Video YouTube</div>
+        <div class="video-info">// Chọn chất lượng mong muốn rồi bấm để tải về máy</div>
+      </div>
+      <div class="dl-links">${links}</div>`;
+    setResult('youtube', true);
+  } catch(e) {
+    setLoading('youtube', false); setError('youtube', '// Lỗi: ' + (e.message || 'Không xử lý được link'));
+  } finally { setMainBtn('youtube', false); }
+}
+
+// ════════════════════════════════════════════════════════
+//  FACEBOOK
+// ════════════════════════════════════════════════════════
+async function fetchFacebook() {
+  const url = $('facebook-url').value.trim();
+  if (!url) { setError('facebook','// Vui lòng nhập link Facebook'); return; }
+  if (!/facebook\.com|fb\.watch/.test(url)) {
+    setError('facebook','// Link không hợp lệ. Cần link từ facebook.com hoặc fb.watch'); return;
+  }
+  reset('facebook'); setLoading('facebook', true, 'Đang xử lý video'); setMainBtn('facebook', true);
+  try {
+    const [hdRes, sdRes] = await Promise.allSettled([
+      cobaltFetch(url, { videoQuality: '1080' }),
+      cobaltFetch(url, { videoQuality:  '480' }),
+    ]);
+
+    const seen  = new Set();
+    let   links = '';
+
+    const add = (d, label, quality, emoji, filename) => {
+      if (d?.status === 'tunnel' && d.url && !seen.has(d.url)) {
+        seen.add(d.url);
+        links += makeDlBtn(label, quality, emoji, d.url, filename);
+      } else if (d?.status === 'picker' && d.picker?.length) {
+        d.picker.slice(0, 2).forEach((item, i) => {
+          if (!seen.has(item.url)) {
+            seen.add(item.url);
+            links += makeDlBtn(label + (i > 0 ? ' ' + (i+1) : ''), quality, emoji, item.url, filename);
+          }
+        });
+      }
+    };
+
+    if (hdRes.status === 'fulfilled') add(hdRes.value, 'Tải Video HD', 'HD', '🎬', 'facebook_hd.mp4');
+    if (sdRes.status === 'fulfilled') add(sdRes.value, 'Tải Video SD', 'SD', '📹', 'facebook_sd.mp4');
+
+    if (!links) throw new Error('Không lấy được link tải. Đảm bảo video ở chế độ công khai (Public).');
+
+    setLoading('facebook', false);
+    $('facebook-body').innerHTML = `
+      <div class="video-meta">
+        <div class="video-title">Video Facebook</div>
+        <div class="video-info">// Chọn chất lượng mong muốn rồi bấm để tải về máy</div>
+      </div>
+      <div class="dl-links">${links}</div>`;
+    setResult('facebook', true);
+  } catch(e) {
+    setLoading('facebook', false); setError('facebook', '// Lỗi: ' + (e.message || 'Không xử lý được link'));
+  } finally { setMainBtn('facebook', false); }
+}
+
+// ════════════════════════════════════════════════════════
+//  MODALS
+// ════════════════════════════════════════════════════════
+const MODALS = {
+  privacy: {
+    title: '🔒 CHÍNH SÁCH QUYỀN RIÊNG TƯ',
+    html: `<h3>Thu thập dữ liệu</h3><p>Chúng tôi không thu thập, lưu trữ hoặc chia sẻ bất kỳ thông tin cá nhân nào. Các link video bạn nhập chỉ được xử lý tạm thời để lấy link tải xuống.</p>
+    <h3>Cookie & Tracking</h3><p>Ứng dụng không sử dụng cookie theo dõi hay công nghệ thu thập dữ liệu hành vi người dùng.</p>
+    <h3>Bảo mật</h3><p>Mọi yêu cầu đều được thực hiện trực tiếp từ trình duyệt của bạn. Không có máy chủ trung gian lưu lại dữ liệu.</p>`
+  },
+  terms: {
+    title: '📄 ĐIỀU KHOẢN SỬ DỤNG',
+    html: `<h3>Điều kiện sử dụng</h3><p>Bằng cách sử dụng dịch vụ này, bạn đồng ý tuân thủ các điều khoản được nêu dưới đây.</p>
+    <h3>Mục đích sử dụng hợp pháp</h3><p>Công cụ này chỉ được sử dụng cho mục đích cá nhân, phi thương mại. Bạn chịu trách nhiệm đảm bảo việc tải xuống không vi phạm bản quyền.</p>
+    <h3>Bản quyền nội dung</h3><p>Chúng tôi không sở hữu bất kỳ nội dung video nào. Bản quyền thuộc về chủ sở hữu gốc. Người dùng phải tôn trọng quyền tác giả.</p>
+    <h3>Giới hạn trách nhiệm</h3><p>Nhà phát triển không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc sử dụng dịch vụ.</p>`
+  },
+  dev: {
+    title: '👨‍💻 NHÀ PHÁT TRIỂN',
+    html: `<div class="dev-card"><div class="dev-avatar">NT</div><div class="dev-info"><div class="dev-name">Nguyễn Tiêu</div><div class="dev-role">// Developer · UI/UX Designer</div></div></div>
+    <h3 style="margin-top:18px">Giới thiệu</h3><p>Tải Video Mxh All được phát triển bởi Nguyễn Tiêu — nhà phát triển ứng dụng với đam mê thiết kế giao diện đẹp và trải nghiệm người dùng mượt mà.</p>
+    <h3>Dự án</h3><p>Ứng dụng web miễn phí, không quảng cáo, giúp tải video từ mạng xã hội nhanh chóng và tiện lợi.</p><div style="margin-top:14px"><span class="version-badge">🚀 Phiên bản 1.0 · 2024</span></div>`
+  },
+  version: {
+    title: '🚀 PHIÊN BẢN',
+    html: `<h3>Phiên bản hiện tại</h3><div style="margin:10px 0 18px"><span class="version-badge">🚀 v1.0 — Stable Release</span></div>
+    <h3>Tính năng</h3><p>✅ TikTok không logo — tải thẳng về máy<br/>✅ YouTube nhiều chất lượng — tải thẳng về máy<br/>✅ Facebook HD/SD — tải thẳng về máy<br/>✅ Thanh tiến trình khi tải<br/>✅ Không mở tab mới · Không quảng cáo · Miễn phí</p>
+    <h3>Công nghệ</h3><p>HTML5 · CSS3 · Vanilla JavaScript · TikWM API · Cobalt Tools API · CORS Proxy</p>`
+  }
+};
+
+function openModal(key) {
+  const m = MODALS[key];
+  $('modal-title-text').textContent = m.title;
+  $('modal-content').innerHTML = m.html;
+  $('modal-overlay').classList.add('open');
+  $('hamburger').classList.remove('open');
+  $('menuDropdown').classList.remove('open');
+}
+function closeModal() { $('modal-overlay').classList.remove('open'); }
+function closeModalOutside(e) { if (e.target === $('modal-overlay')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Enter key
+$('tiktok-url').addEventListener('keydown',   e => { if (e.key==='Enter') fetchTikTok(); });
+$('youtube-url').addEventListener('keydown',  e => { if (e.key==='Enter') fetchYouTube(); });
+$('facebook-url').addEventListener('keydown', e => { if (e.key==='Enter') fetchFacebook(); });
+</script>
+</body>
+</html>
