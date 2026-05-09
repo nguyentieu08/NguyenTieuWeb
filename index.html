@@ -3,235 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyễn Tiêu AI - Dashboard</title>
+    <title>Nguyễn Tiêu AI - Người Bạn Thông Minh</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
         body {
-            background-color: #0f172a;
-            color: #e2e8f0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
         }
-        .terminal {
-            font-family: 'Fira Code', monospace;
-            background-color: #000000;
-            border: 1px solid #1e293b;
-        }
-        .glass {
-            background: rgba(30, 41, 59, 0.7);
+        .glass-header {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
-        .status-pulse {
-            animation: pulse 2s infinite;
+        .chat-window {
+            height: calc(100vh - 140px);
         }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
+        .bubble-ai {
+            background-color: #ffffff;
+            border-radius: 18px 18px 18px 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        ::-webkit-scrollbar {
-            width: 8px;
+        .bubble-user {
+            background: linear-gradient(135deg, #0084ff 0%, #0072ff 100%);
+            color: white;
+            border-radius: 18px 18px 4px 18px;
         }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #90949c;
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 10px;
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0.2; }
+            40% { opacity: 1; }
         }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #ced0d4; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-8">
-    <div class="max-w-6xl mx-auto">
-        <!-- Header -->
-        <header class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+<body class="flex flex-col h-screen">
+
+    <header class="glass-header fixed top-0 w-full z-50 px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center shadow-md">
+                <i class="fas fa-smile text-white text-xl"></i>
+            </div>
             <div>
-                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                    NGUYỄN TIÊU AI <span class="text-sm font-mono px-2 py-1 bg-blue-500/20 text-blue-400 rounded">V45</span>
-                </h1>
-                <p class="text-gray-400 mt-1">Hệ thống AI Messenger tự động - Chế độ Web Control</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <div id="status-badge" class="flex items-center gap-2 bg-red-500/10 text-red-400 px-4 py-2 rounded-full border border-red-500/20">
-                    <span class="w-2 h-2 bg-red-500 rounded-full status-pulse"></span>
-                    <span class="font-medium">Đã dừng</span>
+                <h1 class="text-lg font-bold text-blue-600">Nguyễn Tiêu AI</h1>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                    <span class="text-[11px] text-gray-500 font-medium">Đang sẵn sàng trợ giúp</span>
                 </div>
             </div>
-        </header>
+        </div>
+        <button onclick="clearChat()" class="text-gray-400 hover:text-red-500 transition">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left Panel: Settings -->
-            <div class="lg:col-span-1 space-y-6">
-                <div class="glass p-6 rounded-2xl shadow-xl">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-                        <i class="fas fa-key text-cyan-400"></i> Cấu hình AppState
-                    </h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-gray-400 mb-2">Dán nội dung fbstate.json vào đây:</label>
-                            <textarea id="appstate-input" class="w-full h-64 bg-black/50 border border-slate-700 rounded-lg p-3 text-xs font-mono focus:outline-none focus:border-cyan-500 text-cyan-300" placeholder='[{"key": "datr", "value": "..."}]'></textarea>
-                        </div>
-                        <button onclick="startBot()" id="btn-start" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
-                            <i class="fas fa-play"></i> BẮT ĐẦU CHẠY
-                        </button>
-                    </div>
-                </div>
-
-                <div class="glass p-6 rounded-2xl shadow-xl">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-                        <i class="fas fa-robot text-purple-400"></i> Tính cách AI
-                    </h2>
-                    <select id="ai-personality" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:outline-none">
-                        <option value="aggressive">Hổ báo (Mặc định)</option>
-                        <option value="humorous">Hài hước, lầy lội</option>
-                        <option value="polite">Lịch sự, nghiêm túc</option>
-                        <option value="tsundere">Lạnh lùng, kiêu kỳ</option>
-                    </select>
-                </div>
+    <main id="chat-content" class="chat-window mt-16 px-4 py-6 overflow-y-auto flex flex-col gap-4 max-w-2xl mx-auto w-full">
+        <div class="flex justify-start">
+            <div class="bubble-ai px-4 py-3 text-sm leading-relaxed max-w-[85%]">
+                Chào bạn! Mình là Nguyễn Tiêu AI. Mình rất vui được gặp bạn. Hôm nay bạn cần mình hỗ trợ điều gì không?
             </div>
+        </div>
+    </main>
 
-            <!-- Right Panel: Terminal & Logs -->
-            <div class="lg:col-span-2 space-y-6">
-                <div class="terminal p-4 rounded-xl shadow-2xl h-[600px] flex flex-col">
-                    <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
-                        <span class="text-green-500 font-mono text-sm"><i class="fas fa-terminal mr-2"></i> SYSTEM LOGS</span>
-                        <button onclick="clearLogs()" class="text-gray-500 hover:text-white text-xs underline">Xóa log</button>
-                    </div>
-                    <div id="log-container" class="flex-grow overflow-y-auto text-sm space-y-2 font-mono">
-                        <div class="text-gray-500 italic">[!] Chờ nạp cấu hình để khởi động...</div>
-                    </div>
-                </div>
-
-                <!-- Stats -->
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="glass p-4 rounded-xl text-center">
-                        <div class="text-gray-400 text-xs mb-1 uppercase">Đã Rep</div>
-                        <div id="count-replies" class="text-2xl font-bold text-cyan-400 font-mono">0</div>
-                    </div>
-                    <div class="glass p-4 rounded-xl text-center">
-                        <div class="text-gray-400 text-xs mb-1 uppercase">Thời gian chạy</div>
-                        <div id="runtime" class="text-2xl font-bold text-blue-400 font-mono">00:00</div>
-                    </div>
-                    <div class="glass p-4 rounded-xl text-center">
-                        <div class="text-gray-400 text-xs mb-1 uppercase">Độ trễ AI</div>
-                        <div id="latency" class="text-2xl font-bold text-purple-400 font-mono">--</div>
-                    </div>
-                </div>
+    <div class="fixed bottom-0 w-full bg-white border-t p-4">
+        <div class="max-w-2xl mx-auto flex items-center gap-2">
+            <div id="loading" class="hidden absolute -top-10 left-4 flex gap-1 bg-white px-3 py-2 rounded-full shadow-md border border-gray-100">
+                <div class="typing-dot"></div>
+                <div class="typing-dot" style="animation-delay: 0.2s"></div>
+                <div class="typing-dot" style="animation-delay: 0.4s"></div>
             </div>
+            
+            <input type="text" id="user-input" class="flex-grow bg-gray-100 border-none focus:ring-2 focus:ring-blue-500 rounded-full px-5 py-3 text-sm outline-none" placeholder="Nhập tin nhắn của bạn...">
+            <button onclick="sendMsg()" id="send-btn" class="w-11 h-11 rounded-full bg-blue-500 flex items-center justify-center text-white hover:bg-blue-600 transition shadow-lg">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </div>
     </div>
 
     <script>
-        let isRunning = false;
-        let logs = [];
-        let replyCount = 0;
-        let startTime = null;
+        const apiKey = ""; 
+        const chatBox = document.getElementById('chat-content');
+        const input = document.getElementById('user-input');
+        const loader = document.getElementById('loading');
 
-        function addLog(message, type = 'info') {
-            const container = document.getElementById('log-container');
-            const time = new Date().toLocaleTimeString();
-            const logEntry = document.createElement('div');
-            
-            let color = 'text-blue-400';
-            if (type === 'success') color = 'text-green-400';
-            if (type === 'error') color = 'text-red-400';
-            if (type === 'warning') color = 'text-yellow-400';
-            if (type === 'incoming') color = 'text-purple-400';
-
-            logEntry.className = `${color} border-l-2 border-current pl-3 py-1 bg-white/5`;
-            logEntry.innerHTML = `<span class="text-gray-600">[${time}]</span> ${message}`;
-            
-            container.appendChild(logEntry);
-            container.scrollTop = container.scrollHeight;
+        function clearChat() {
+            chatBox.innerHTML = '';
+            addMsg("Đã xóa lịch sử trò chuyện. Mình có thể giúp gì mới cho bạn không?", 'ai');
         }
 
-        function clearLogs() {
-            document.getElementById('log-container').innerHTML = '';
-        }
+        async function sendMsg() {
+            const text = input.value.trim();
+            if (!text) return;
 
-        function startBot() {
-            const input = document.getElementById('appstate-input').value.trim();
-            const btn = document.getElementById('btn-start');
-            const status = document.getElementById('status-badge');
+            input.value = '';
+            addMsg(text, 'user');
+            loader.classList.remove('hidden');
 
-            if (!isRunning) {
-                if (!input) {
-                    addLog("LỖI: Chưa dán nội dung fbstate.json!", "error");
-                    return;
+            try {
+                const isImg = /vẽ|tạo ảnh|hình ảnh/i.test(text);
+                if (isImg) {
+                    await fetchImage(text);
+                } else {
+                    await fetchText(text);
                 }
-
-                try {
-                    JSON.parse(input);
-                    addLog("Đang nạp cookie và khởi động bot...", "info");
-                    
-                    // Giả lập khởi động
-                    setTimeout(() => {
-                        isRunning = true;
-                        startTime = new Date();
-                        btn.innerHTML = '<i class="fas fa-stop"></i> DỪNG LẠI';
-                        btn.classList.replace('from-cyan-600', 'from-red-600');
-                        btn.classList.replace('to-blue-600', 'to-red-700');
-                        status.classList.replace('bg-red-500/10', 'bg-green-500/10');
-                        status.classList.replace('text-red-400', 'text-green-400');
-                        status.classList.replace('border-red-500/20', 'border-green-500/20');
-                        status.querySelector('.bg-red-500').classList.replace('bg-red-500', 'bg-green-500');
-                        status.querySelector('span:last-child').innerText = 'Đang chạy';
-                        
-                        addLog("NGUYỄN TIÊU AI ĐÃ SẴN SÀNG QUÉT TIN NHẮN!", "success");
-                        simulateBotActivity();
-                    }, 1500);
-
-                } catch (e) {
-                    addLog("LỖI: Định dạng JSON đéo hợp lệ!", "error");
-                }
-            } else {
-                isRunning = false;
-                location.reload(); // Đơn giản nhất là reload để reset state
+            } catch (e) {
+                addMsg("Rất tiếc, mình gặp chút sự cố kết nối. Bạn vui lòng thử lại nhé!", 'ai');
+            } finally {
+                loader.classList.add('hidden');
             }
         }
 
-        function simulateBotActivity() {
-            if (!isRunning) return;
-
-            // Giả lập quét tin nhắn
-            const names = ["Trần Văn A", "Nguyễn Thị B", "Chủ nợ", "Người yêu cũ", "Linh Xe Ôm"];
-            const msgs = ["Alo mày ơi", "Đang làm gì đó?", "Trả tiền tao mày!", "Sao không rep?", "Check inbox đi"];
-
-            setInterval(() => {
-                if (isRunning && Math.random() > 0.7) {
-                    const name = names[Math.floor(Math.random() * names.length)];
-                    const msg = msgs[Math.floor(Math.random() * msgs.length)];
-                    
-                    addLog(`Nhận tin từ <b>${name}</b>: "${msg}"`, "incoming");
-                    
-                    setTimeout(() => {
-                        if (!isRunning) return;
-                        const startAi = Date.now();
-                        // Giả lập rep AI
-                        const personality = document.getElementById('ai-personality').value;
-                        let reply = "Tao đang bận tí, sủa gì sủa lẹ!";
-                        if(personality === 'humorous') reply = "Hehe, đợi tao tí đang đi hái hoa!";
-                        
-                        addLog(`Đã vả lại: "${reply}"`, "success");
-                        replyCount++;
-                        document.getElementById('count-replies').innerText = replyCount;
-                        document.getElementById('latency').innerText = (Date.now() - startAi + 450) + "ms";
-                    }, 2000);
-                }
-            }, 5000);
-
-            // Cập nhật runtime
-            setInterval(() => {
-                if (isRunning && startTime) {
-                    const diff = Math.floor((new Date() - startTime) / 1000);
-                    const mins = Math.floor(diff / 60).toString().padStart(2, '0');
-                    const secs = (diff % 60).toString().padStart(2, '0');
-                    document.getElementById('runtime').innerText = `${mins}:${secs}`;
-                }
-            }, 1000);
+        function addMsg(content, role, isImg = false) {
+            const div = document.createElement('div');
+            div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`;
+            
+            if (isImg) {
+                div.innerHTML = `<div class="bubble-ai p-2 max-w-[85%] shadow-md"><img src="${content}" class="rounded-lg w-full h-auto"></div>`;
+            } else {
+                div.innerHTML = `<div class="bubble-${role} px-4 py-3 text-sm max-w-[85%] shadow-sm">${content.replace(/\n/g, '<br>')}</div>`;
+            }
+            
+            chatBox.appendChild(div);
+            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
         }
+
+        async function fetchText(prompt) {
+            const sys = "Mày là Nguyễn Tiêu AI, một người bạn cực kỳ thân thiện, lễ phép và luôn sẵn lòng giúp đỡ mọi người. Xưng hô là 'mình' và 'bạn'. Luôn trả lời một cách lịch sự, ấm áp và thông minh.";
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: { parts: [{ text: sys }] },
+                    tools: [{ "google_search": {} }]
+                })
+            });
+            const data = await res.json();
+            addMsg(data.candidates[0].content.parts[0].text, 'ai');
+        }
+
+        async function fetchImage(prompt) {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ instances: { prompt: prompt }, parameters: { sampleCount: 1 } })
+            });
+            const data = await res.json();
+            if (data.predictions) {
+                addMsg(`data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`, 'ai', true);
+            } else {
+                addMsg("Mình không thể tạo hình ảnh này, bạn thử mô tả khác xem sao nhé!", 'ai');
+            }
+        }
+
+        input.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMsg(); });
     </script>
 </body>
 </html>
