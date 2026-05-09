@@ -1,1 +1,237 @@
-...kbh
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nguyễn Tiêu AI - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .terminal {
+            font-family: 'Fira Code', monospace;
+            background-color: #000000;
+            border: 1px solid #1e293b;
+        }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .status-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                    NGUYỄN TIÊU AI <span class="text-sm font-mono px-2 py-1 bg-blue-500/20 text-blue-400 rounded">V45</span>
+                </h1>
+                <p class="text-gray-400 mt-1">Hệ thống AI Messenger tự động - Chế độ Web Control</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="status-badge" class="flex items-center gap-2 bg-red-500/10 text-red-400 px-4 py-2 rounded-full border border-red-500/20">
+                    <span class="w-2 h-2 bg-red-500 rounded-full status-pulse"></span>
+                    <span class="font-medium">Đã dừng</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Panel: Settings -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="glass p-6 rounded-2xl shadow-xl">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i class="fas fa-key text-cyan-400"></i> Cấu hình AppState
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Dán nội dung fbstate.json vào đây:</label>
+                            <textarea id="appstate-input" class="w-full h-64 bg-black/50 border border-slate-700 rounded-lg p-3 text-xs font-mono focus:outline-none focus:border-cyan-500 text-cyan-300" placeholder='[{"key": "datr", "value": "..."}]'></textarea>
+                        </div>
+                        <button onclick="startBot()" id="btn-start" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+                            <i class="fas fa-play"></i> BẮT ĐẦU CHẠY
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass p-6 rounded-2xl shadow-xl">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i class="fas fa-robot text-purple-400"></i> Tính cách AI
+                    </h2>
+                    <select id="ai-personality" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:outline-none">
+                        <option value="aggressive">Hổ báo (Mặc định)</option>
+                        <option value="humorous">Hài hước, lầy lội</option>
+                        <option value="polite">Lịch sự, nghiêm túc</option>
+                        <option value="tsundere">Lạnh lùng, kiêu kỳ</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Right Panel: Terminal & Logs -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="terminal p-4 rounded-xl shadow-2xl h-[600px] flex flex-col">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
+                        <span class="text-green-500 font-mono text-sm"><i class="fas fa-terminal mr-2"></i> SYSTEM LOGS</span>
+                        <button onclick="clearLogs()" class="text-gray-500 hover:text-white text-xs underline">Xóa log</button>
+                    </div>
+                    <div id="log-container" class="flex-grow overflow-y-auto text-sm space-y-2 font-mono">
+                        <div class="text-gray-500 italic">[!] Chờ nạp cấu hình để khởi động...</div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="glass p-4 rounded-xl text-center">
+                        <div class="text-gray-400 text-xs mb-1 uppercase">Đã Rep</div>
+                        <div id="count-replies" class="text-2xl font-bold text-cyan-400 font-mono">0</div>
+                    </div>
+                    <div class="glass p-4 rounded-xl text-center">
+                        <div class="text-gray-400 text-xs mb-1 uppercase">Thời gian chạy</div>
+                        <div id="runtime" class="text-2xl font-bold text-blue-400 font-mono">00:00</div>
+                    </div>
+                    <div class="glass p-4 rounded-xl text-center">
+                        <div class="text-gray-400 text-xs mb-1 uppercase">Độ trễ AI</div>
+                        <div id="latency" class="text-2xl font-bold text-purple-400 font-mono">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isRunning = false;
+        let logs = [];
+        let replyCount = 0;
+        let startTime = null;
+
+        function addLog(message, type = 'info') {
+            const container = document.getElementById('log-container');
+            const time = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            
+            let color = 'text-blue-400';
+            if (type === 'success') color = 'text-green-400';
+            if (type === 'error') color = 'text-red-400';
+            if (type === 'warning') color = 'text-yellow-400';
+            if (type === 'incoming') color = 'text-purple-400';
+
+            logEntry.className = `${color} border-l-2 border-current pl-3 py-1 bg-white/5`;
+            logEntry.innerHTML = `<span class="text-gray-600">[${time}]</span> ${message}`;
+            
+            container.appendChild(logEntry);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('log-container').innerHTML = '';
+        }
+
+        function startBot() {
+            const input = document.getElementById('appstate-input').value.trim();
+            const btn = document.getElementById('btn-start');
+            const status = document.getElementById('status-badge');
+
+            if (!isRunning) {
+                if (!input) {
+                    addLog("LỖI: Chưa dán nội dung fbstate.json!", "error");
+                    return;
+                }
+
+                try {
+                    JSON.parse(input);
+                    addLog("Đang nạp cookie và khởi động bot...", "info");
+                    
+                    // Giả lập khởi động
+                    setTimeout(() => {
+                        isRunning = true;
+                        startTime = new Date();
+                        btn.innerHTML = '<i class="fas fa-stop"></i> DỪNG LẠI';
+                        btn.classList.replace('from-cyan-600', 'from-red-600');
+                        btn.classList.replace('to-blue-600', 'to-red-700');
+                        status.classList.replace('bg-red-500/10', 'bg-green-500/10');
+                        status.classList.replace('text-red-400', 'text-green-400');
+                        status.classList.replace('border-red-500/20', 'border-green-500/20');
+                        status.querySelector('.bg-red-500').classList.replace('bg-red-500', 'bg-green-500');
+                        status.querySelector('span:last-child').innerText = 'Đang chạy';
+                        
+                        addLog("NGUYỄN TIÊU AI ĐÃ SẴN SÀNG QUÉT TIN NHẮN!", "success");
+                        simulateBotActivity();
+                    }, 1500);
+
+                } catch (e) {
+                    addLog("LỖI: Định dạng JSON đéo hợp lệ!", "error");
+                }
+            } else {
+                isRunning = false;
+                location.reload(); // Đơn giản nhất là reload để reset state
+            }
+        }
+
+        function simulateBotActivity() {
+            if (!isRunning) return;
+
+            // Giả lập quét tin nhắn
+            const names = ["Trần Văn A", "Nguyễn Thị B", "Chủ nợ", "Người yêu cũ", "Linh Xe Ôm"];
+            const msgs = ["Alo mày ơi", "Đang làm gì đó?", "Trả tiền tao mày!", "Sao không rep?", "Check inbox đi"];
+
+            setInterval(() => {
+                if (isRunning && Math.random() > 0.7) {
+                    const name = names[Math.floor(Math.random() * names.length)];
+                    const msg = msgs[Math.floor(Math.random() * msgs.length)];
+                    
+                    addLog(`Nhận tin từ <b>${name}</b>: "${msg}"`, "incoming");
+                    
+                    setTimeout(() => {
+                        if (!isRunning) return;
+                        const startAi = Date.now();
+                        // Giả lập rep AI
+                        const personality = document.getElementById('ai-personality').value;
+                        let reply = "Tao đang bận tí, sủa gì sủa lẹ!";
+                        if(personality === 'humorous') reply = "Hehe, đợi tao tí đang đi hái hoa!";
+                        
+                        addLog(`Đã vả lại: "${reply}"`, "success");
+                        replyCount++;
+                        document.getElementById('count-replies').innerText = replyCount;
+                        document.getElementById('latency').innerText = (Date.now() - startAi + 450) + "ms";
+                    }, 2000);
+                }
+            }, 5000);
+
+            // Cập nhật runtime
+            setInterval(() => {
+                if (isRunning && startTime) {
+                    const diff = Math.floor((new Date() - startTime) / 1000);
+                    const mins = Math.floor(diff / 60).toString().padStart(2, '0');
+                    const secs = (diff % 60).toString().padStart(2, '0');
+                    document.getElementById('runtime').innerText = `${mins}:${secs}`;
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
