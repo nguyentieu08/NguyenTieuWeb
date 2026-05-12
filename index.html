@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NizeTube - No Ads Elite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #020202; --accent: #3b82f6; --glass: rgba(255, 255, 255, 0.02); }
+        body { 
+            background: var(--bg); 
+            color: #fff; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            margin: 0; 
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        /* Sidebar Menu */
+        #side-menu {
+            position: fixed; top: 0; left: -100%; width: 85%; height: 100%;
+            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(30px);
+            z-index: 20000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        #side-menu.active { left: 0; }
+        .menu-item { padding: 16px 24px; display: flex; align-items: center; gap: 16px; border-radius: 16px; margin: 4px 12px; transition: 0.2s; }
+        .menu-item:active { background: rgba(255, 255, 255, 0.05); color: #3b82f6; }
+        
+        /* Content Layers */
+        .layer { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 30000; overflow-y: auto; padding: 24px; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        #player-ui { position: fixed; inset: 0; background: var(--bg); z-index: 15000; display: none; flex-direction: column; animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .glass-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Image protection */
+        img { -webkit-user-drag: none; pointer-events: none; }
+
+        /* Loader */
+        .loader { width: 24px; height: 24px; border: 2px solid #FFF; border-bottom-color: #3b82f6; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <!-- Header -->
+    <header class="h-20 flex items-center justify-between px-6 sticky top-0 bg-[#020202]/90 backdrop-blur-xl z-[110] border-b border-white/5">
+        <div class="flex items-center gap-4">
+            <button onclick="toggleMenu(true)" class="w-10 h-10 flex items-center justify-center glass-btn"><i class="fa-solid fa-bars-staggered text-gray-400"></i></button>
+            <div class="flex flex-col">
+                <span class="font-extrabold text-lg tracking-tight uppercase">NizeTube</span>
+                <span class="text-[8px] text-blue-500 font-black tracking-widest uppercase">GitHub Static Mode</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div id="active-timer" class="hidden items-center gap-2 bg-blue-500/10 border border-blue-500/30 px-3 py-1.5 rounded-full" onclick="showLayer('layer-timer')">
+                <div class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                <span id="timer-txt" class="text-[10px] font-black text-blue-400">00:00</span>
+            </div>
+            <button onclick="toggleSearch(true)" class="w-10 h-10 flex items-center justify-center glass-btn"><i class="fa-solid fa-search text-gray-400"></i></button>
+        </div>
+    </header>
+
+    <!-- Sidebar Menu -->
+    <div id="menu-overlay" class="hidden fixed inset-0 bg-black/60 z-[19999] backdrop-blur-sm" onclick="toggleMenu(false)"></div>
+    <nav id="side-menu">
+        <div class="p-8 mt-4">
+            <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-blue-500/20 mb-6">
+                <i class="fa-solid fa-shield-halved text-white text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-black">Hệ thống</h2>
+            <p class="text-gray-500 text-xs mt-1">Phiên bản V41.0 GitHub</p>
+        </div>
+        <div class="flex flex-col gap-1">
+            <div class="menu-item" onclick="showLayer('layer-settings')"><i class="fa-solid fa-gear w-6 text-gray-500"></i> <span class="font-bold text-sm">Cài đặt ứng dụng</span></div>
+            <div class="menu-item" onclick="showLayer('layer-timer')"><i class="fa-solid fa-clock w-6 text-gray-500"></i> <span class="font-bold text-sm">Hẹn giờ dừng video</span></div>
+            <div class="menu-item" onclick="showLayer('layer-privacy')"><i class="fa-solid fa-user-shield w-6 text-gray-500"></i> <span class="font-bold text-sm">Quyền riêng tư</span></div>
+            <div class="menu-item" onclick="showLayer('layer-dev')"><i class="fa-solid fa-code w-6 text-gray-500"></i> <span class="font-bold text-sm">Nhà phát triển</span></div>
+        </div>
+        <div class="absolute bottom-8 left-8 right-8 p-6 glass-btn text-center">
+            <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Secure Client Side</p>
+        </div>
+    </nav>
+
+    <!-- Content Layers -->
+    <div id="layer-settings" class="layer">
+        <div class="flex items-center gap-4 mb-10"><i class="fa-solid fa-arrow-left text-xl" onclick="closeLayer()"></i> <h1 class="text-xl font-black">Cài đặt</h1></div>
+        <div class="p-5 glass-btn flex justify-between items-center mb-4">
+            <div><p class="font-bold">Chống xem mã nguồn</p><p class="text-xs text-green-500">Đã kích hoạt</p></div>
+            <i class="fa-solid fa-check-circle text-blue-500"></i>
+        </div>
+    </div>
+
+    <div id="layer-dev" class="layer">
+        <div class="flex items-center gap-4 mb-12"><i class="fa-solid fa-arrow-left text-xl" onclick="closeLayer()"></i> <h1 class="text-xl font-black">Nhà phát triển</h1></div>
+        <div class="text-center">
+            <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-[32px] mx-auto mb-6 flex items-center justify-center shadow-2xl shadow-blue-500/30">
+                <i class="fa-solid fa-user-ninja text-4xl text-white"></i>
+            </div>
+            <h2 class="text-2xl font-black">Nguyễn Tiêu</h2>
+            <p class="text-blue-500 font-bold text-sm mt-1 uppercase tracking-widest">Lead Developer</p>
+        </div>
+    </div>
+
+    <div id="layer-timer" class="layer">
+        <div class="flex items-center gap-4 mb-10"><i class="fa-solid fa-arrow-left text-xl" onclick="closeLayer()"></i> <h1 class="text-xl font-black">Hẹn giờ dừng</h1></div>
+        <div class="text-center p-6 glass-btn rounded-[32px]">
+            <input type="range" id="t-range" min="0" max="120" value="0" class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer mb-8">
+            <div class="text-5xl font-black mb-10" id="t-val">0<span class="text-xs text-gray-500 ml-2">PHÚT</span></div>
+            <button onclick="startTimer()" class="w-full py-5 bg-blue-600 rounded-2xl font-black">BẮT ĐẦU</button>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div id="search-bar" class="hidden fixed inset-0 bg-[#020202] z-[10000] p-6">
+        <div class="flex items-center gap-4">
+            <i class="fa-solid fa-arrow-left text-2xl" onclick="toggleSearch(false)"></i>
+            <input type="text" id="q-input" placeholder="Tìm kiếm trên GitHub..." class="flex-1 bg-white/5 border border-white/10 rounded-2xl p-4 outline-none text-lg">
+            <button onclick="runSearch()" class="w-14 h-14 bg-white text-black rounded-2xl"><i class="fa-solid fa-search"></i></button>
+        </div>
+    </div>
+
+    <!-- Feed -->
+    <main id="video-feed" class="p-6 grid gap-8 pb-32"></main>
+
+    <!-- Player -->
+    <div id="player-ui">
+        <div class="h-16 flex items-center justify-between px-6 border-b border-white/5">
+            <button onclick="closePlayer()" class="w-10 h-10 rounded-full glass-btn flex items-center justify-center"><i class="fa-solid fa-chevron-down"></i></button>
+            <span class="text-[9px] font-black text-gray-600 tracking-widest uppercase">Secure Streaming</span>
+            <div class="w-10"></div>
+        </div>
+        <div id="art-box" class="w-full aspect-video bg-black shadow-2xl"></div>
+        <div class="p-6 flex-1 overflow-y-auto no-scrollbar">
+            <h1 id="p-title" class="font-extrabold text-xl leading-tight"></h1>
+            <p id="p-up" class="text-blue-500 font-bold text-sm mt-1"></p>
+            <div id="p-rel" class="mt-10 flex flex-col gap-6"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * SECURITY: ANTI-INSPECT & ANTI-SOURCE
+         */
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false;
+            if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        };
+        setInterval(() => console.clear(), 1000);
+
+        /**
+         * CORE LOGIC
+         */
+        let playlist = [];
+        let curIdx = -1;
+        let tRef = null;
+        const API_URL = "https://inv.tux.rs/api/v1"; // Invidious Instance
+
+        const art = new Artplayer({
+            container: '#art-box',
+            url: '',
+            autoplay: true,
+            theme: '#3b82f6',
+            autoSize: true,
+            fullscreen: true,
+            playbackRate: true,
+        });
+
+        art.on('video:ended', () => {
+            if(curIdx < playlist.length - 1) {
+                const next = playlist[curIdx+1];
+                playVideo(next.id, next.title, next.up, curIdx+1);
+            }
+        });
+
+        function toggleMenu(v) { 
+            document.getElementById('side-menu').classList.toggle('active', v);
+            document.getElementById('menu-overlay').classList.toggle('hidden', !v);
+        }
+
+        function showLayer(id) { 
+            document.querySelectorAll('.layer').forEach(l => l.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+            toggleMenu(false);
+        }
+
+        function closeLayer() { document.querySelectorAll('.layer').forEach(l => l.style.display = 'none'); }
+        function toggleSearch(v) { document.getElementById('search-bar').style.display = v?'block':'none'; if(v) document.getElementById('q-input').focus(); }
+
+        // Timer Logic
+        document.getElementById('t-range').oninput = function() { document.getElementById('t-val').innerHTML = `${this.value}<span class="text-xs text-gray-500 ml-2">PHÚT</span>`; }
+        function startTimer() {
+            const m = parseInt(document.getElementById('t-range').value);
+            if(m > 0) {
+                let s = m * 60;
+                document.getElementById('active-timer').style.display = 'flex';
+                tRef = setInterval(() => {
+                    s--;
+                    const min = Math.floor(s/60); const sec = s%60;
+                    document.getElementById('timer-txt').textContent = `${min.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+                    if(s <= 0) { clearInterval(tRef); art.pause(); document.getElementById('active-timer').style.display = 'none'; }
+                }, 1000);
+            }
+            closeLayer();
+        }
+
+        // Search Logic
+        async function runSearch() {
+            const q = document.getElementById('q-input').value;
+            if(!q) return;
+            toggleSearch(false);
+            const f = document.getElementById('video-feed');
+            f.innerHTML = '<div class="py-20 text-center"><span class="loader"></span></div>';
+            
+            try {
+                const r = await fetch(`${API_URL}/search?q=${encodeURIComponent(q)}&type=video`);
+                const data = await r.json();
+                f.innerHTML = '';
+                playlist = data.map(v => ({ id: v.videoId, title: v.title, thumb: v.videoThumbnails[0].url, up: v.author }));
+                
+                playlist.forEach((v, i) => {
+                    const d = document.createElement('div');
+                    d.className = 'flex flex-col gap-4';
+                    d.onclick = () => playVideo(v.id, v.title, v.up, i);
+                    d.innerHTML = `
+                        <img src="${v.thumb}" class="w-full aspect-video object-cover rounded-[28px] shadow-2xl">
+                        <div class="flex gap-4 px-2">
+                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex-shrink-0 flex items-center justify-center font-bold text-blue-500 border border-white/5">${v.up.charAt(0)}</div>
+                            <div class="min-w-0">
+                                <h3 class="font-bold text-[15px] line-clamp-2 text-white/90 leading-tight">${v.title}</h3>
+                                <p class="text-[10px] font-black text-gray-600 mt-1 uppercase tracking-tighter">${v.up}</p>
+                            </div>
+                        </div>
+                    `;
+                    f.appendChild(d);
+                });
+            } catch(e) { f.innerHTML = '<p class="text-center text-red-500 py-10">Lỗi kết nối. Thử lại sau.</p>'; }
+        }
+
+        async function playVideo(id, t, a, index) {
+            curIdx = index;
+            document.getElementById('player-ui').style.display = 'flex';
+            document.getElementById('p-title').textContent = t;
+            document.getElementById('p-up').textContent = a;
+            art.switchUrl('');
+            
+            try {
+                const r = await fetch(`${API_URL}/videos/${id}`);
+                const d = await r.json();
+                const format = d.formatStreams.find(s => s.qualityLabel === '720p') || d.formatStreams[0];
+                if(format) {
+                    art.switchUrl(format.url);
+                    loadRelated(t);
+                }
+            } catch(e) {}
+        }
+
+        async function loadRelated(q) {
+            const r = await fetch(`${API_URL}/search?q=${encodeURIComponent(q)}&type=video`);
+            const data = await r.json();
+            const rel = document.getElementById('p-rel');
+            rel.innerHTML = '';
+            data.slice(0, 8).forEach((v, i) => {
+                const d = document.createElement('div');
+                d.className = 'flex gap-4 items-center';
+                d.onclick = () => {
+                    playlist = data.map(item => ({ id: item.videoId, title: item.title, thumb: item.videoThumbnails[0].url, up: item.author }));
+                    playVideo(v.videoId, v.title, v.author, i);
+                };
+                d.innerHTML = `<img src="${v.videoThumbnails[0].url}" class="w-32 aspect-video object-cover rounded-xl shadow-lg"><div class="flex-1 min-w-0"><div class="text-xs font-bold line-clamp-2">${v.title}</div><div class="text-[9px] text-gray-500 font-black uppercase mt-1">${v.author}</div></div>`;
+                rel.appendChild(d);
+            });
+        }
+
+        function closePlayer() { document.getElementById('player-ui').style.display = 'none'; art.pause(); }
+        window.onload = () => { document.getElementById('q-input').value = 'nhạc remix 2024'; runSearch(); };
+    </script>
+</body>
+</html>
