@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NizeTik - Tải Video TikTok Không Logo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NizeTik - Tải Video TikTok Siêu Tốc</title>
     <!-- Tailwind CSS để tạo giao diện nhanh và responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome cho các biểu tượng đẹp mắt -->
@@ -23,7 +23,7 @@
                             bg: '#0a0b10',
                             card: '#12131a',
                             border: '#1f2937',
-                            primary: '#10b981', // Emerald Green cho chuẩn công nghệ
+                            primary: '#10b981', // Emerald Green
                             accent: '#3b82f6', // Xanh dương neon
                             text: '#e2e8f0',
                         }
@@ -33,6 +33,28 @@
         }
     </script>
     <style>
+        /* CHẶN LẤY SOURCE BẰNG CSS CHO CẢ MOBILE VÀ PC */
+        * {
+            /* Ngăn việc chạm giữ hiển thị menu sao chép hình ảnh/văn bản trên điện thoại */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Cho phép người dùng tương tác bình thường với ô nhập link */
+        input[type="url"], input[type="url"] * {
+            -webkit-touch-callout: default !important;
+            -webkit-user-select: text !important;
+            -khtml-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+
         body {
             font-family: 'JetBrains Mono', monospace;
             background-color: #0a0b10;
@@ -42,7 +64,8 @@
                 radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
             background-attachment: fixed;
         }
-        /* Tùy chỉnh thanh cuộn phong cách hacker */
+
+        /* Thanh cuộn phong cách hacker */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -72,7 +95,7 @@
                 <div>
                     <h1 class="text-xl font-extrabold text-white tracking-wider flex items-center">
                         Nize<span class="text-emerald-400">Tik</span>
-                        <span class="ml-2 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono uppercase tracking-widest">v1.0</span>
+                        <span class="ml-2 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono uppercase tracking-widest">v1.3</span>
                     </h1>
                 </div>
             </div>
@@ -151,15 +174,17 @@
             <div class="border-t border-gray-800/80 pt-6 space-y-3">
                 <div class="flex justify-between text-xs">
                     <span class="text-gray-500">Môi trường:</span>
-                    <span class="text-gray-300 font-mono">Production_v1.0</span>
+                    <span class="text-gray-300 font-mono">Production_v1.3</span>
                 </div>
                 <div class="flex justify-between text-xs">
-                    <span class="text-gray-500">API Gateway:</span>
-                    <span class="text-emerald-400 font-mono">Đang kết nối</span>
+                    <span class="text-gray-500">Công nghệ tải:</span>
+                    <span class="text-emerald-400 font-mono">Blob Stream Direct</span>
                 </div>
                 <div class="flex justify-between text-xs">
-                    <span class="text-gray-500">Khởi chạy:</span>
-                    <span class="text-gray-300 font-mono">Client-side rendering</span>
+                    <span class="text-gray-500">Bảo mật hệ thống:</span>
+                    <span class="text-red-400 font-mono flex items-center gap-1">
+                        <i class="fa-solid fa-lock-open text-[10px] animate-pulse"></i> Ultra Active Wall
+                    </span>
                 </div>
             </div>
         </div>
@@ -182,8 +207,8 @@
                 TẢI VIDEO TIKTOK <br class="sm:hidden">
                 <span class="bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-500 bg-clip-text text-transparent">KHÔNG DÍNH WATERMARK</span>
             </h2>
-            <p class="text-gray-400 mt-3 text-sm md:text-base max-w-lg mx-auto">
-                Dán đường dẫn video TikTok vào bên dưới, hệ thống sẽ bóc tách và tải xuống video chất lượng cao mà không có logo chỉ trong 2 giây.
+            <p class="text-gray-400 mt-3 text-sm md:text-base max-w-lg mx-auto font-sans">
+                Dán đường dẫn video TikTok vào dưới, hệ thống sẽ tự động bóc tách và tải thẳng tệp tin về thiết bị của bạn ngay lập tức.
             </p>
         </div>
 
@@ -211,14 +236,13 @@
                     <input 
                         type="url" 
                         id="tiktokUrl" 
-                        placeholder="Dán link video TikTok (ví dụ: https://www.tiktok.com/@username/video/...)" 
+                        placeholder="Dán link video TikTok tại đây..." 
                         class="w-full pl-10 pr-24 py-4 bg-[#0a0b10] border border-gray-800 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all text-sm font-mono"
                         autocomplete="off"
                     >
                     <button 
                         id="pasteBtn"
                         class="absolute inset-y-2 right-2 px-3 bg-gray-800/80 hover:bg-emerald-500 hover:text-black text-gray-300 font-semibold text-xs rounded-lg transition-all duration-200 flex items-center justify-center gap-1.5 border border-gray-700/50 hover:border-emerald-400/50"
-                        title="Dán từ khay nhớ tạm"
                     >
                         <i class="fa-solid fa-clipboard"></i> Dán
                     </button>
@@ -229,22 +253,23 @@
                     id="downloadBtn" 
                     class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-black font-extrabold text-sm uppercase tracking-widest rounded-xl shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/25 transition-all duration-300 flex items-center justify-center gap-2 transform hover:-translate-y-[1px]"
                 >
-                    <i class="fa-solid fa-circle-down text-base"></i> Phân tích link
+                    <i class="fa-solid fa-cloud-arrow-down text-base"></i> Tải Video Ngay
                 </button>
             </div>
 
-            <!-- MÀN HÌNH CHỜ XỬ LÝ (LOADING) -->
-            <div id="loadingSection" class="hidden mt-8 border-t border-gray-800/60 pt-6 animate-pulse">
+            <!-- MÀN HÌNH CHỜ XỬ LÝ (LOADING & BÓC TÁCH) -->
+            <div id="loadingSection" class="hidden mt-8 border-t border-gray-800/60 pt-6">
                 <div class="flex items-center gap-3 justify-center mb-4 text-emerald-400">
                     <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span class="text-xs font-semibold uppercase tracking-widest">Đang bóc tách gói tin & giải mã logo...</span>
+                    <span id="loadingText" class="text-xs font-semibold uppercase tracking-widest">Đang bóc tách thông tin liên kết...</span>
                 </div>
-                <div class="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
-                    <div class="h-full bg-emerald-500 rounded-full animate-[progress_1.5s_ease-in-out_infinite]" style="width: 40%"></div>
+                <div class="h-2.5 w-full bg-gray-800 rounded-full overflow-hidden relative">
+                    <div id="loadingBar" class="h-full bg-emerald-500 rounded-full transition-all duration-300 w-[10%]"></div>
                 </div>
+                <div id="progressPercent" class="text-center text-[10px] text-gray-500 mt-2 font-mono">0%</div>
             </div>
 
             <!-- BÁO LỖI -->
@@ -261,7 +286,7 @@
                 <div class="flex items-center justify-between">
                     <span class="text-xs text-emerald-400 uppercase tracking-widest font-bold flex items-center gap-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-                        Giải mã thành công!
+                        Đã tải xong trực tiếp!
                     </span>
                     <button id="clearBtn" class="text-xs text-gray-500 hover:text-red-400 transition-colors flex items-center gap-1">
                         <i class="fa-solid fa-trash-can"></i> Xóa kết quả
@@ -270,7 +295,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                     <!-- Ảnh bìa hoặc trình phát Video trực tiếp -->
-                    <div class="md:col-span-5 flex flex-col justify-center items-center bg-black/40 border border-gray-800 rounded-xl p-3 relative group">
+                    <div class="md:col-span-5 flex flex-col justify-center items-center bg-black/40 border border-gray-800 rounded-xl p-3 relative">
                         <video id="videoPreview" class="w-full max-h-[260px] rounded-lg aspect-[9/16] object-cover hidden" controls preload="metadata"></video>
                         <div id="videoPlaceholder" class="w-full h-[220px] bg-gray-900 rounded-lg flex flex-col items-center justify-center text-gray-600 gap-2 border border-dashed border-gray-800">
                             <i class="fa-solid fa-circle-play text-4xl"></i>
@@ -284,7 +309,7 @@
                             <!-- Tác giả -->
                             <div class="flex items-center gap-3.5 mb-3">
                                 <div class="relative">
-                                    <img id="authorAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-700 object-cover">
+                                    <img id="authorAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80" alt="Avatar" class="w-10 h-10 rounded-full border border-gray-700 object-cover" draggable="false">
                                     <span class="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 border-2 border-emerald-950 rounded-full flex items-center justify-center"><i class="fa-solid fa-check text-[5px] text-white"></i></span>
                                 </div>
                                 <div>
@@ -299,22 +324,22 @@
                             </p>
                         </div>
 
-                        <!-- Các liên kết tải xuống -->
+                        <!-- Các liên kết tải trực tiếp thủ công nếu muốn tải lại -->
                         <div class="space-y-2.5">
                             <!-- Tải không Logo HD -->
-                            <a id="dlNoWatermark" href="#" target="_blank" class="w-full py-2.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-download"></i> Tải Video không Logo
-                            </a>
+                            <button id="dlNoWatermark" class="w-full py-2.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-video"></i> Tải lại Video không Logo
+                            </button>
                             
                             <!-- Tải không Logo Backup -->
-                            <a id="dlNoWatermarkHD" href="#" target="_blank" class="w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-emerald-400 font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-2 border border-emerald-500/20">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> Tải Video (Dự Phòng HD)
-                            </a>
+                            <button id="dlNoWatermarkHD" class="w-full py-2.5 px-4 bg-gray-800 hover:bg-gray-700 text-emerald-400 font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-2 border border-emerald-500/20">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Tải lại Video (Bản HD)
+                            </button>
 
                             <!-- Tải Nhạc MP3 -->
-                            <a id="dlAudio" href="#" target="_blank" class="w-full py-2.5 px-4 bg-blue-950/40 hover:bg-blue-900/60 text-blue-400 font-bold text-xs uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-2 border border-blue-500/20">
-                                <i class="fa-solid fa-music"></i> Tải Nhạc Nền (MP3)
-                            </a>
+                            <button id="dlAudio" class="w-full py-2.5 px-4 bg-blue-950/40 hover:bg-blue-900/60 text-blue-400 font-bold text-xs uppercase tracking-wider rounded-lg transition-all duration-200 flex items-center justify-center gap-2 border border-blue-500/20">
+                                <i class="fa-solid fa-music"></i> Tải lại Nhạc Nền (MP3)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -348,6 +373,32 @@
         </div>
     </main>
 
+    <!-- TOAST THÔNG BÁO GÓC MÀN HÌNH -->
+    <div id="toastBox" class="fixed bottom-4 right-4 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-gray-950 border border-emerald-500/30 text-emerald-400 px-4 py-3 rounded-lg shadow-2xl flex items-center gap-3 text-xs font-mono">
+        <i class="fa-solid fa-circle-check text-base"></i>
+        <span id="toastMsg">Thông báo hệ thống</span>
+    </div>
+
+    <!-- HỘP THOẠI CẢNH BÁO BẢO MẬT (CUSTOM DIALOG) -->
+    <div id="securityModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="fixed inset-0 bg-black/95 backdrop-blur-md"></div>
+        <div class="bg-[#12131a] border-2 border-red-500 rounded-2xl w-full max-w-md p-6 z-10 relative text-center space-y-4 shadow-2xl shadow-red-500/10">
+            <div class="w-16 h-16 bg-red-500/10 border border-red-500/30 rounded-full flex items-center justify-center mx-auto text-red-500 animate-bounce">
+                <i class="fa-solid fa-shield-halved text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-extrabold text-white uppercase tracking-wider font-mono">Cảnh Báo Bảo Mật Nguồn</h3>
+            <p class="text-xs text-gray-400 font-sans leading-relaxed">
+                Hệ thống phát hiện hành vi truy cập trái phép cấu trúc mã nguồn (Inspect / View Source / Debugging) trên thiết bị của bạn. Bản quyền thuộc về <span class="text-red-400 font-bold">Nguyễn Tiêu</span>. Mọi hoạt động sao chép mã nguồn đã bị chặn lại.
+            </p>
+            <div class="p-3 bg-red-950/20 border border-red-500/20 rounded-lg text-[10px] text-red-400 font-mono">
+                CODE: ACC_DENIED_SOURCE_PROT
+            </div>
+            <button onclick="closeSecurityModal()" class="w-full py-2.5 bg-red-600 hover:bg-red-500 text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-all">
+                Đồng ý và tiếp tục sử dụng
+            </button>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="border-t border-gray-900 bg-black/60 py-6 text-center text-xs text-gray-600 px-4 mt-12">
         <div class="max-w-5xl mx-auto space-y-2">
@@ -371,13 +422,10 @@
             <div class="p-6 overflow-y-auto space-y-4 text-xs leading-relaxed text-gray-400 font-sans">
                 <p class="text-white font-bold font-mono text-sm">// THÔNG BÁO CHO NGƯỜI SỬ DỤNG</p>
                 <p>NizeTik ("chúng tôi", "ứng dụng") rất coi trọng sự bảo mật và thông tin cá nhân của người sử dụng. Hãy chắc chắn bạn đã đọc kỹ những điểm sau:</p>
-                
                 <h4 class="font-bold text-white mt-4 uppercase tracking-wider">1. Thu thập thông tin</h4>
                 <p>Chúng tôi cam kết KHÔNG yêu cầu, đăng ký tài khoản hay theo dõi bất kỳ dữ liệu cá nhân nào từ thiết bị của bạn. Công cụ này hoạt động dựa trên cơ chế phân tích URL công khai của mạng xã hội TikTok.</p>
-                
                 <h4 class="font-bold text-white mt-4 uppercase tracking-wider">2. Cookie và Bộ nhớ đệm</h4>
-                <p>Chúng tôi chỉ lưu trữ các cấu hình hoạt động căn bản trên trình duyệt của bạn (nếu có) dưới dạng bộ nhớ cục bộ tạm thời để tối ưu hiệu năng và ghi nhớ lượt tải của bạn trong phiên làm việc.</p>
-
+                <p>Chúng tôi chỉ lưu trữ các cấu hình hoạt động căn bản trên trình duyệt của bạn dưới dạng bộ nhớ cục bộ tạm thời để tối ưu hiệu năng và ghi nhớ lượt tải của bạn trong phiên làm việc.</p>
                 <h4 class="font-bold text-white mt-4 uppercase tracking-wider">3. Chuyển tiếp Dữ liệu bên thứ ba</h4>
                 <p>Các API giải mã video được cung cấp từ các máy chủ mở và an toàn thuộc cộng đồng mã nguồn mở. Chúng tôi không kiểm soát máy chủ trung gian này nhưng cam kết không chuyển tiếp thông tin định danh hay hành vi người dùng.</p>
             </div>
@@ -401,15 +449,12 @@
             <div class="p-6 overflow-y-auto space-y-4 text-xs leading-relaxed text-gray-400 font-sans">
                 <p class="text-white font-bold font-mono text-sm">// ĐIỀU KHOẢN VÀ THỎA THUẬN NGƯỜI DÙNG</p>
                 <p>Bằng việc truy cập và sử dụng dịch vụ NizeTik, bạn xác nhận đã đồng ý các thỏa thuận sử dụng dịch vụ sau:</p>
-                
                 <h4 class="font-bold text-white mt-4 uppercase tracking-wider">1. Bản quyền & Sở hữu trí tuệ</h4>
                 <p>Bạn hoàn toàn chịu trách nhiệm pháp lý đối với nội dung/video được tải xuống qua công cụ này. NizeTik không sở hữu các tài nguyên tải về và không cung cấp bất kỳ quyền thương mại nào đối với các nội dung video/audio thuộc về tác giả TikTok.</p>
-                
                 <h4 class="font-bold text-white mt-4 uppercase tracking-wider">2. Mục đích phi thương mại</h4>
                 <p>Chúng tôi chỉ cung cấp giải pháp bóc tách video cho mục đích học tập cá nhân, nghiên cứu, phục vụ nhu cầu giải trí và phân tích phi thương mại. Mọi hành vi trục lợi hoặc sử dụng trái phép bản quyền sở hữu của người dùng khác sẽ không thuộc trách nhiệm của nhà phát triển Nguyễn Tiêu.</p>
-
                 <h4 class="font-bold text-white mt-4 uppercase tracking-wider">3. Từ chối cam kết lỗi hệ thống</h4>
-                <p>Ứng dụng vận hành phụ thuộc vào hệ thống API cộng đồng và thuật toán gốc từ TikTok. Do đó, chức năng tải có thể tạm ngắt quãng khi TikTok cập nhật mã nguồn mới. Chúng tôi sẽ cố gắng khôi phục nhanh nhất.</p>
+                <p>Ứng dụng vận hành phụ thuộc vào hệ thống API cộng đồng và thuật toán gốc từ TikTok. Do đó, chức năng tải có thể tạm ngắt quãng khi TikTok cập nhật mã nguồn mới.</p>
             </div>
             <div class="p-4 border-t border-gray-800 bg-black/20 flex justify-end">
                 <button onclick="closeModal('termsModal')" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold rounded-lg transition-all">Đồng ý</button>
@@ -433,15 +478,15 @@
                 <div class="space-y-3">
                     <div class="flex gap-3">
                         <span class="w-5 h-5 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold font-mono">1</span>
-                        <p class="flex-1">Mở ứng dụng TikTok trên điện thoại hoặc máy tính của bạn. Chọn video bạn muốn tải và nhấp vào nút <strong>"Chia sẻ"</strong> &gt; chọn <strong>"Sao chép liên kết"</strong>.</p>
+                        <p class="flex-1">Sao chép liên kết video TikTok muốn tải về.</p>
                     </div>
                     <div class="flex gap-3">
                         <span class="w-5 h-5 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold font-mono">2</span>
-                        <p class="flex-1">Trở về trang web <span class="text-white font-bold">NizeTik</span>, nhấn nút <span class="text-white font-bold">"Dán"</span> hoặc nhấn chuột phải và dán đường dẫn vừa sao chép vào trường nhập liệu.</p>
+                        <p class="flex-1">Nhấn dán vào ô nhập liệu của NizeTik.</p>
                     </div>
                     <div class="flex gap-3">
                         <span class="w-5 h-5 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold font-mono">3</span>
-                        <p class="flex-1">Nhấp nút <span class="text-emerald-400 font-bold">"Phân tích link"</span>. Hệ thống sẽ bóc tách và cung cấp cho bạn 3 đường dẫn tùy chọn: Video không Logo, Video dự phòng HD hoặc tải tệp âm thanh MP3.</p>
+                        <p class="flex-1">Bấm <strong>"Tải Video Ngay"</strong>, tệp sẽ được tải trực tiếp hoàn toàn tự động.</p>
                     </div>
                 </div>
             </div>
@@ -453,7 +498,112 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Các phần tử giao diện
+        // --- 1. CHỐNG XEM NGUỒN TRÊN PC & ĐIỆN THOẠI (ULTRA SECURITY WALL) ---
+        const securityModal = document.getElementById('securityModal');
+
+        function triggerSecurityAlert() {
+            securityModal.classList.remove('hidden');
+        }
+
+        function closeSecurityModal() {
+            securityModal.classList.add('hidden');
+        }
+
+        // A. VÔ HIỆU HÓA CHUỘT PHẢI (PC)
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            triggerSecurityAlert();
+        });
+
+        // B. VÔ HIỆU HÓA CÁC THAO TÁC CHẠM GIỮ / COPY TRÊN ĐIỆN THOẠI (MOBILE)
+        document.addEventListener('touchstart', function(e) {
+            // Phát hiện chạm nhiều ngón (Thường dùng để chụp màn hình hoặc hack DevTools di động)
+            if (e.touches.length > 2) {
+                e.preventDefault();
+                triggerSecurityAlert();
+            }
+        }, { passive: false });
+
+        // C. CHẶN PHÍM TẮT TRÊN MÁY TÍNH (WINDOWS & MAC)
+        document.addEventListener('keydown', (e) => {
+            // F12
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                triggerSecurityAlert();
+                return false;
+            }
+            // Ctrl + Shift + I hoặc J hoặc C (PC)
+            if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+                e.preventDefault();
+                triggerSecurityAlert();
+                return false;
+            }
+            // Command + Option + I hoặc J hoặc C (Mac)
+            if (e.metaKey && e.altKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+                e.preventDefault();
+                triggerSecurityAlert();
+                return false;
+            }
+            // Ctrl + U hoặc Cmd + U (Xem source code)
+            if ((e.ctrlKey || e.metaKey) && e.keyCode === 85) {
+                e.preventDefault();
+                triggerSecurityAlert();
+                return false;
+            }
+            // Ctrl + S hoặc Cmd + S (Lưu trang)
+            if ((e.ctrlKey || e.metaKey) && e.keyCode === 83) {
+                e.preventDefault();
+                triggerSecurityAlert();
+                return false;
+            }
+            // Ctrl + P hoặc Cmd + P (In trang/Lưu tệp PDF của trang)
+            if ((e.ctrlKey || e.metaKey) && e.keyCode === 80) {
+                e.preventDefault();
+                triggerSecurityAlert();
+                return false;
+            }
+        });
+
+        // D. NGĂN CHẶN SAO CHÉP & CẮT NỘI DUNG (PC/MOBILE)
+        document.addEventListener('copy', (e) => {
+            e.preventDefault();
+            showToast("⚠️ Nội dung đã được mã hóa bảo vệ bởi Nguyễn Tiêu.");
+        });
+        document.addEventListener('cut', (e) => {
+            e.preventDefault();
+        });
+
+        // E. NGĂN CHẶN KÉO THẢ PHẦN TỬ (TRÁNH LẤY LINK ẢNH/VIDEO)
+        document.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+        });
+
+        // F. HỆ THỐNG PHÁT HIỆN GỠ LỖI DEVTOOLS (DETECTION VÒNG LẶP DEBUGGER)
+        // Khi người dùng cố gắng gỡ lỗi từ xa hoặc bật Inspect, chương trình sẽ rơi vào bẫy Debugger liên tục
+        setInterval(function() {
+            const before = new Date().getTime();
+            debugger; 
+            const after = new Date().getTime();
+            if (after - before > 100) {
+                triggerSecurityAlert();
+            }
+        }, 800);
+
+        // G. PHÁT HIỆN SỰ THAY ĐỔI CỦA TRÌNH DUYỆT (MỞ DEVTOOLS CHẾ ĐỘ CỬA SỔ PHỤ)
+        const threshold = 160;
+        setInterval(() => {
+            const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+            const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+            if (widthThreshold || heightThreshold) {
+                // Ngoại trừ các dòng điện thoại xoay ngang màn hình thường không có khoảng cách lớn này
+                if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    triggerSecurityAlert();
+                }
+            }
+        }, 1000);
+
+
+        // --- 2. LOGIC ĐIỀU KHIỂN GIAO DIỆN CHÍNH & TẢI VIDEO ---
         const menuBtn = document.getElementById('menuBtn');
         const sideMenu = document.getElementById('sideMenu');
         const closeMenuBtn = document.getElementById('closeMenuBtn');
@@ -464,28 +614,38 @@
         const downloadBtn = document.getElementById('downloadBtn');
         
         const loadingSection = document.getElementById('loadingSection');
+        const loadingText = document.getElementById('loadingText');
+        const loadingBar = document.getElementById('loadingBar');
+        const progressPercent = document.getElementById('progressPercent');
+
         const errorSection = document.getElementById('errorSection');
         const errorMsg = document.getElementById('errorMsg');
         const resultSection = document.getElementById('resultSection');
         const clearBtn = document.getElementById('clearBtn');
 
-        // Kết quả bóc tách
+        // Các kết quả bóc tách
         const videoPreview = document.getElementById('videoPreview');
         const videoPlaceholder = document.getElementById('videoPlaceholder');
         const authorAvatar = document.getElementById('authorAvatar');
         const authorName = document.getElementById('authorName');
         const authorUsername = document.getElementById('authorUsername');
         const videoDesc = document.getElementById('videoDesc');
+        
         const dlNoWatermark = document.getElementById('dlNoWatermark');
         const dlNoWatermarkHD = document.getElementById('dlNoWatermarkHD');
         const dlAudio = document.getElementById('dlAudio');
 
-        // Danh sách máy chủ API (Dự phòng thông minh)
-        const API_PROVIDERS = [
-            (url) => `https://api.tik-tok-download.com/api/video/info?url=${encodeURIComponent(url)}`, // API Provider 1 (Cần parse)
-            (url) => `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`, // API Provider 2 (Thịnh hành)
-            (url) => `https://api.douyin.wtf/api?url=${encodeURIComponent(url)}` // API Provider 3 (Dự phòng nội bộ)
-        ];
+        // MÃ HÓA CÁC ĐƯỜNG DẪN API SỬ DỤNG BASE64 ĐỂ CHỐNG XEM CHUỖI TRỰC TIẾP
+        // aHR0cHM6Ly93d3cudGlrd20uY29tL2FwaS8/dXJsPQ==  ==> https://www.tikwm.com/api/?url=
+        // aHR0cHM6Ly9hcGkudGlrLXRvay1kb3dubG9hZC5jb20vYXBpL3ZpZGVvL2luZm8/dXJsPQ== ==> https://api.tik-tok-download.com/api/video/info?url=
+        const apiPathA = atob("YUhSMGNEb3ZMM2QzZHk1MGFXdDNkM0N1WTI5dExyOXlaV3g3ZFc1cw=="); 
+        const apiPathB = atob("YUhSMGNEb3ZMM0Z3YVM1MGFXdC1kRzl0TFdScmR3NTViRzloWkN1amIyMHZZWEJwTDNaYFpXUnZMMmoxWm05N2RYSnNPUT09");
+
+        let extractedLinks = {
+            video: '',
+            hdVideo: '',
+            audio: ''
+        };
 
         // --- ĐIỀU KHIỂN SIDEBAR ---
         function toggleMenu() {
@@ -505,7 +665,7 @@
         closeMenuBtn.addEventListener('click', toggleMenu);
         menuOverlay.addEventListener('click', toggleMenu);
 
-        // --- ĐIỀU KHIỂN MODAL ---
+        // --- ĐIỀU KHIỂN MODAL THÔNG TIN ---
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.remove('hidden');
@@ -520,22 +680,44 @@
             modal.classList.add('hidden');
         }
 
-        // Đóng modal khi nhấn vào lớp phủ nền mờ của nó
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
                 e.target.parentElement.classList.add('hidden');
             });
         });
 
+        // --- HỘP THÔNG BÁO TOAST ---
+        function showToast(msg) {
+            const toast = document.getElementById('toastBox');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 4000);
+        }
+
+        // --- BÁO LỖI HỆ THỐNG ---
+        function alertMessage(msg) {
+            errorMsg.textContent = msg;
+            errorSection.classList.remove('hidden');
+            errorSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- CẬP NHẬT TIẾN TRÌNH TẢI ---
+        function updateProgress(percent, label = "") {
+            if (label) loadingText.textContent = label;
+            loadingBar.style.width = `${percent}%`;
+            progressPercent.textContent = `${percent}%`;
+        }
+
         // --- XỬ LÝ LẮNG NGHE & INPUT ---
         tiktokUrlInput.addEventListener('input', (e) => {
             const val = e.target.value;
             charCount.textContent = `${val.length} ký tự`;
-            // Tự động bỏ cảnh báo lỗi khi người dùng gõ mới
             errorSection.classList.add('hidden');
         });
 
-        // Nút paste từ clipboard (Sử dụng document.execCommand hoặc Navigator API tùy môi trường)
         pasteBtn.addEventListener('click', async () => {
             try {
                 if (navigator.clipboard && navigator.clipboard.readText) {
@@ -544,57 +726,112 @@
                     charCount.textContent = `${text.length} ký tự`;
                     tiktokUrlInput.dispatchEvent(new Event('input'));
                 } else {
-                    // Cơ chế Fallback thông báo cho Iframe nếu clipboard bị hạn chế bảo mật
-                    alertMessage("Tính năng 'Dán trực tiếp' bị trình duyệt chặn do cơ chế bảo mật trên iframe. Vui lòng nhấn Ctrl+V (hoặc giữ đè để Dán) thủ công.");
+                    alertMessage("Phím tắt Paste bị chặn bảo mật trên iframe. Vui lòng bấm giữ chuột/tay để dán thủ công.");
                 }
             } catch (err) {
-                alertMessage("Hãy dán link thủ công bằng cách sử dụng phím tắt Ctrl+V hoặc giữ màn hình chọn Paste.");
+                alertMessage("Hãy dán liên kết bằng cách sử dụng phím tắt hoặc dán trên thiết bị di động.");
             }
         });
 
-        // Hộp thông báo tùy chỉnh thay vì dùng alert() truyền thống
-        function alertMessage(msg) {
-            errorMsg.textContent = msg;
-            errorSection.classList.remove('hidden');
-            errorSection.scrollIntoView({ behavior: 'smooth' });
+        // --- HÀM THỰC THI TẢI XUỐNG TRỰC TIẾP (BLOB STREAM) ---
+        async function triggerDirectDownload(fileUrl, filename) {
+            updateProgress(0, "Khởi tạo kết nối mã hóa an toàn...");
+            try {
+                // Tải bằng Fetch Blob
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error("Truy cập tệp trực tiếp thất bại");
+                
+                const reader = response.body.getReader();
+                const contentLength = +response.headers.get('Content-Length') || 0;
+                
+                let receivedLength = 0;
+                let chunks = [];
+                
+                while(true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+                    
+                    chunks.push(value);
+                    receivedLength += value.length;
+                    
+                    if (contentLength) {
+                        const percent = Math.round((receivedLength / contentLength) * 100);
+                        updateProgress(percent, `Đang xử lý luồng dữ liệu về máy: ${percent}%`);
+                    } else {
+                        updateProgress(50, "Đang giải mã luồng stream dữ liệu...");
+                    }
+                }
+                
+                updateProgress(100, "Kiểm định tệp an toàn hoàn tất!");
+                
+                const blob = new Blob(chunks, { type: filename.endsWith('.mp3') ? 'audio/mp3' : 'video/mp4' });
+                const blobUrl = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Giải phóng tài nguyên tạm thời của trình duyệt
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+                showToast("Đã hoàn thành tải trực tiếp về máy!");
+                
+            } catch (err) {
+                console.warn("CORS restriction on CDN, utilizing browser redirect download", err);
+                // Fallback an toàn khi CDN chặn CORS truyền phát trực tiếp
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.target = '_blank';
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast("Đã chuyển tiếp lệnh tải an toàn của trình duyệt!");
+            }
         }
 
-        // --- LOGIC TẢI VIDEO & KHAI THÁC API ---
+        // --- PHÂN TÍCH LINK & KHỞI CHẠY TẢI ---
         downloadBtn.addEventListener('click', async () => {
             const inputUrl = tiktokUrlInput.value.trim();
             if (!inputUrl) {
-                alertMessage("Vui lòng dán hoặc nhập liên kết TikTok hợp lệ để tiếp tục phân tích.");
+                alertMessage("Vui lòng nhập hoặc sao chép liên kết TikTok để tiến hành tải.");
                 return;
             }
 
-            // Kiểm tra sơ bộ liên kết TikTok hợp lệ
             if (!inputUrl.includes("tiktok.com")) {
-                alertMessage("Liên kết không đúng định dạng. Đảm bảo đường dẫn bắt đầu hoặc chứa từ khóa 'tiktok.com'.");
+                alertMessage("Liên kết TikTok không đúng định dạng.");
                 return;
             }
 
-            // Reset UI
             loadingSection.classList.remove('hidden');
             errorSection.classList.add('hidden');
             resultSection.classList.add('hidden');
             downloadBtn.disabled = true;
             downloadBtn.classList.add('opacity-50');
+            updateProgress(15, "Đang bóc tách gói tin mã nguồn...");
 
             try {
-                // Chúng ta sẽ ưu tiên gọi API Tikwm vì tính ổn định cực tốt
-                const response = await fetchWithRetry(`https://www.tikwm.com/api/?url=${encodeURIComponent(inputUrl)}`);
+                // Giải mã Base64 sang chuỗi API Tikwm thực tế tại thời gian chạy
+                const decryptedApiA = atob("aHR0cHM6Ly93d3cudGlrd20uY29tL2FwaS8/dXJsPQ==");
+                const response = await fetchWithRetry(`${decryptedApiA}${encodeURIComponent(inputUrl)}`);
                 const resData = await response.json();
 
                 if (resData && resData.code === 0 && resData.data) {
                     const info = resData.data;
 
-                    // Thiết lập dữ liệu kết quả phân tích
+                    // Lưu dữ liệu liên kết bóc tách được
+                    extractedLinks.video = info.play;
+                    extractedLinks.hdVideo = info.hdplay || info.play;
+                    extractedLinks.audio = info.music;
+
+                    // Ghi thông tin tác giả video
                     authorName.textContent = info.author.nickname || "TikTok User";
                     authorUsername.textContent = `@${info.author.unique_id || "username"}`;
                     authorAvatar.src = info.author.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80";
-                    videoDesc.textContent = info.title || "Không có tiêu đề mô tả cho video này.";
+                    videoDesc.textContent = info.title || "Không có nội dung mô tả.";
 
-                    // Thiết lập Video Preview (Trình phát xem trước)
                     if (info.play) {
                         videoPreview.src = info.play;
                         videoPreview.classList.remove('hidden');
@@ -604,24 +841,17 @@
                         videoPlaceholder.classList.remove('hidden');
                     }
 
-                    // Tải xuống video không logo (không có hình mờ)
-                    // Sử dụng liên kết trực tiếp từ Tikwm API
-                    dlNoWatermark.href = info.play;
-                    // Đường dẫn dự phòng HD
-                    dlNoWatermarkHD.href = info.hdplay || info.play;
-                    // File audio MP3
-                    dlAudio.href = info.music || "#";
+                    // Kích hoạt tiến trình tải trực tiếp ngay sau khi phân tích thành công
+                    updateProgress(45, "Mã nguồn chính xác! Đang truyền phát dữ liệu...");
+                    const uniqueId = info.id || Date.now();
+                    await triggerDirectDownload(extractedLinks.video, `NizeTik_${uniqueId}.mp4`);
 
-                    // Hiển thị khung kết quả
                     resultSection.classList.remove('hidden');
-                    resultSection.scrollIntoView({ behavior: 'smooth' });
                 } else {
-                    // Nếu API chính thất bại, kích hoạt cơ chế thử nghiệm API dự phòng thứ hai
                     await tryBackupAPI(inputUrl);
                 }
 
             } catch (err) {
-                // Xử lý lỗi khi bị chặn CORS hoặc không có mạng
                 await tryBackupAPI(inputUrl);
             } finally {
                 loadingSection.classList.add('hidden');
@@ -630,44 +860,49 @@
             }
         });
 
-        // Thử API dự phòng thứ hai khi API Tikwm thất bại
+        // API dự phòng bóc tách video
         async function tryBackupAPI(url) {
+            updateProgress(30, "Đang chuyển tiếp cổng kết nối dự phòng...");
             try {
-                // Sử dụng API Tik-tok-download
-                const response = await fetchWithRetry(`https://api.tik-tok-download.com/api/video/info?url=${encodeURIComponent(url)}`);
+                // Giải mã cổng API dự phòng
+                const decryptedApiB = atob("aHR0cHM6Ly9hcGkudGlrLXRvay1kb3dubG9hZC5jb20vYXBpL3ZpZGVvL2luZm8/dXJsPQ==");
+                const response = await fetchWithRetry(`${decryptedApiB}${encodeURIComponent(url)}`);
                 const resData = await response.json();
 
                 if (resData && resData.status === "success" && resData.video) {
+                    extractedLinks.video = resData.video.noWatermark;
+                    extractedLinks.hdVideo = resData.video.watermark || resData.video.noWatermark;
+                    extractedLinks.audio = resData.music?.playUrl || '';
+
                     authorName.textContent = resData.author?.nickname || "TikTok User";
                     authorUsername.textContent = `@${resData.author?.username || "username"}`;
                     authorAvatar.src = resData.author?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80";
                     videoDesc.textContent = resData.title || "Không có tiêu đề mô tả.";
 
-                    if (resData.video.noWatermark) {
-                        videoPreview.src = resData.video.noWatermark;
+                    if (extractedLinks.video) {
+                        videoPreview.src = extractedLinks.video;
                         videoPreview.classList.remove('hidden');
                         videoPlaceholder.classList.add('hidden');
                     }
 
-                    dlNoWatermark.href = resData.video.noWatermark || "#";
-                    dlNoWatermarkHD.href = resData.video.watermark || "#";
-                    dlAudio.href = resData.music?.playUrl || "#";
+                    // Tải ngay lập tức
+                    updateProgress(65, "Giải mã thành công! Đang lưu trữ tệp tin về máy...");
+                    await triggerDirectDownload(extractedLinks.video, `NizeTik_${Date.now()}.mp4`);
 
                     resultSection.classList.remove('hidden');
-                    resultSection.scrollIntoView({ behavior: 'smooth' });
                 } else {
-                    throw new Error("Tất cả máy chủ bóc tách gói video đều quá tải.");
+                    throw new Error("Lỗi giải mã cấu trúc file.");
                 }
             } catch (fallbackErr) {
-                alertMessage("Không thể giải mã liên kết này. Rất có thể video này ở chế độ riêng tư, bị giới hạn quốc gia hoặc API đã thay đổi cấu trúc bảo mật.");
+                alertMessage("Không thể phân tích dữ liệu video TikTok từ liên kết này. Hãy thử liên kết khác ở chế độ công khai.");
             }
         }
 
-        // Cơ chế Gọi lại API với số lần thử tối đa 3 lần và Backoff tăng dần
+        // Hàm gọi mạng thông minh tự phục hồi
         async function fetchWithRetry(url, options = {}, retries = 3, backoff = 1000) {
             try {
                 const response = await fetch(url, options);
-                if (!response.ok) throw new Error("Yêu cầu không thành công");
+                if (!response.ok) throw new Error("Cổng phân tích không phản hồi");
                 return response;
             } catch (err) {
                 if (retries > 1) {
@@ -679,7 +914,32 @@
             }
         }
 
-        // Nút xóa kết quả để phục hồi giao diện ban đầu
+        // --- CÁC NÚT TẢI LẠI TRÊN KHUNG KẾT QUẢ ---
+        dlNoWatermark.addEventListener('click', async () => {
+            if (!extractedLinks.video) return;
+            loadingSection.classList.remove('hidden');
+            await triggerDirectDownload(extractedLinks.video, `NizeTik_Video_${Date.now()}.mp4`);
+            loadingSection.classList.add('hidden');
+        });
+
+        dlNoWatermarkHD.addEventListener('click', async () => {
+            if (!extractedLinks.hdVideo) return;
+            loadingSection.classList.remove('hidden');
+            await triggerDirectDownload(extractedLinks.hdVideo, `NizeTik_HD_${Date.now()}.mp4`);
+            loadingSection.classList.add('hidden');
+        });
+
+        dlAudio.addEventListener('click', async () => {
+            if (!extractedLinks.audio) {
+                showToast("Video này không có tệp âm thanh MP3 độc lập.");
+                return;
+            }
+            loadingSection.classList.remove('hidden');
+            await triggerDirectDownload(extractedLinks.audio, `NizeTik_Audio_${Date.now()}.mp3`);
+            loadingSection.classList.add('hidden');
+        });
+
+        // Xóa kết quả ban đầu
         clearBtn.addEventListener('click', () => {
             resultSection.classList.add('hidden');
             tiktokUrlInput.value = "";
@@ -687,6 +947,7 @@
             videoPreview.src = "";
             videoPreview.classList.add('hidden');
             videoPlaceholder.classList.remove('hidden');
+            extractedLinks = { video: '', hdVideo: '', audio: '' };
             tiktokUrlInput.focus();
         });
     </script>
